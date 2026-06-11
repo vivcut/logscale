@@ -98,22 +98,61 @@ export async function removeWorkspaceLogo(): Promise<SettingsActionState> {
 export async function setChangelogEnabled(
   enabled: boolean
 ): Promise<SettingsActionState> {
+  return setSurfaceEnabled("changelog", enabled);
+}
+
+/** The public surfaces that can be hidden from visitors. */
+export type PublicSurface =
+  | "boards"
+  | "roadmap"
+  | "changelog"
+  | "surveys"
+  | "status"
+  | "contact";
+
+const SURFACE_COLUMN: Record<PublicSurface, string> = {
+  boards: "boards_enabled",
+  roadmap: "roadmap_enabled",
+  changelog: "changelog_enabled",
+  surveys: "surveys_enabled",
+  status: "status_enabled",
+  contact: "contact_enabled",
+};
+
+// Most surfaces have a matching dashboard route at /dashboard/<surface>; the
+// exceptions are revalidated explicitly here.
+const SURFACE_REVALIDATE_PATH: Partial<Record<PublicSurface, string>> = {
+  contact: "/dashboard/contact-page",
+};
+
+/**
+ * Toggles whether a given public surface (boards / roadmap / changelog /
+ * surveys / status) is visible to visitors. Turning a surface OFF only hides
+ * the public page + widget tab — no underlying data is ever deleted. Only
+ * owners/admins may change it.
+ */
+export async function setSurfaceEnabled(
+  surface: PublicSurface,
+  enabled: boolean
+): Promise<SettingsActionState> {
   const workspace = await getActiveWorkspace();
   if (!workspace) return { ok: false, error: "No active workspace." };
   if (workspace.role !== "owner" && workspace.role !== "admin") {
     return { ok: false, error: "Insufficient permissions." };
   }
 
+  const column = SURFACE_COLUMN[surface];
   const supabase = await createClient();
   const { error } = await supabase
     .from("workspaces")
-    .update({ changelog_enabled: enabled })
+    .update({ [column]: enabled })
     .eq("id", workspace.id);
 
   if (error) return { ok: false, error: error.message };
 
   revalidatePath("/dashboard/settings");
-  revalidatePath("/dashboard/changelog");
+  revalidatePath(SURFACE_REVALIDATE_PATH[surface] ?? `/dashboard/${surface}`);
   return { ok: true };
 }
+
 

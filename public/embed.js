@@ -79,8 +79,12 @@
 
     var iframe = document.createElement("iframe");
     var src = SCRIPT_ORIGIN + "/widget/" + encodeURIComponent(state.workspace);
-    // Optional ?view= selects which surfaces are exposed (all|board|roadmap|changelog).
+    // Optional ?view= selects which surfaces are exposed. Generic surfaces:
+    // all|board|roadmap|changelog|status|contact. Per-item targets:
+    // "board:slug" pins a single board, "survey:slug" embeds a single published
+    // survey form. "contact" pins the widget to the contact form.
     if (state.view) src += "?view=" + encodeURIComponent(state.view);
+
     iframe.src = src;
 
     iframe.style.cssText =

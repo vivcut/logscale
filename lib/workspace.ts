@@ -6,8 +6,14 @@ export type ActiveWorkspace = {
   slug: string;
   logo_url: string | null;
   changelog_enabled: boolean;
+  boards_enabled: boolean;
+  roadmap_enabled: boolean;
+  surveys_enabled: boolean;
+  status_enabled: boolean;
+  contact_enabled: boolean;
   role: string;
 };
+
 
 
 /**
@@ -26,7 +32,10 @@ export async function getActiveWorkspace(): Promise<ActiveWorkspace | null> {
 
   const { data: membership } = await supabase
     .from("workspace_members")
-    .select("role, workspaces ( id, name, slug, logo_url, changelog_enabled )")
+    .select(
+      "role, workspaces ( id, name, slug, logo_url, changelog_enabled, boards_enabled, roadmap_enabled, surveys_enabled, status_enabled, contact_enabled )"
+    )
+
     .eq("profile_id", user.id)
     .order("created_at", { ascending: true })
     .limit(1)
@@ -40,6 +49,11 @@ export async function getActiveWorkspace(): Promise<ActiveWorkspace | null> {
     slug: string;
     logo_url: string | null;
     changelog_enabled: boolean | null;
+    boards_enabled: boolean | null;
+    roadmap_enabled: boolean | null;
+    surveys_enabled: boolean | null;
+    status_enabled: boolean | null;
+    contact_enabled: boolean | null;
   };
 
   return {
@@ -48,7 +62,13 @@ export async function getActiveWorkspace(): Promise<ActiveWorkspace | null> {
     slug: ws.slug,
     logo_url: ws.logo_url,
     changelog_enabled: ws.changelog_enabled ?? true,
+    boards_enabled: ws.boards_enabled ?? true,
+    roadmap_enabled: ws.roadmap_enabled ?? true,
+    surveys_enabled: ws.surveys_enabled ?? true,
+    status_enabled: ws.status_enabled ?? true,
+    contact_enabled: ws.contact_enabled ?? true,
     role: membership.role as string,
   };
+
 }
 

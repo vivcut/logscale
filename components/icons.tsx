@@ -6,7 +6,9 @@
  * intrinsic 1em width/height), so existing className usage keeps working.
  */
 export {
+  Pulse as Activity,
   ArrowUp,
+
   ArrowRight,
   ArrowLeft,
   SealCheck as BadgeCheck,
@@ -23,7 +25,13 @@ export {
   Eye,
   EyeSlash,
   FileText,
+  ClipboardText as ClipboardList,
+  ChartBar as BarChart3,
+  DotsSixVertical as GripVertical,
+  CheckCircle,
+  TextAlignLeft as AlignLeft,
   Fire as Flame,
+
   FloppyDisk as Save,
   Gear as Settings,
   GearSix as Settings2,

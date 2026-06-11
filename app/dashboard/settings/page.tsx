@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
-import { Code2, ExternalLink, Sparkles, Users } from "@/components/icons";
+import { Code2, ExternalLink, Eye, Users } from "@/components/icons";
+
 
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -7,7 +8,8 @@ import { getActiveWorkspace } from "@/lib/workspace";
 
 import { EmbedSnippet } from "./snippet";
 import { LogoUploader } from "./logo-uploader";
-import { ChangelogToggle } from "./changelog-toggle";
+import { SurfaceToggle } from "./surface-toggle";
+
 
 import {
   EditorsManager,
@@ -78,6 +80,32 @@ export default async function SettingsPage() {
 
   const invites: PendingInvite[] = (inviteRows ?? []) as PendingInvite[];
 
+  // Public boards + published surveys — used to offer per-item embed views
+  // (e.g. "Board - Feature requests", "Survey - Customer support").
+  const { data: boardRows } = await supabase
+    .from("boards")
+    .select("name, slug")
+    .eq("workspace_id", workspace.id)
+    .eq("is_private", false)
+    .order("created_at", { ascending: true });
+
+  const { data: surveyRows } = await supabase
+    .from("surveys")
+    .select("title, slug")
+    .eq("workspace_id", workspace.id)
+    .eq("is_published", true)
+    .order("created_at", { ascending: true });
+
+  const embedBoards = (boardRows ?? []).map((b) => ({
+    name: b.name as string,
+    slug: b.slug as string,
+  }));
+  const embedSurveys = (surveyRows ?? []).map((s) => ({
+    name: s.title as string,
+    slug: s.slug as string,
+  }));
+
+
 
   return (
 
@@ -134,21 +162,63 @@ export default async function SettingsPage() {
       </section>
 
 
-      {/* Public changelog visibility */}
+      {/* Public surface visibility */}
       <section className="mb-10">
         <div className="mb-3 flex items-center gap-2">
-          <Sparkles className="size-4 text-muted-foreground" />
-          <h2 className="text-sm font-semibold">Changelog</h2>
+          <Eye className="size-4 text-muted-foreground" />
+          <h2 className="text-sm font-semibold">Public visibility</h2>
         </div>
         <p className="mb-4 max-w-prose text-sm text-muted-foreground">
-          Control whether your public changelog is visible. When off, the page
-          returns a 404 and links to it are hidden.
+          Control which surfaces visitors can see. Turning one off returns a 404
+          on its public page and removes it from the widget — your data is
+          preserved and reappears the moment you switch it back on.
         </p>
-        <ChangelogToggle
-          initialEnabled={workspace.changelog_enabled}
-          canManage={canManage}
-        />
+        <div className="divide-y divide-border overflow-hidden rounded-xl border border-border">
+          <SurfaceToggle
+            surface="boards"
+            label="Boards"
+            description="Your feedback boards are live and publicly viewable."
+            initialEnabled={workspace.boards_enabled}
+            canManage={canManage}
+          />
+          <SurfaceToggle
+            surface="roadmap"
+            label="Roadmap"
+            description="Your public roadmap is live and linked from public pages."
+            initialEnabled={workspace.roadmap_enabled}
+            canManage={canManage}
+          />
+          <SurfaceToggle
+            surface="changelog"
+            label="Changelog"
+            description="Your changelog is live and linked from public pages."
+            initialEnabled={workspace.changelog_enabled}
+            canManage={canManage}
+          />
+          <SurfaceToggle
+            surface="surveys"
+            label="Surveys"
+            description="Published survey links are reachable by respondents."
+            initialEnabled={workspace.surveys_enabled}
+            canManage={canManage}
+          />
+          <SurfaceToggle
+            surface="status"
+            label="Status page"
+            description="Your public status page is live and viewable."
+            initialEnabled={workspace.status_enabled}
+            canManage={canManage}
+          />
+          <SurfaceToggle
+            surface="contact"
+            label="Contact page"
+            description="Your public contact form is live and accepting messages."
+            initialEnabled={workspace.contact_enabled}
+            canManage={canManage}
+          />
+        </div>
       </section>
+
 
 
       {/* Embed widget */}
@@ -166,7 +236,13 @@ export default async function SettingsPage() {
           won&apos;t block your page.
         </p>
 
-        <EmbedSnippet origin={origin} workspaceSlug={workspace.slug} />
+        <EmbedSnippet
+          origin={origin}
+          workspaceSlug={workspace.slug}
+          boards={embedBoards}
+          surveys={embedSurveys}
+        />
+
 
         <a
           href={`/widget/${workspace.slug}`}

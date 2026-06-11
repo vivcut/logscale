@@ -32,11 +32,13 @@ export default async function PublicBoardPage({
   // Resolve workspace by slug.
   const { data: workspace } = await supabase
     .from("workspaces")
-    .select("id, name, slug, logo_url")
+    .select("id, name, slug, logo_url, boards_enabled")
     .eq("slug", workspaceSlug)
     .single();
 
-  if (!workspace) notFound();
+  // Boards hidden from public view (toggle off) → 404. Data is preserved.
+  if (!workspace || workspace.boards_enabled === false) notFound();
+
 
   // Resolve board within that workspace.
   const { data: board } = await supabase

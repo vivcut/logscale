@@ -1,12 +1,17 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import {
+  Activity,
+  ClipboardList,
   GitBranch,
   LayoutGrid,
+  Mail,
   MessageSquare,
   Settings,
   Sparkles,
 } from "@/components/icons";
+
+
 
 import { createClient } from "@/lib/supabase/server";
 import { claimPendingInvites } from "@/lib/invites";
@@ -19,7 +24,12 @@ const nav = [
   { href: "/dashboard/boards", label: "Boards", icon: MessageSquare },
   { href: "/dashboard/roadmap", label: "Roadmap", icon: GitBranch },
   { href: "/dashboard/changelog", label: "Changelog", icon: Sparkles },
+  { href: "/dashboard/surveys", label: "Surveys", icon: ClipboardList },
+  { href: "/dashboard/status", label: "Status", icon: Activity },
+  { href: "/dashboard/contact-page", label: "Contact", icon: Mail },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
+
+
 ];
 
 export default async function DashboardLayout({

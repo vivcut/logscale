@@ -26,11 +26,13 @@ export default async function PublicRoadmapPage({
 
   const { data: workspace } = await supabase
     .from("workspaces")
-    .select("id, name, slug, logo_url")
+    .select("id, name, slug, logo_url, roadmap_enabled")
     .eq("slug", workspaceSlug)
     .single();
 
-  if (!workspace) notFound();
+  // Roadmap hidden from public view (toggle off) → 404. Data is preserved.
+  if (!workspace || workspace.roadmap_enabled === false) notFound();
+
 
   const posts = await getRoadmapPosts(workspace.id);
 

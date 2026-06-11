@@ -4,16 +4,23 @@ import * as React from "react";
 import { Loader2 } from "@/components/icons";
 
 import { cn } from "@/lib/utils";
-import { setChangelogEnabled } from "./actions";
+import { setSurfaceEnabled, type PublicSurface } from "./actions";
 
 /**
- * Owner/admin toggle that shows or hides the public changelog. Updates
- * optimistically and reverts if the server action fails.
+ * Owner/admin toggle that shows or hides a public surface (boards / roadmap /
+ * changelog / surveys / status). Optimistic UI that reverts on failure.
+ * Turning a surface off never deletes data — it just hides the public page.
  */
-export function ChangelogToggle({
+export function SurfaceToggle({
+  surface,
+  label,
+  description,
   initialEnabled,
   canManage,
 }: {
+  surface: PublicSurface;
+  label: string;
+  description: string;
   initialEnabled: boolean;
   canManage: boolean;
 }) {
@@ -27,7 +34,7 @@ export function ChangelogToggle({
     setEnabled(next);
     setBusy(true);
     setError(null);
-    const res = await setChangelogEnabled(next);
+    const res = await setSurfaceEnabled(surface, next);
     if (!res.ok) {
       setEnabled(!next); // revert
       setError(res.error ?? "Could not update.");
@@ -36,13 +43,11 @@ export function ChangelogToggle({
   }
 
   return (
-    <div className="flex items-center justify-between gap-4 rounded-xl border border-border bg-card p-4">
+    <div className="flex items-center justify-between gap-4 bg-card p-4">
       <div className="min-w-0">
-        <p className="text-sm font-medium">Public changelog</p>
+        <p className="text-sm font-medium">{label}</p>
         <p className="mt-0.5 text-sm text-muted-foreground">
-          {enabled
-            ? "Your changelog is live and linked from public pages."
-            : "Your changelog is hidden from visitors."}
+          {enabled ? description : "Hidden from visitors. No data is lost."}
         </p>
         {error ? (
           <p className="mt-1 font-mono text-[10px] text-destructive">{error}</p>

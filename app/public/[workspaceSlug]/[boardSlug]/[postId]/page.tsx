@@ -43,11 +43,13 @@ export default async function PublicPostPage({
 
   const { data: workspace } = await supabase
     .from("workspaces")
-    .select("id, name, slug, logo_url")
+    .select("id, name, slug, logo_url, boards_enabled")
     .eq("slug", workspaceSlug)
     .single();
 
-  if (!workspace) notFound();
+  // Boards hidden from public view (toggle off) → 404. Data is preserved.
+  if (!workspace || workspace.boards_enabled === false) notFound();
+
 
   const { data: board } = await supabase
     .from("boards")
