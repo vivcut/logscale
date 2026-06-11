@@ -1,26 +1,238 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  ToTheMoon — polar.sh inspired theme
+  Deep, high-contrast dark UI: near-black backgrounds, crisp zinc-800 borders,
+  muted zinc-400 secondary text, electric white primary, indigo accent ring.
+*/
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --radius: 0.5rem;
+
+  /* Light fallback (the app runs dark-first, but tokens exist for completeness) */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+}
+
+.dark {
+  /* Base canvas — ultra-dark, near #030303 */
+  --background: oklch(0.12 0 0);
+  --foreground: oklch(0.985 0 0);
+
+  /* Surfaces — slightly raised dark zinc panels */
+  --card: oklch(0.16 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.16 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+
+  /* Primary — crisp electric white actions on dark */
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.16 0 0);
+
+  /* Secondary / muted / accent — subtle zinc layers */
+  --secondary: oklch(0.22 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.2 0 0);
+  --muted-foreground: oklch(0.708 0 0); /* ~ zinc-400 */
+  --accent: oklch(0.24 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+
+  /* Crisp borders ~ zinc-800, inputs slightly brighter */
+  --border: oklch(0.27 0 0);
+  --input: oklch(0.3 0 0);
+
+  /* Electric indigo focus ring accent */
+  --ring: oklch(0.55 0.21 277);
+
+  --chart-1: oklch(0.55 0.21 277);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
-body {
-  background: var(--background);
+/*
+  prose-changelog — a precise, dependency-free "prose-invert" style for the
+  Markdown output in both the editor preview and the public timeline.
+  Tuned to the polar.sh look: tight rhythm, muted body text, crisp code chips.
+  Uses standard properties only so Safari/Edge render identically.
+*/
+.prose-changelog {
+  color: var(--muted-foreground);
+  font-size: 0.925rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.prose-changelog > :first-child {
+  margin-top: 0;
+}
+.prose-changelog > :last-child {
+  margin-bottom: 0;
+}
+.prose-changelog h1,
+.prose-changelog h2,
+.prose-changelog h3,
+.prose-changelog h4 {
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  margin-top: 1.75em;
+  margin-bottom: 0.6em;
+}
+.prose-changelog h1 {
+  font-size: 1.5rem;
+}
+.prose-changelog h2 {
+  font-size: 1.2rem;
+}
+.prose-changelog h3 {
+  font-size: 1.05rem;
+}
+.prose-changelog h4 {
+  font-size: 0.95rem;
+}
+.prose-changelog p {
+  margin: 0.85em 0;
+}
+.prose-changelog a {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--border);
+  transition: text-decoration-color 0.15s ease;
+}
+.prose-changelog a:hover {
+  text-decoration-color: var(--foreground);
+}
+.prose-changelog strong {
+  color: var(--foreground);
+  font-weight: 600;
+}
+.prose-changelog ul,
+.prose-changelog ol {
+  margin: 0.85em 0;
+  padding-left: 1.4em;
+}
+.prose-changelog ul {
+  list-style: disc;
+}
+.prose-changelog ol {
+  list-style: decimal;
+}
+.prose-changelog li {
+  margin: 0.35em 0;
+  padding-left: 0.25em;
+}
+.prose-changelog li::marker {
+  color: var(--muted-foreground);
+}
+.prose-changelog code {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.825em;
+  background: var(--secondary);
+  color: var(--foreground);
+  padding: 0.15em 0.4em;
+  border-radius: 0.3rem;
+  border: 1px solid var(--border);
+}
+.prose-changelog pre {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  margin: 1.1em 0;
+}
+.prose-changelog pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: 0.825rem;
+  color: var(--muted-foreground);
+}
+.prose-changelog blockquote {
+  border-left: 2px solid var(--border);
+  padding-left: 1em;
+  margin: 1.1em 0;
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+.prose-changelog hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 1.75em 0;
 }
