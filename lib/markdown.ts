@@ -23,6 +23,13 @@ function inline(text: string): string {
   // Inline code (process before other inline rules).
   out = out.replace(/`([^`]+)`/g, (_m, code) => `<code>${code}</code>`);
 
+  // Images ![alt](url) — must run before links since the syntax overlaps.
+  out = out.replace(
+    /!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g,
+    (_m, alt, url) =>
+      `<img src="${url}" alt="${alt}" loading="lazy" />`
+  );
+
   // Links [label](url)
   out = out.replace(
     /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,

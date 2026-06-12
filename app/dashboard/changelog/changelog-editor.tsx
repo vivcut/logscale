@@ -2,7 +2,15 @@
 
 import * as React from "react";
 import { useActionState } from "react";
-import { Eye, FileText, Loader2, Save, Send, Sparkles } from "@/components/icons";
+import {
+  Eye,
+  FileText,
+  ImageIcon,
+  Loader2,
+  Save,
+  Send,
+  Sparkles,
+} from "@/components/icons";
 
 import { cn } from "@/lib/utils";
 import { renderMarkdown } from "@/lib/markdown";
@@ -37,9 +45,58 @@ export function ChangelogEditor({
   const [content, setContent] = React.useState(entry?.content ?? "");
   const [mode, setMode] = React.useState<Mode>("write");
 
+  const contentRef = React.useRef<HTMLTextAreaElement>(null);
+  const imageInputRef = React.useRef<HTMLInputElement>(null);
+
   // AI draft state
   const [aiLoading, setAiLoading] = React.useState(false);
   const [aiError, setAiError] = React.useState<string | null>(null);
+
+  // Image upload state
+  const [imageUploading, setImageUploading] = React.useState(false);
+  const [imageError, setImageError] = React.useState<string | null>(null);
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (imageInputRef.current) imageInputRef.current.value = "";
+    if (!file) return;
+
+    setImageError(null);
+    setImageUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/changelog/images", {
+        method: "POST",
+        body: fd,
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setImageError(json.error ?? "Upload failed.");
+        return;
+      }
+
+      // Splice the markdown image at the cursor (or append to the end).
+      const snippet = `![${file.name}](${json.url})`;
+      const el = contentRef.current;
+      setContent((prev) => {
+        if (el && typeof el.selectionStart === "number") {
+          const start = el.selectionStart;
+          const end = el.selectionEnd;
+          const before = prev.slice(0, start);
+          const after = prev.slice(end);
+          const sep = before && !before.endsWith("\n") ? "\n" : "";
+          return `${before}${sep}${snippet}\n${after}`;
+        }
+        return prev.trim() ? `${prev.trim()}\n\n${snippet}\n` : `${snippet}\n`;
+      });
+      setMode("write");
+    } catch {
+      setImageError("Unexpected error uploading image.");
+    } finally {
+      setImageUploading(false);
+    }
+  }
 
   async function handleAiDraft() {
     setAiLoading(true);
@@ -127,6 +184,29 @@ export function ChangelogEditor({
               </button>
             </div>
 
+            {/* Image upload */}
+            <input
+              ref={imageInputRef}
+              type="file"
+              accept="image/png,image/jpeg,image/webp,image/gif"
+              onChange={handleImageUpload}
+              className="hidden"
+            />
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => imageInputRef.current?.click()}
+              disabled={imageUploading}
+            >
+              {imageUploading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <ImageIcon />
+              )}
+              {imageUploading ? "Uploading…" : "Image"}
+            </Button>
+
             {/* AI Draft */}
             <Button
               type="button"
@@ -148,6 +228,9 @@ export function ChangelogEditor({
         {aiError ? (
           <p className="font-mono text-xs text-destructive">{aiError}</p>
         ) : null}
+        {imageError ? (
+          <p className="font-mono text-xs text-destructive">{imageError}</p>
+        ) : null}
 
         {/* Hidden field always carries the markdown for submission */}
         <textarea name="content" value={content} readOnly hidden />
@@ -155,6 +238,7 @@ export function ChangelogEditor({
         {mode === "write" ? (
           <textarea
             id="content"
+            ref={contentRef}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder={

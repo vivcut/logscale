@@ -120,18 +120,43 @@ export default async function DashboardPage() {
           <div className="flex size-10 items-center justify-center rounded-md border border-border bg-secondary">
             <MessageSquare className="size-5 text-muted-foreground" />
           </div>
-          <h2 className="mt-4 text-sm font-medium">No feedback yet</h2>
-          <p className="mt-1 max-w-xs text-sm text-muted-foreground">
-            Create your first board to start collecting feature requests from
-            your users.
-          </p>
-          <Link
-            href="/dashboard/boards"
-            className="mt-4 inline-flex items-center gap-1.5 rounded-md border border-border bg-secondary px-3 py-2 text-sm font-medium transition-colors hover:bg-secondary/70"
-          >
-            <Plus className="size-4" />
-            Create a board
-          </Link>
+          {boards.length === 0 ? (
+            <>
+              {/* No boards at all — guide the user to create their first one. */}
+              <h2 className="mt-4 text-sm font-medium">No boards yet</h2>
+              <p className="mt-1 max-w-xs text-sm text-muted-foreground">
+                Create your first board to start collecting feature requests
+                from your users.
+              </p>
+              <Link
+                href="/dashboard/boards"
+                className="mt-4 inline-flex items-center gap-1.5 rounded-md border border-border bg-secondary px-3 py-2 text-sm font-medium transition-colors hover:bg-secondary/70"
+              >
+                <Plus className="size-4" />
+                Create a board
+              </Link>
+            </>
+          ) : (
+            <>
+              {/* Boards exist but nobody has posted yet — share the public link. */}
+              <h2 className="mt-4 text-sm font-medium">No feedback yet</h2>
+              <p className="mt-1 max-w-xs text-sm text-muted-foreground">
+                Your{" "}
+                {boards.length === 1
+                  ? "board is"
+                  : `${boards.length} boards are`}{" "}
+                ready — share the public link so your users can start posting
+                feature requests.
+              </p>
+              <Link
+                href="/dashboard/boards"
+                className="mt-4 inline-flex items-center gap-1.5 rounded-md border border-border bg-secondary px-3 py-2 text-sm font-medium transition-colors hover:bg-secondary/70"
+              >
+                <MessageSquare className="size-4" />
+                View boards
+              </Link>
+            </>
+          )}
         </div>
       ) : (
         <OverviewBoards

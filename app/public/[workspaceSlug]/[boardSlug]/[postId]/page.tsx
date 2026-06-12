@@ -10,6 +10,7 @@ import {
   PostDetail,
   type DetailPost,
   type StatusEvent,
+  type PostAttachment,
 } from "./post-detail";
 
 type PageParams = {
@@ -79,6 +80,13 @@ export default async function PublicPostPage({
     .eq("post_id", post.id)
     .order("created_at", { ascending: true });
 
+  // Attachments (images shown inline, PDFs as clickable chips).
+  const { data: attachments } = await supabase
+    .from("post_attachments")
+    .select("id, url, file_name, content_type, size")
+    .eq("post_id", post.id)
+    .order("created_at", { ascending: true });
+
   // Determine whether the current viewer can manage (pin comments etc.).
   let canManage = false;
   const active = await getActiveWorkspace().catch(() => null);
@@ -130,6 +138,7 @@ export default async function PublicPostPage({
         <PostDetail
           post={post as DetailPost}
           statusEvents={(events ?? []) as StatusEvent[]}
+          attachments={(attachments ?? []) as PostAttachment[]}
           boardSlug={board.slug}
           canManage={canManage}
         />

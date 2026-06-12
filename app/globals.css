@@ -236,3 +236,11 @@
   border-top: 1px solid var(--border);
   margin: 1.75em 0;
 }
+.prose-changelog img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  margin: 1.1em 0;
+}

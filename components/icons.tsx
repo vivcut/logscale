@@ -38,6 +38,8 @@ export {
   GitBranch,
   GitMerge,
   Image as ImageIcon,
+  Paperclip,
+  FilePdf,
   Tray as Inbox,
   Lock,
   SignOut as LogOut,

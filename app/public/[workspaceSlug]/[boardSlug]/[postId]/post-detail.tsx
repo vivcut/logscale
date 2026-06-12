@@ -8,6 +8,7 @@ import {
   BadgeCheck,
   Check,
   ChevronDown,
+  FilePdf,
   Loader2,
   Pin,
   Send,
@@ -36,6 +37,14 @@ export type StatusEvent = {
   id: string;
   status: string;
   created_at: string;
+};
+
+export type PostAttachment = {
+  id: string;
+  url: string;
+  file_name: string;
+  content_type: string;
+  size: number;
 };
 
 type Comment = {
@@ -82,14 +91,22 @@ function formatDate(iso: string) {
 }
 
 
+function formatBytes(bytes: number) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 export function PostDetail({
   post: initialPost,
   statusEvents: initialEvents,
+  attachments = [],
   boardSlug,
   canManage,
 }: {
   post: DetailPost;
   statusEvents: StatusEvent[];
+  attachments?: PostAttachment[];
   boardSlug: string;
   canManage: boolean;
 }) {
@@ -306,6 +323,54 @@ export function PostDetail({
               <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">
                 {post.description}
               </p>
+            ) : null}
+
+            {/* Attachments — images render inline; PDFs become a clickable chip. */}
+            {attachments.length > 0 ? (
+              <div className="mt-4 space-y-3">
+                {attachments
+                  .filter((a) => a.content_type.startsWith("image/"))
+                  .map((a) => (
+                    <a
+                      key={a.id}
+                      href={a.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block overflow-hidden rounded-lg border border-border"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={a.url}
+                        alt={a.file_name}
+                        className="max-h-[480px] w-full bg-secondary/30 object-contain"
+                      />
+                    </a>
+                  ))}
+
+                <div className="flex flex-wrap gap-2">
+                  {attachments
+                    .filter((a) => a.content_type === "application/pdf")
+                    .map((a) => (
+                      <a
+                        key={a.id}
+                        href={a.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 transition-colors hover:border-foreground/30 hover:bg-secondary/40"
+                      >
+                        <FilePdf className="size-5 shrink-0 text-red-400" />
+                        <span className="flex flex-col">
+                          <span className="max-w-[200px] truncate text-xs font-medium">
+                            {a.file_name}
+                          </span>
+                          <span className="font-mono text-[10px] text-muted-foreground">
+                            PDF · {formatBytes(a.size)}
+                          </span>
+                        </span>
+                      </a>
+                    ))}
+                </div>
+              </div>
             ) : null}
 
             {/* Owner-only inline controls */}

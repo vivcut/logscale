@@ -4,11 +4,15 @@ import * as React from "react";
 import Link from "next/link";
 import {
   ArrowUp,
+  FilePdf,
+  ImageIcon,
   Loader2,
   MessageSquare,
   MessageSquarePlus,
+  Paperclip,
   Search,
   Send,
+  X,
 } from "@/components/icons";
 
 import { cn } from "@/lib/utils";
@@ -49,7 +53,21 @@ type FilterKey = (typeof FILTERS)[number]["key"];
 const NAME_KEY = "ttm_name";
 const EMAIL_KEY = "ttm_email";
 
+// Strict client-side mirror of the server limits (see /api/posts/attachments).
+const MAX_FILES = 4;
+const MAX_FILE_BYTES = 5 * 1024 * 1024; // 5MB
+const ACCEPT =
+  "image/png,image/jpeg,image/webp,image/gif,application/pdf";
+const ALLOWED_TYPES = [
+  "image/png",
+  "image/jpeg",
+  "image/webp",
+  "image/gif",
+  "application/pdf",
+];
+
 function formatDate(iso: string) {
+
   return new Date(iso).toLocaleDateString(undefined, {
     year: "numeric",
     month: "short",
@@ -87,8 +105,12 @@ export function FeedbackBoard({
   const [submitting, setSubmitting] = React.useState(false);
   const [formError, setFormError] = React.useState<string | null>(null);
 
+  // Pending attachments (uploaded after the post is created).
+  const [files, setFiles] = React.useState<File[]>([]);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   // Inline duplicate detection
+
   const [matches, setMatches] = React.useState<PublicPost[]>([]);
   const [searching, setSearching] = React.useState(false);
 
@@ -168,6 +190,43 @@ export function FeedbackBoard({
     };
   }, [title, boardId]);
 
+  // Validate + queue picked files, enforcing the strict count/size/type caps.
+  function handlePickFiles(e: React.ChangeEvent<HTMLInputElement>) {
+    const picked = Array.from(e.target.files ?? []);
+    if (picked.length === 0) return;
+    setFormError(null);
+
+    setFiles((prev) => {
+      const next = [...prev];
+      for (const file of picked) {
+        if (next.length >= MAX_FILES) {
+          setFormError(`You can attach at most ${MAX_FILES} files.`);
+          break;
+        }
+        if (!ALLOWED_TYPES.includes(file.type)) {
+          setFormError("Only images (PNG, JPG, WEBP, GIF) or PDFs are allowed.");
+          continue;
+        }
+        if (file.size > MAX_FILE_BYTES) {
+          setFormError("Each file must be under 5MB.");
+          continue;
+        }
+        // Skip exact duplicates (same name + size).
+        if (next.some((f) => f.name === file.name && f.size === file.size)) {
+          continue;
+        }
+        next.push(file);
+      }
+      return next.slice(0, MAX_FILES);
+    });
+
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
+
+  function removeFile(idx: number) {
+    setFiles((prev) => prev.filter((_, i) => i !== idx));
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!title.trim()) return;
@@ -206,11 +265,32 @@ export function FeedbackBoard({
         setFormError(json.error ?? "Something went wrong.");
         return;
       }
-      setPosts((prev) => [json.post as PublicPost, ...prev]);
+
+      // Upload any queued attachments now that we have a post id. Failures here
+      // are non-fatal — the post is already created.
+      const newPost = json.post as PublicPost;
+      if (files.length > 0 && newPost?.id) {
+        for (const file of files) {
+          const fd = new FormData();
+          fd.append("postId", newPost.id);
+          fd.append("file", file);
+          try {
+            await fetch("/api/posts/attachments", {
+              method: "POST",
+              body: fd,
+            });
+          } catch {
+            /* best effort — ignore individual upload failures */
+          }
+        }
+      }
+
+      setPosts((prev) => [newPost, ...prev]);
       setTitle("");
       setDescription("");
       setFlair(null);
       setMatches([]);
+      setFiles([]);
 
     } catch {
       setFormError("Network error. Please try again.");
@@ -359,6 +439,70 @@ export function FeedbackBoard({
                 placeholder="Describe the problem and why it matters…"
                 rows={4}
               />
+            </div>
+
+            {/* Attachments — images & PDFs (strict limit). */}
+            <div className="flex flex-col gap-2">
+              <Label className="text-muted-foreground">
+                Attachments{" "}
+                <span className="text-muted-foreground/60">(optional)</span>
+              </Label>
+
+              {files.length > 0 ? (
+                <ul className="flex flex-col gap-1.5">
+                  {files.map((file, idx) => {
+                    const isImage = file.type.startsWith("image/");
+                    return (
+                      <li
+                        key={`${file.name}-${idx}`}
+                        className="flex items-center gap-2 rounded-md border border-border bg-background/60 px-2.5 py-1.5"
+                      >
+                        {isImage ? (
+                          <ImageIcon className="size-3.5 shrink-0 text-muted-foreground" />
+                        ) : (
+                          <FilePdf className="size-3.5 shrink-0 text-red-400" />
+                        )}
+                        <span className="min-w-0 flex-1 truncate text-xs">
+                          {file.name}
+                        </span>
+                        <span className="shrink-0 font-mono text-[10px] text-muted-foreground">
+                          {(file.size / 1024).toFixed(0)}kb
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => removeFile(idx)}
+                          className="shrink-0 text-muted-foreground transition-colors hover:text-destructive"
+                          aria-label="Remove attachment"
+                        >
+                          <X className="size-3.5" />
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : null}
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept={ACCEPT}
+                multiple
+                onChange={handlePickFiles}
+                className="hidden"
+              />
+              {files.length < MAX_FILES ? (
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="inline-flex items-center justify-center gap-1.5 rounded-md border border-dashed border-border px-3 py-2 font-mono text-[11px] text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
+                >
+                  <Paperclip className="size-3.5" />
+                  attach image or PDF
+                </button>
+              ) : null}
+              <p className="font-mono text-[10px] text-muted-foreground">
+                up to {MAX_FILES} files · images or PDFs · max 5MB each
+              </p>
             </div>
 
 
