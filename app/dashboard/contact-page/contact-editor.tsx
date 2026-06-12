@@ -3,12 +3,14 @@
 import * as React from "react";
 import { useActionState } from "react";
 import Link from "next/link";
-import { ExternalLink, Loader2, Save } from "@/components/icons";
+import { Loader2, Save } from "@/components/icons";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ShareLink } from "@/components/share-link";
+
 import {
   saveContactConfig,
   type ContactActionState,
@@ -53,7 +55,7 @@ export function ContactEditor({
       <input type="hidden" name="enabled" value={String(enabled)} />
 
       {/* Live state bar */}
-      <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="space-y-3 rounded-xl border border-border bg-card p-4">
         <div className="flex items-center gap-2">
           <span
             className={cn(
@@ -65,15 +67,9 @@ export function ContactEditor({
             {enabled ? "live — public page enabled" : "hidden — public page off"}
           </span>
         </div>
-        <Link
-          href={publicUrl}
-          target="_blank"
-          className="inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
-        >
-          <ExternalLink className="size-3.5" />
-          view public page
-        </Link>
+        <ShareLink url={publicUrl} label="Contact page" />
       </div>
+
 
       {/* Text settings */}
       <div className="space-y-4 rounded-xl border border-border bg-card p-5">

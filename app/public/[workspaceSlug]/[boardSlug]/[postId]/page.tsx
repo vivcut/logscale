@@ -6,6 +6,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 
 import { getActiveWorkspace } from "@/lib/workspace";
 import { CommandPalette } from "@/components/command-palette";
+import { Watermark } from "@/components/watermark";
+
 import {
   PostDetail,
   type DetailPost,
@@ -64,8 +66,10 @@ export default async function PublicPostPage({
   const { data: post } = await supabase
     .from("posts")
     .select(
-      "id, board_id, title, description, status, upvotes_count, flair, created_at"
+      "id, board_id, title, description, status, upvotes_count, flair, is_official, author_name, created_at"
     )
+
+
     .eq("id", postId)
     .eq("board_id", board.id)
     .single();
@@ -143,7 +147,10 @@ export default async function PublicPostPage({
           canManage={canManage}
         />
 
+        {/* Hobby-plan watermark (removed on Startup). */}
+        <Watermark workspaceId={workspace.id} />
       </main>
+
     </div>
   );
 }

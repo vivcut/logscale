@@ -12,6 +12,8 @@ import {
 
 import { createClient } from "@/lib/supabase/server";
 import { getActiveWorkspace } from "@/lib/workspace";
+import { PlanBanner } from "@/components/plan-banner";
+
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -195,7 +197,10 @@ export default async function DashboardPage() {
         </p>
       </div>
 
+      <PlanBanner page="overview" />
+
       <div className="grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+
         {apps.map((app) => (
           <Link
             key={app.href}

@@ -1,10 +1,14 @@
 import Link from "next/link";
-import { ExternalLink, Plus, Sparkles } from "@/components/icons";
+import { Plus, Sparkles } from "@/components/icons";
 
 import { createClient } from "@/lib/supabase/server";
 import { getActiveWorkspace } from "@/lib/workspace";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { PlanBanner } from "@/components/plan-banner";
+import { ShareLink } from "@/components/share-link";
+
+
 
 export const metadata = {
   title: "Changelog — ToTheMoon",
@@ -44,25 +48,31 @@ export default async function ChangelogPage() {
             Publish release notes to your public timeline.
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <Link href={`/public/${workspace.slug}/changelog`} target="_blank">
-            <Button variant="outline" size="sm">
-              <ExternalLink />
-              View public
-            </Button>
-          </Link>
-          <Link href="/dashboard/changelog/new">
-            <Button size="sm">
-              <Plus />
-              New release
-            </Button>
-          </Link>
-        </div>
+        <Link href="/dashboard/changelog/new">
+          <Button size="sm">
+            <Plus />
+            New release
+          </Button>
+        </Link>
       </div>
+
+      <div className="mb-6">
+        <p className="mb-1.5 font-mono text-xs text-muted-foreground">
+          public changelog link
+        </p>
+        <ShareLink
+          url={`/public/${workspace.slug}/changelog`}
+          label={`${workspace.name} changelog`}
+        />
+      </div>
+
+      <PlanBanner page="changelog" />
+
 
       {list.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-16 text-center">
           <Sparkles className="mb-3 size-5 text-muted-foreground" />
+
           <h3 className="text-sm font-medium">No releases yet</h3>
           <p className="mt-1 max-w-sm text-sm text-muted-foreground">
             Write your first release note, or generate one with AI from your

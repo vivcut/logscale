@@ -5,8 +5,10 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getActiveWorkspace } from "@/lib/workspace";
+import { getWorkspaceSubscription, hasStartupPlan } from "@/lib/subscription";
 
 export type ContactActionState = { ok: boolean; error?: string };
+
 
 /**
  * Save the active workspace's contact-page configuration: heading text,
@@ -26,23 +28,40 @@ export async function saveContactConfig(
   const title = String(formData.get("title") ?? "").trim();
   if (!title) return { ok: false, error: "Please enter a title." };
 
-  const placeholder =
+  let placeholder =
     String(formData.get("placeholder") ?? "").trim() || "How can we help?";
   const emailRequired = formData.get("email_required") === "true";
   const smsRequired = formData.get("sms_required") === "true";
   const enabled = formData.get("enabled") === "true";
 
   const supabase = await createClient();
+
+  // Hobby plan: can't customize the title text or message placeholder — keep
+  // whatever is currently saved (or the defaults) and only allow toggling
+  // enabled / required settings.
+  const subscription = await getWorkspaceSubscription(workspace.id);
+  let titleToSave = title;
+  if (!hasStartupPlan(subscription)) {
+    const { data: current } = await supabase
+      .from("workspaces")
+      .select("contact_title, contact_placeholder")
+      .eq("id", workspace.id)
+      .single();
+    titleToSave = current?.contact_title ?? "Get in touch";
+    placeholder = current?.contact_placeholder ?? "How can we help?";
+  }
+
   const { error } = await supabase
     .from("workspaces")
     .update({
-      contact_title: title,
+      contact_title: titleToSave,
       contact_placeholder: placeholder,
       contact_email_required: emailRequired,
       contact_sms_required: smsRequired,
       contact_enabled: enabled,
     })
     .eq("id", workspace.id);
+
 
   if (error) return { ok: false, error: error.message };
 

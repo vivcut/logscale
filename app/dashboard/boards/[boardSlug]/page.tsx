@@ -2,7 +2,9 @@ import { notFound, redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { getActiveWorkspace } from "@/lib/workspace";
+import { getWorkspaceSubscription, hasStartupPlan } from "@/lib/subscription";
 import { AdminBoard, type AdminPost } from "./admin-board";
+
 
 export const metadata = {
   title: "Board — ToTheMoon",
@@ -21,12 +23,36 @@ export default async function AdminBoardPage({
 
   const supabase = await createClient();
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // The signed-in team member's identity is autofilled + locked on the
+  // "manually add post" form so internal posts are always attributed.
+  let teamName: string | null = null;
+  let teamEmail: string | null = user?.email ?? null;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("name, email")
+      .eq("id", user.id)
+      .maybeSingle();
+    teamName = profile?.name ?? null;
+    teamEmail = profile?.email ?? user.email ?? null;
+  }
+
+  // Custom flairs are a Startup-plan feature.
+  const subscription = await getWorkspaceSubscription(workspace.id);
+  const canCustomizeFlairs = hasStartupPlan(subscription);
+
   const { data: board } = await supabase
     .from("boards")
-    .select("id, name, slug, description, is_private")
+    .select("id, name, slug, description, is_private, flairs")
     .eq("workspace_id", workspace.id)
     .eq("slug", boardSlug)
     .maybeSingle();
+
+
 
   if (!board) notFound();
 
@@ -109,13 +135,21 @@ export default async function AdminBoardPage({
 
   return (
     <AdminBoard
+      boardId={board.id}
       boardSlug={board.slug}
       boardName={board.name}
       boardDescription={board.description}
+      boardFlairs={(board.flairs ?? ["general"]) as string[]}
+      canCustomizeFlairs={canCustomizeFlairs}
+      teamName={teamName}
+      teamEmail={teamEmail}
+      isPrivate={board.is_private}
       workspaceName={workspace.name}
       workspaceSlug={workspace.slug}
       canManage={canManage}
       posts={visible}
+
+
       followerCounts={followerCounts}
       metrics={{
         totalPosts,

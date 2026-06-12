@@ -2,8 +2,13 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { claimPendingInvites } from "@/lib/invites";
+import { getActiveWorkspace } from "@/lib/workspace";
+import { getWorkspaceSubscription, hasStartupPlan } from "@/lib/subscription";
 import { SignOutButton } from "./sign-out-button";
 import { DashboardSidebar } from "./sidebar";
+import { PageTransition } from "./page-transition";
+
+
 
 
 export default async function DashboardLayout({
@@ -62,15 +67,27 @@ export default async function DashboardLayout({
   const displayName = profile?.name ?? user.email ?? "Account";
   const displayEmail = profile?.email ?? user.email ?? "";
 
+  // Resolve the active workspace's plan so the sidebar can show a badge.
+  const activeWorkspace = await getActiveWorkspace();
+  const subscription = activeWorkspace
+    ? await getWorkspaceSubscription(activeWorkspace.id)
+    : null;
+  const isStartup = hasStartupPlan(subscription);
+
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-screen overflow-hidden">
       {/* Sidebar (client component — collapsible + theme toggle) */}
       <DashboardSidebar
+
         workspaces={workspaces}
+        activeWorkspaceId={activeWorkspace?.id ?? null}
         displayName={displayName}
         displayEmail={displayEmail}
         avatarUrl={profile?.avatar_url ?? null}
+        isStartup={isStartup}
       />
+
+
 
       {/* Main content */}
 
@@ -79,7 +96,10 @@ export default async function DashboardLayout({
           <span className="font-mono text-sm font-semibold">tothemoon</span>
           <SignOutButton />
         </header>
-        <main className="flex-1 overflow-y-auto">{children}</main>
+        <main className="flex-1 overflow-y-auto">
+          <PageTransition>{children}</PageTransition>
+        </main>
+
       </div>
     </div>
   );

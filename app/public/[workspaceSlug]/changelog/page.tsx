@@ -5,6 +5,8 @@ import {
   ChangelogTimeline,
   type ChangelogEntry,
 } from "@/components/changelog-timeline";
+import { Watermark } from "@/components/watermark";
+
 
 type PageParams = { workspaceSlug: string };
 
@@ -80,7 +82,9 @@ export default async function PublicChangelogPage({
           public page and the embeddable widget stay perfectly in sync.
         */}
         <ChangelogTimeline entries={list as ChangelogEntry[]} />
+        <Watermark workspaceId={workspace.id} />
       </main>
+
 
     </div>
   );

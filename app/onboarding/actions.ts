@@ -1,9 +1,12 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
 import { createClient } from "@/lib/supabase/server";
+import { ACTIVE_WORKSPACE_COOKIE } from "@/lib/workspace";
+
 
 export type OnboardingState = {
   error?: string;
@@ -98,6 +101,17 @@ export async function createWorkspace(
     return { error: memberError.message };
   }
 
-  revalidatePath("/dashboard");
+  // Make the freshly created workspace the active one so the dashboard opens
+  // straight into it (instead of falling back to the user's first workspace).
+  const cookieStore = await cookies();
+  cookieStore.set(ACTIVE_WORKSPACE_COOKIE, workspace.id, {
+    httpOnly: true,
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365,
+  });
+
+  revalidatePath("/dashboard", "layout");
   redirect("/dashboard");
+
 }

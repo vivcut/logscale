@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getWorkspaceStatus } from "@/lib/uptime";
 import { StatusBoard, type StatusSite } from "@/components/status-board";
+import { Watermark } from "@/components/watermark";
+
 
 type PageParams = { workspaceSlug: string };
 
@@ -111,7 +113,9 @@ export default async function PublicStatusPage({
         <p className="mt-6 text-center font-mono text-[11px] text-muted-foreground">
           Automatically monitored every 2 minutes.
         </p>
+        <Watermark workspaceId={workspace.id} />
       </main>
+
     </div>
   );
 }

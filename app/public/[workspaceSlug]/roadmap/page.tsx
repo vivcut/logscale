@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getRoadmapPosts } from "@/lib/roadmap";
 import { RoadmapBoard } from "@/components/roadmap-board";
+import { Watermark } from "@/components/watermark";
+
 
 type PageParams = { workspaceSlug: string };
 
@@ -67,7 +69,9 @@ export default async function PublicRoadmapPage({
       <main className="mx-auto max-w-6xl px-6 py-8">
         {/* Shared roadmap board — identical to the widget's roadmap tab. */}
         <RoadmapBoard posts={posts} />
+        <Watermark workspaceId={workspace.id} />
       </main>
+
 
     </div>
   );

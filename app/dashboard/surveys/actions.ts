@@ -6,7 +6,13 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getActiveWorkspace } from "@/lib/workspace";
+import {
+  getWorkspaceSubscription,
+  hasStartupPlan,
+  PLAN_LIMITS,
+} from "@/lib/subscription";
 import { isChoiceType, type QuestionType } from "@/lib/surveys";
+
 
 export type SurveyActionState = {
   ok: boolean;
@@ -40,7 +46,23 @@ export async function createSurvey(
   const title = String(formData.get("title") ?? "").trim();
   if (!title) return { ok: false, error: "Please enter a title." };
 
+  // Hobby plan limit: at most PLAN_LIMITS.maxSurveys survey per workspace.
+  const subscription = await getWorkspaceSubscription(workspace.id);
+  if (!hasStartupPlan(subscription)) {
+    const { count } = await supabase
+      .from("surveys")
+      .select("id", { count: "exact", head: true })
+      .eq("workspace_id", workspace.id);
+    if ((count ?? 0) >= PLAN_LIMITS.maxSurveys) {
+      return {
+        ok: false,
+        error: `The Hobby plan is limited to ${PLAN_LIMITS.maxSurveys} survey. Upgrade to the Startup plan for unlimited surveys.`,
+      };
+    }
+  }
+
   // Build a unique slug within the workspace (append a short suffix on clash).
+
   const base = slugify(title) || "survey";
   let slug = base;
   for (let i = 0; i < 5; i++) {
@@ -135,7 +157,20 @@ export async function saveSurvey(
     return { ok: false, error: "Could not parse questions." };
   }
 
+  // Hobby plan limit: at most PLAN_LIMITS.maxQuestionsPerSurvey questions.
+  const subscription = await getWorkspaceSubscription(workspace.id);
+  if (
+    !hasStartupPlan(subscription) &&
+    questions.length > PLAN_LIMITS.maxQuestionsPerSurvey
+  ) {
+    return {
+      ok: false,
+      error: `The Hobby plan is limited to ${PLAN_LIMITS.maxQuestionsPerSurvey} questions per survey. Upgrade to the Startup plan for unlimited questions.`,
+    };
+  }
+
   // Update survey meta.
+
   const { error: updErr } = await supabase
     .from("surveys")
     .update({ title, description, require_email: requireEmail })

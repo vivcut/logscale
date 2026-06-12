@@ -2,9 +2,11 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Check, ChevronsUpDown, Plus } from "@/components/icons";
 
 import { cn } from "@/lib/utils";
+import { setActiveWorkspace } from "./workspace-actions";
 
 
 type Workspace = {
@@ -18,15 +20,34 @@ type Workspace = {
 
 export function WorkspaceSwitcher({
   workspaces,
+  activeId: activeIdProp,
 }: {
   workspaces: Workspace[];
+  activeId?: string | null;
 }) {
+  const router = useRouter();
   const [open, setOpen] = React.useState(false);
-  const [activeId, setActiveId] = React.useState<string | null>(
-    workspaces[0]?.id ?? null
-  );
+  const [pending, setPending] = React.useState(false);
 
+  // The active workspace is resolved server-side (cookie-backed) and passed in.
+  const activeId = activeIdProp ?? workspaces[0]?.id ?? null;
   const active = workspaces.find((w) => w.id === activeId) ?? workspaces[0];
+
+  const handleSwitch = async (id: string) => {
+    setOpen(false);
+    if (id === activeId) return;
+    setPending(true);
+    // Persist the selection in a cookie, then jump straight to the overview for
+    // the newly selected workspace (and refresh server components so the whole
+    // dashboard reflects it). Switching context shouldn't strand you on a
+    // detail page that may not exist in the other workspace.
+    await setActiveWorkspace(id);
+    router.push("/dashboard");
+    router.refresh();
+    setPending(false);
+  };
+
+
 
   if (workspaces.length === 0) {
     return (
@@ -83,12 +104,11 @@ export function WorkspaceSwitcher({
             {workspaces.map((w) => (
               <button
                 key={w.id}
-                onClick={() => {
-                  setActiveId(w.id);
-                  setOpen(false);
-                }}
-                className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm transition-colors hover:bg-secondary"
+                onClick={() => handleSwitch(w.id)}
+                disabled={pending}
+                className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm transition-colors hover:bg-secondary disabled:opacity-60"
               >
+
                 <span className="flex size-5 shrink-0 items-center justify-center rounded bg-secondary text-[9px] font-bold">
                   {w.name.charAt(0).toUpperCase()}
                 </span>

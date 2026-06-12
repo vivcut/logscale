@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
 
 import { getPublicSurvey } from "@/lib/surveys";
+import { Watermark } from "@/components/watermark";
 import { FormRunner } from "./form-runner";
+
 
 export async function generateMetadata({
   params,
@@ -66,10 +68,10 @@ export default async function PublicFormPage({
           requireEmail={survey.require_email}
         />
 
-        <p className="mt-8 text-center font-mono text-[11px] text-muted-foreground/60">
-          powered by ToTheMoon
-        </p>
+        {/* Hobby-plan watermark (removed on Startup). */}
+        <Watermark workspaceId={workspace.id} />
       </div>
+
     </div>
   );
 }

@@ -5,6 +5,12 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getActiveWorkspace } from "@/lib/workspace";
+import {
+  getWorkspaceSubscription,
+  hasStartupPlan,
+  PLAN_LIMITS,
+} from "@/lib/subscription";
+
 
 export type StatusActionState = {
   ok: boolean;
@@ -55,6 +61,36 @@ export async function addMonitoredSite(
     return { ok: false, error: "Please enter a valid website URL." };
   }
   const title = String(formData.get("title") ?? "").trim() || null;
+
+  // Hobby plan limits: at most PLAN_LIMITS.maxStatusSites links, and only base
+  // origin URLs (no specific paths / directories / query strings).
+  const subscription = await getWorkspaceSubscription(workspace.id);
+  if (!hasStartupPlan(subscription)) {
+    const parsed = new URL(url);
+    const isBaseUrl =
+      (parsed.pathname === "/" || parsed.pathname === "") &&
+      !parsed.search &&
+      !parsed.hash;
+    if (!isBaseUrl) {
+      return {
+        ok: false,
+        error:
+          "The Hobby plan only allows base URLs (e.g. https://example.com) with no paths or directories. Upgrade to the Startup plan to monitor specific pages.",
+      };
+    }
+
+    const { count } = await supabase
+      .from("monitored_sites")
+      .select("id", { count: "exact", head: true })
+      .eq("workspace_id", workspace.id);
+    if ((count ?? 0) >= PLAN_LIMITS.maxStatusSites) {
+      return {
+        ok: false,
+        error: `The Hobby plan is limited to ${PLAN_LIMITS.maxStatusSites} monitored links. Upgrade to the Startup plan for unlimited links.`,
+      };
+    }
+  }
+
 
   // New sites start as 'PENDING' so the UI shows "Checked soon" — never a
   // misleading "Up" — until the first real probe runs.

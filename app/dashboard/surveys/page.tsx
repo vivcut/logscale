@@ -5,6 +5,8 @@ import { createClient } from "@/lib/supabase/server";
 import { getActiveWorkspace } from "@/lib/workspace";
 import { Badge } from "@/components/ui/badge";
 import { CreateSurveyForm } from "./create-survey-form";
+import { PlanBanner } from "@/components/plan-banner";
+
 
 export const metadata = {
   title: "Surveys — ToTheMoon",
@@ -74,8 +76,11 @@ export default async function SurveysPage() {
         </div>
       </div>
 
+      <PlanBanner page="surveys" />
+
       {/* Create */}
       <div className="mb-8 rounded-xl border border-border bg-card p-4">
+
         <p className="mb-3 text-sm text-muted-foreground">
           Build a form with custom questions, publish it, and share the public
           link to collect responses.

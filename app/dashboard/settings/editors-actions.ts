@@ -5,8 +5,10 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getActiveWorkspace } from "@/lib/workspace";
+import { getWorkspaceSubscription, hasStartupPlan } from "@/lib/subscription";
 
 export type EditorActionState = { ok: boolean; error?: string };
+
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -30,7 +32,18 @@ export async function inviteEditor(
     return { ok: false, error: "Enter a valid email address." };
   }
 
+  // Hobby plan: no extra team members / editors allowed.
+  const subscription = await getWorkspaceSubscription(workspace.id);
+  if (!hasStartupPlan(subscription)) {
+    return {
+      ok: false,
+      error:
+        "Adding team members is a Startup plan feature. Upgrade to invite editors to your workspace.",
+    };
+  }
+
   const admin = createAdminClient();
+
 
   // Already a registered user? Add them directly as a member.
   const { data: existing } = await admin

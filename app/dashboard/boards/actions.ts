@@ -4,6 +4,12 @@ import { revalidatePath } from "next/cache";
 
 import { createClient } from "@/lib/supabase/server";
 import { getActiveWorkspace } from "@/lib/workspace";
+import {
+  getWorkspaceSubscription,
+  hasStartupPlan,
+  PLAN_LIMITS,
+} from "@/lib/subscription";
+
 
 export type BoardActionState = {
   ok: boolean;
@@ -48,7 +54,23 @@ export async function createBoard(
     return { ok: false, error: "Please provide a valid slug." };
   }
 
+  // Hobby plan limit: at most PLAN_LIMITS.maxBoards boards per workspace.
+  const subscription = await getWorkspaceSubscription(workspace.id);
+  if (!hasStartupPlan(subscription)) {
+    const { count } = await supabase
+      .from("boards")
+      .select("id", { count: "exact", head: true })
+      .eq("workspace_id", workspace.id);
+    if ((count ?? 0) >= PLAN_LIMITS.maxBoards) {
+      return {
+        ok: false,
+        error: `The Hobby plan is limited to ${PLAN_LIMITS.maxBoards} board. Upgrade to the Startup plan for unlimited boards.`,
+      };
+    }
+  }
+
   const { error } = await supabase.from("boards").insert({
+
     workspace_id: workspace.id, // strict tenant scoping
     name,
     slug,

@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 
 import { getPublicContact } from "@/lib/contact";
 import { ContactForm } from "@/components/contact-form";
+import { Watermark } from "@/components/watermark";
+
 
 type PageParams = { workspaceSlug: string };
 
@@ -65,10 +67,9 @@ export default async function PublicContactPage({
           smsRequired={config.smsRequired}
         />
 
-        <p className="mt-8 text-center font-mono text-[11px] text-muted-foreground/60">
-          powered by ToTheMoon
-        </p>
+        <Watermark workspaceId={workspace.id} />
       </div>
+
     </div>
   );
 }

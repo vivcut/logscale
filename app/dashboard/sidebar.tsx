@@ -10,13 +10,16 @@ import {
   LayoutGrid,
   Mail,
   MessageSquare,
+  BadgeCheck,
   Monitor,
   Moon,
+  Rocket,
   Settings,
   SidebarIcon,
   Sparkles,
   Sun,
 } from "@/components/icons";
+
 
 import { cn } from "@/lib/utils";
 import { SignOutButton } from "./sign-out-button";
@@ -45,15 +48,21 @@ type Workspace = {
 
 export function DashboardSidebar({
   workspaces,
+  activeWorkspaceId,
   displayName,
   displayEmail,
   avatarUrl,
+  isStartup = false,
 }: {
   workspaces: Workspace[];
+  activeWorkspaceId?: string | null;
   displayName: string;
   displayEmail: string;
   avatarUrl: string | null;
+  isStartup?: boolean;
 }) {
+
+
   const pathname = usePathname();
   const [collapsed, setCollapsed] = React.useState(false);
 
@@ -82,8 +91,10 @@ export function DashboardSidebar({
   return (
     <aside
       className={cn(
-        "hidden shrink-0 flex-col border-r border-border bg-card/40 transition-[width] duration-200 md:flex",
+        "sticky top-0 hidden h-screen shrink-0 flex-col overflow-hidden border-r border-border bg-card/40 transition-[width] duration-200 md:flex",
         collapsed ? "w-16" : "w-64"
+
+
       )}
     >
       <div
@@ -104,8 +115,12 @@ export function DashboardSidebar({
         ) : (
           <>
             <div className="min-w-0 flex-1">
-              <WorkspaceSwitcher workspaces={workspaces} />
+              <WorkspaceSwitcher
+                workspaces={workspaces}
+                activeId={activeWorkspaceId}
+              />
             </div>
+
             <button
               onClick={toggleCollapsed}
               title="Collapse sidebar"
@@ -118,12 +133,47 @@ export function DashboardSidebar({
         )}
       </div>
 
+      {/* Plan badge — links to the plan page. */}
+      <div className={cn("px-3 pt-3", collapsed && "px-2")}>
+        <Link
+          href="/subscriptions/plan"
+          title={isStartup ? "Startup plan" : "Hobby plan — upgrade"}
+          className={cn(
+            "flex items-center rounded-md border text-xs font-medium transition-colors",
+            collapsed ? "justify-center px-2 py-2" : "gap-2 px-3 py-2",
+            isStartup
+              ? "border-primary/40 bg-primary/5 text-primary hover:bg-primary/10"
+              : "border-border bg-secondary/40 text-muted-foreground hover:text-foreground"
+          )}
+        >
+          {isStartup ? (
+            <BadgeCheck className="size-4 shrink-0" />
+          ) : (
+            <Rocket className="size-4 shrink-0" />
+          )}
+          {!collapsed ? (
+            <span className="flex min-w-0 flex-1 items-center justify-between gap-2">
+              <span className="truncate">
+                {isStartup ? "Startup plan" : "Hobby plan"}
+              </span>
+              {!isStartup ? (
+                <span className="shrink-0 font-mono text-[10px] uppercase tracking-wider text-primary">
+                  upgrade
+                </span>
+              ) : null}
+            </span>
+          ) : null}
+        </Link>
+
+      </div>
+
       <nav className="flex flex-1 flex-col gap-0.5 p-3">
         {!collapsed ? (
           <span className="px-3 pb-2 pt-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
             workspace
           </span>
         ) : null}
+
         {nav.map((item) => (
           <Link
             key={item.href}
@@ -150,12 +200,14 @@ export function DashboardSidebar({
 
       {/* Account */}
       <div className={cn("border-t border-border p-3", collapsed && "px-2")}>
-        <div
+        <Link
+          href="/dashboard/profile"
+          title={collapsed ? displayName : "Edit your profile"}
           className={cn(
-            "flex items-center rounded-md",
-            collapsed ? "justify-center py-2" : "gap-3 px-2 py-2"
+            "flex items-center rounded-md transition-colors hover:bg-secondary",
+            collapsed ? "justify-center py-2" : "gap-3 px-2 py-2",
+            isActive("/dashboard/profile") && "bg-secondary"
           )}
-          title={collapsed ? displayName : undefined}
         >
           <div className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-secondary text-xs font-medium">
             {avatarUrl ? (
@@ -173,13 +225,15 @@ export function DashboardSidebar({
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-medium">{displayName}</p>
               <p className="truncate font-mono text-xs text-muted-foreground">
+
                 {displayEmail}
               </p>
             </div>
           ) : null}
-        </div>
+        </Link>
         {!collapsed ? <SignOutButton /> : null}
       </div>
+
     </aside>
   );
 }

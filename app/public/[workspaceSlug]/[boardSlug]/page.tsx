@@ -1,8 +1,12 @@
 import { notFound } from "next/navigation";
 
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 import { CommandPalette } from "@/components/command-palette";
+
+import { Watermark } from "@/components/watermark";
 import { FeedbackBoard, type PublicPost } from "./feedback-board";
+
 
 
 type PageParams = {
@@ -53,14 +57,44 @@ export default async function PublicBoardPage({
   // Initial posts, sorted by top (upvotes) — hydrated client-side afterwards.
   const { data: posts } = await supabase
     .from("posts")
-    .select("id, title, description, status, upvotes_count, flair, created_at")
+    .select(
+      "id, title, description, status, upvotes_count, flair, is_official, author_name, created_at"
+    )
     .eq("board_id", board.id)
+
+
     .order("upvotes_count", { ascending: false })
     .order("created_at", { ascending: false })
     .limit(100);
 
+  // If the current viewer is a member of this workspace, lock the post form's
+  // name/email to their profile so team-authored posts are always attributed.
+  let teamName: string | null = null;
+  let teamEmail: string | null = null;
+  const sessionClient = await createClient();
+  const {
+    data: { user },
+  } = await sessionClient.auth.getUser();
+  if (user) {
+    const { data: membership } = await supabase
+      .from("workspace_members")
+      .select("role")
+      .eq("workspace_id", workspace.id)
+      .eq("profile_id", user.id)
+      .maybeSingle();
+    if (membership) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("name")
+        .eq("id", user.id)
+        .single();
+      teamName = profile?.name ?? user.email ?? "Team";
+      teamEmail = user.email ?? null;
+    }
+  }
 
   return (
+
     <div className="min-h-screen">
       {/* Header */}
       <header className="border-b border-border">
@@ -103,10 +137,14 @@ export default async function PublicBoardPage({
           boardSlug={board.slug}
           flairs={(board.flairs ?? ["feedback", "bug"]) as string[]}
           initialPosts={(posts ?? []) as PublicPost[]}
+          lockedName={teamName}
+          lockedEmail={teamEmail}
         />
 
 
+        <Watermark workspaceId={workspace.id} />
       </main>
+
     </div>
   );
 }

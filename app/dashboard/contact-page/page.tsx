@@ -6,6 +6,8 @@ import { createClient } from "@/lib/supabase/server";
 import { getActiveWorkspace } from "@/lib/workspace";
 import { toContactConfig, type ContactSubmission } from "@/lib/contact";
 import { ContactEditor } from "./contact-editor";
+import { PlanBanner } from "@/components/plan-banner";
+
 
 export const metadata = {
   title: "Contact Page — ToTheMoon",
@@ -62,8 +64,11 @@ export default async function ContactPageSettings() {
         </p>
       </div>
 
+      <PlanBanner page="contact" />
+
       {/* Editor (config) */}
       <section className="mb-12">
+
         <div className="mb-3 flex items-center gap-2">
           <MessageSquare className="size-4 text-muted-foreground" />
           <h2 className="text-sm font-semibold">Configuration</h2>

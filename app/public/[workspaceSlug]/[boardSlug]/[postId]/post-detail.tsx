@@ -29,11 +29,15 @@ export type DetailPost = {
   status: string;
   upvotes_count: number;
   flair: string | null;
+  is_official?: boolean;
+  author_name?: string | null;
   created_at: string;
 };
 
 
+
 export type StatusEvent = {
+
   id: string;
   status: string;
   created_at: string;
@@ -303,6 +307,14 @@ export function PostDetail({
                   {post.flair}
                 </span>
               ) : null}
+              {post.author_name ? (
+                <span className="inline-flex items-center gap-1 font-mono text-[11px] text-foreground/70">
+                  {post.author_name}
+                  {post.is_official ? (
+                    <BadgeCheck className="size-3 text-indigo-300" />
+                  ) : null}
+                </span>
+              ) : null}
               <span
                 className="font-mono text-[11px] text-muted-foreground"
                 title={formatDateTime(post.created_at)}
@@ -311,10 +323,18 @@ export function PostDetail({
               </span>
 
 
+
             </div>
-            <h1 className="mt-2 text-2xl font-semibold tracking-tight">
+            <h1 className="mt-2 inline-flex flex-wrap items-center gap-2 text-2xl font-semibold tracking-tight">
               {post.title}
+              {post.is_official ? (
+                <span className="inline-flex items-center gap-0.5 rounded-full bg-indigo-500/15 px-2 py-0.5 font-mono text-[10px] font-medium text-indigo-300">
+                  <BadgeCheck className="size-3" />
+                  team
+                </span>
+              ) : null}
             </h1>
+
             {post.description ? (
               <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">
                 {post.description}

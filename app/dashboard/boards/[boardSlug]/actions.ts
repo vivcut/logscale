@@ -5,6 +5,9 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getActiveWorkspace } from "@/lib/workspace";
+import { getWorkspaceSubscription, hasStartupPlan } from "@/lib/subscription";
+import { DEFAULT_FLAIR, normalizeFlair } from "@/lib/flairs";
+
 
 
 const VALID_STATUSES = [
@@ -227,10 +230,94 @@ export async function createInternalPost(
 }
 
 /**
+ * Saves the board's flair set. Custom flairs are a Startup-plan feature: Hobby
+ * workspaces are locked to the single default "general" flair. Owners/admins on
+ * the Startup plan can add/remove any flairs, but the default flair is always
+ * kept so every post can be tagged.
+ */
+export async function saveBoardFlairs(
+  boardSlug: string,
+  flairs: string[]
+): Promise<AdminActionState & { flairs?: string[] }> {
+  const auth = await authorizeBoard(boardSlug);
+  if ("error" in auth) return { ok: false, error: auth.error };
+
+  const workspace = await getActiveWorkspace();
+  if (!workspace) return { ok: false, error: "No active workspace." };
+
+  // Normalise + de-dupe, preserving the owner's chosen order.
+  const next = Array.from(
+    new Set(
+      flairs
+        .map((f) => normalizeFlair(f))
+        .filter((f) => f.length > 0 && f.length <= 24)
+    )
+  );
+
+  // A board must always keep at least one flair so posts can be tagged.
+  if (next.length === 0) {
+    return {
+      ok: false,
+      error: "Keep at least one flair so people can tag their posts.",
+    };
+  }
+
+  // Custom flairs require the Startup plan. Hobby workspaces are locked to the
+  // single default "general" flair (no custom flairs, no renaming/removing it).
+  const subscription = await getWorkspaceSubscription(workspace.id);
+  if (
+    !hasStartupPlan(subscription) &&
+    (next.length > 1 || next[0] !== DEFAULT_FLAIR)
+  ) {
+    return {
+      ok: false,
+      error:
+        "Custom post flairs are a Startup plan feature. Upgrade to add your own flairs.",
+    };
+  }
+
+
+  const { error } = await auth.supabase
+    .from("boards")
+    .update({ flairs: next })
+    .eq("id", auth.boardId);
+
+  if (error) return { ok: false, error: error.message };
+
+  revalidatePath(`/dashboard/boards/${boardSlug}`);
+  return { ok: true, flairs: next };
+}
+
+
+/**
+ * Toggles a board between public and private. Returns the new visibility so the
+ * client can reflect the change without a full reload.
+ */
+export async function setBoardPrivacy(
+  boardSlug: string,
+  isPrivate: boolean
+): Promise<AdminActionState & { isPrivate?: boolean }> {
+  const auth = await authorizeBoard(boardSlug);
+  if ("error" in auth) return { ok: false, error: auth.error };
+
+  const { error } = await auth.supabase
+    .from("boards")
+    .update({ is_private: isPrivate })
+    .eq("id", auth.boardId);
+
+  if (error) return { ok: false, error: error.message };
+
+  revalidatePath(`/dashboard/boards/${boardSlug}`);
+  revalidatePath("/dashboard/boards");
+  return { ok: true, isPrivate };
+}
+
+/**
  * Permanently deletes a board and everything attached to it (posts, upvotes,
  * comments cascade via FKs). Owners/admins only.
  */
 export async function deleteBoard(
+
   boardSlug: string
 ): Promise<AdminActionState> {
   const auth = await authorizeBoard(boardSlug);

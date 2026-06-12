@@ -5,7 +5,12 @@ import { getRoadmapPosts } from "@/lib/roadmap";
 import { getWorkspaceStatus } from "@/lib/uptime";
 import { getPublicSurvey, type SurveyQuestion } from "@/lib/surveys";
 import { toContactConfig } from "@/lib/contact";
+import {
+  getWorkspaceSubscription,
+  hasStartupPlan,
+} from "@/lib/subscription";
 import { WidgetShell, type WidgetBoardInfo } from "./widget-board";
+
 import { type PublicPost } from "@/app/public/[workspaceSlug]/[boardSlug]/feedback-board";
 import { type StatusSite } from "@/components/status-board";
 
@@ -54,7 +59,13 @@ export default async function WidgetPage({
 
   if (!workspace) notFound();
 
+  // Hobby (free) workspaces show the "Built with ToTheMoon" watermark in the
+  // widget footer; the Startup plan removes it.
+  const subscription = await getWorkspaceSubscription(workspace.id);
+  const showWatermark = !hasStartupPlan(subscription);
+
   // Resolve the widget colour scheme chosen by the owner. "auto" defers to the
+
   // visitor's OS via prefers-color-scheme; "dark"/"light" force the scheme.
   // This runs before paint to avoid a flash of the wrong theme inside the frame.
   const widgetTheme = (workspace.widget_theme ?? "auto") as
@@ -210,6 +221,8 @@ export default async function WidgetPage({
       statusSites={statusSites}
       survey={survey}
       contact={contact}
+      showWatermark={showWatermark}
+
       changelogs={
 
         (changelogs ?? []) as {

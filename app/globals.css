@@ -137,7 +137,69 @@
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+
+  /*
+    Invisible scrollbars everywhere — content still scrolls (wheel, trackpad,
+    keyboard, drag), the scrollbar is just not painted. Firefox uses
+    scrollbar-width; WebKit/Blink use the ::-webkit-scrollbar pseudo-element.
+  */
+  * {
+    scrollbar-width: none; /* Firefox */
+  }
+  *::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none; /* Chrome, Safari, Edge */
+  }
 }
+
+/*
+  Opt-out helper: anything that must NEVER scroll (e.g. the dashboard sidebar)
+  can use this to lock both axes regardless of content height.
+*/
+.no-scroll {
+  overflow: hidden !important;
+}
+
+/*
+  Gentle content fade-in. Applied to dashboard page content (keyed on route) so
+  every navigation / workspace switch eases the content in steadily while the
+  surrounding layout (sidebar) stays put.
+*/
+@keyframes ttm-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in {
+  animation: ttm-fade-in 0.45s ease-out both;
+}
+
+/*
+  Subtle skeleton shimmer for placeholder blocks (avatar, workspace switcher)
+  shown during loading. Quieter than a full pulse — a soft opacity breathe.
+*/
+@keyframes ttm-skeleton {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+.skeleton {
+  background: var(--secondary);
+  border-radius: var(--radius-md);
+  animation: ttm-skeleton 1.4s ease-in-out infinite;
+}
+
+
 
 /*
   prose-changelog — a precise, dependency-free "prose-invert" style for the

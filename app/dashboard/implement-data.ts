@@ -12,7 +12,7 @@ const SECTION_DEFS = [
 ] as const;
 
 // Per-section cap so the page stays fast (and AI calls stay bounded).
-const PER_SECTION = 4;
+const PER_SECTION = 3;
 
 export type ImplementInputPost = {
   id: string;
@@ -20,20 +20,68 @@ export type ImplementInputPost = {
   description: string | null;
   status: string;
   upvotes_count: number;
+  comments_count: number;
   board_id: string;
 };
 
+/**
+ * Builds the "what to build next" sections for the overview. Pure/synchronous:
+ * it groups posts by status (under-review / planned / in-progress), sorts each
+ * group by upvotes, caps to the top 3, and attaches each item's board name and
+ * comment count. The one-line AI gist is fetched separately on the client (see
+ * /api/boards/summaries) so it never blocks the page render.
+ */
+export function buildImplementSections(
+  posts: ImplementInputPost[],
+  boards: { id: string; slug: string; name: string }[]
+): ImplementSection[] {
+  if (boards.length === 0) {
+    return SECTION_DEFS.map((s) => ({ ...s, items: [] }));
+  }
+
+  const boardById = Object.fromEntries(boards.map((b) => [b.id, b]));
+
+  return SECTION_DEFS.map((def) => {
+    const items = posts
+      .filter((p) => p.status === def.key)
+      .sort((a, b) => b.upvotes_count - a.upvotes_count)
+      .slice(0, PER_SECTION)
+      .map<ImplementItem>((p) => {
+        const board = boardById[p.board_id];
+        return {
+          id: p.id,
+          title: p.title,
+          upvotes_count: p.upvotes_count,
+          comments_count: p.comments_count,
+          boardSlug: board?.slug ?? null,
+          boardName: board?.name ?? null,
+          summary: null,
+        };
+      });
+    return { key: def.key, label: def.label, dot: def.dot, items };
+  });
+}
+
 // Short, deterministic fallback when the AI worker is unavailable: trim the
 // description (or fall back to the title) so the UI is never empty.
-function fallbackSummary(post: ImplementInputPost): string {
+function fallbackSummary(post: {
+  title: string;
+  description: string | null;
+}): string {
   const text = (post.description ?? "").trim();
   if (!text) return "";
   return text.length > 110 ? `${text.slice(0, 107)}…` : text;
 }
 
-// Ask the AI worker for a one-line gist. Times out quickly and falls back so a
-// slow/unavailable worker never blocks the dashboard.
-async function summarize(post: ImplementInputPost): Promise<string> {
+/**
+ * Ask the AI worker for a one-line gist of a single post. Times out quickly and
+ * falls back to a trimmed description so a slow/unavailable worker never breaks
+ * the summaries endpoint. Used by /api/boards/summaries.
+ */
+export async function summarizePost(post: {
+  title: string;
+  description: string | null;
+}): Promise<string> {
   const fallback = fallbackSummary(post);
   try {
     const controller = new AbortController();
@@ -55,52 +103,4 @@ async function summarize(post: ImplementInputPost): Promise<string> {
   } catch {
     return fallback;
   }
-}
-
-/**
- * Builds the "what to build next" sections for the overview. Takes posts
- * already scraped from every board in the workspace, groups them by status
- * (under-review / planned / in-progress), sorts each group by upvotes, caps it,
- * and attaches a short AI-generated summary to each item.
- */
-export async function buildImplementSections(
-  posts: ImplementInputPost[],
-  boards: { id: string; slug: string }[]
-): Promise<ImplementSection[]> {
-  if (boards.length === 0) {
-    return SECTION_DEFS.map((s) => ({ ...s, items: [] }));
-  }
-
-  const slugByBoard = Object.fromEntries(boards.map((b) => [b.id, b.slug]));
-
-  // Collect the capped, vote-sorted posts per section first…
-  const grouped = SECTION_DEFS.map((def) => {
-    const items = posts
-      .filter((p) => p.status === def.key)
-      .sort((a, b) => b.upvotes_count - a.upvotes_count)
-      .slice(0, PER_SECTION);
-    return { def, items };
-  });
-
-  // …then summarize every selected post in parallel.
-  const flat = grouped.flatMap((g) => g.items);
-  const summaries = new Map<string, string>();
-  await Promise.all(
-    flat.map(async (p) => {
-      summaries.set(p.id, await summarize(p));
-    })
-  );
-
-  return grouped.map(({ def, items }) => ({
-    key: def.key,
-    label: def.label,
-    dot: def.dot,
-    items: items.map<ImplementItem>((p) => ({
-      id: p.id,
-      title: p.title,
-      upvotes_count: p.upvotes_count,
-      boardSlug: slugByBoard[p.board_id] ?? null,
-      summary: summaries.get(p.id) ?? null,
-    })),
-  }));
 }

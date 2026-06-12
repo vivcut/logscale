@@ -2,11 +2,15 @@ import { redirect } from "next/navigation";
 
 import { getActiveWorkspace } from "@/lib/workspace";
 import { getWorkspaceStatus } from "@/lib/uptime";
-import { Activity, ExternalLink } from "@/components/icons";
+import { Activity } from "@/components/icons";
 import { type StatusSite } from "@/components/status-board";
 import { AddSiteForm } from "./add-site-form";
 import { ManageableStatusBoard } from "./manageable-status-board";
 import { RefreshButton } from "./refresh-button";
+import { PlanBanner } from "@/components/plan-banner";
+import { ShareLink } from "@/components/share-link";
+
+
 
 
 export const metadata = { title: "Status — Uptime monitoring" };
@@ -67,17 +71,21 @@ export default async function StatusPage() {
       </div>
 
       {/* Public page link */}
-      <a
-        href={`/public/${workspace.slug}/status`}
-        target="_blank"
-        rel="noreferrer"
-        className="mb-6 inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
-      >
-        <ExternalLink className="size-3" />
-        view public status page
-      </a>
+      <div className="mb-6">
+        <p className="mb-1.5 font-mono text-xs text-muted-foreground">
+          public status page link
+        </p>
+        <ShareLink
+          url={`/public/${workspace.slug}/status`}
+          label={`${workspace.name} status`}
+        />
+      </div>
+
+      <PlanBanner page="status" />
+
 
       {canManage ? (
+
         <div className="mb-6">
           <AddSiteForm />
         </div>

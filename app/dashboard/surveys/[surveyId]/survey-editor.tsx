@@ -7,7 +7,6 @@ import {
   AlignLeft,
   CheckCircle,
   ClipboardList,
-  ExternalLink,
   FileText,
   Loader2,
   Plus,
@@ -16,6 +15,8 @@ import {
   Trash2,
   X,
 } from "@/components/icons";
+import { ShareLink } from "@/components/share-link";
+
 
 import { cn } from "@/lib/utils";
 import {
@@ -98,9 +99,8 @@ export function SurveyEditor({
     initialState
   );
 
-  const [copied, setCopied] = React.useState(false);
-
   function addQuestion(type: QuestionType) {
+
     setItems((prev) => [
       ...prev,
       {
@@ -144,21 +144,11 @@ export function SurveyEditor({
     }))
   );
 
-  async function copyLink() {
-    try {
-      await navigator.clipboard.writeText(publicUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      /* clipboard unavailable */
-    }
-  }
-
   return (
     <div className="space-y-6">
       {/* Publish bar */}
-      <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="min-w-0">
+      <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <span
               className={cn(
@@ -171,29 +161,16 @@ export function SurveyEditor({
             </span>
           </div>
           {survey.is_published ? (
-            <div className="mt-2 flex items-center gap-2">
-              <code className="truncate rounded bg-secondary px-2 py-1 font-mono text-xs text-muted-foreground">
-                {publicUrl}
-              </code>
-              <button
-                type="button"
-                onClick={copyLink}
-                className="shrink-0 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {copied ? "copied" : "copy"}
-              </button>
-              <Link
-                href={publicUrl}
-                target="_blank"
-                className="shrink-0 text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <ExternalLink className="size-3.5" />
-              </Link>
-            </div>
+            <ShareLink
+              url={publicUrl}
+              label={`${survey.title} form`}
+              className="mt-2"
+            />
           ) : null}
         </div>
 
         <div className="flex items-center gap-2">
+
           <Link href={`/dashboard/surveys/${survey.id}/responses`}>
             <Button variant="outline" size="sm">
               View responses

@@ -22,8 +22,12 @@ export async function GET(request: NextRequest) {
 
   let query = supabase
     .from("posts")
-    .select("id, title, description, status, upvotes_count, flair, created_at")
+    .select(
+      "id, title, description, status, upvotes_count, flair, is_official, author_name, created_at"
+    )
     .eq("board_id", boardId);
+
+
 
 
   if (q) {
@@ -103,6 +107,7 @@ export async function POST(request: NextRequest) {
   }
 
 
+
   // Identify the visitor (if logged in).
   const sessionClient = await createClient();
   const {
@@ -136,6 +141,46 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Anonymous (public) submitters must provide a name so posts are attributed.
+  if (!user && !authorName) {
+    return NextResponse.json(
+      { error: "Please enter your name." },
+      { status: 400 }
+    );
+  }
+
+
+  // A signed-in user who is an owner/admin/member of the board's workspace is
+  // posting as "the team" — flag it so the public board shows a verified badge,
+  // mirroring official comments. We attribute internal posts to their profile.
+  let isOfficial = false;
+  let teamName: string | null = null;
+  if (user) {
+    const { data: boardWorkspace } = await admin
+      .from("boards")
+      .select("workspace_id")
+      .eq("id", boardId)
+      .single();
+
+    if (boardWorkspace) {
+      const { data: membership } = await admin
+        .from("workspace_members")
+        .select("role")
+        .eq("workspace_id", boardWorkspace.workspace_id)
+        .eq("profile_id", user.id)
+        .maybeSingle();
+      if (membership) {
+        isOfficial = true;
+        const { data: profile } = await admin
+          .from("profiles")
+          .select("name")
+          .eq("id", user.id)
+          .single();
+        teamName = profile?.name ?? null;
+      }
+    }
+  }
+
   const { data: inserted, error } = await admin
     .from("posts")
     .insert({
@@ -145,12 +190,18 @@ export async function POST(request: NextRequest) {
       title,
       description,
       flair,
-      // Only persist contact identity for anonymous submitters.
-      author_name: user ? null : authorName,
+      is_official: isOfficial,
+      // Attribute the author: team members post under their profile name,
+      // anonymous visitors under their supplied name/email.
+      author_name: isOfficial ? teamName ?? authorName : user ? null : authorName,
       author_email: user ? null : authorEmail,
     })
-    .select("id, title, description, status, upvotes_count, flair, created_at")
+    .select(
+      "id, title, description, status, upvotes_count, flair, is_official, author_name, created_at"
+    )
     .single();
+
+
 
 
 

@@ -88,6 +88,7 @@ export function WidgetShell({
   statusSites = [],
   survey = null,
   contact = null,
+  showWatermark = false,
 }: {
   workspaceName: string;
   workspaceSlug: string;
@@ -102,7 +103,9 @@ export function WidgetShell({
   statusSites?: StatusSite[];
   survey?: WidgetSurvey | null;
   contact?: WidgetContact | null;
+  showWatermark?: boolean;
 }) {
+
   // Which tabs are available for this embed configuration. A surface only
   // appears when the workspace owner has it enabled (data is preserved either
   // way — toggling just shows/hides the tab).
@@ -334,11 +337,28 @@ export function WidgetShell({
           <ChangelogTimeline entries={changelogs} />
         )}
 
-
+        {/* Hobby-plan watermark (removed on Startup). */}
+        {showWatermark ? (
+          <div className="flex items-center justify-center pt-6">
+            <a
+              href="https://tothemoon.dev"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-[11px] text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <span aria-hidden>🚀</span>
+              Built with{" "}
+              <span className="font-mono font-medium text-foreground">
+                ToTheMoon
+              </span>
+            </a>
+          </div>
+        ) : null}
       </div>
     </div>
   );
 }
+
 
 function TabButton({
   active,

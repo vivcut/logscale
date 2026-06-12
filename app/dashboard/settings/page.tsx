@@ -1,13 +1,29 @@
+import Link from "next/link";
 import { headers } from "next/headers";
-import { Code2, ExternalLink, Eye, Users } from "@/components/icons";
+import {
+  ArrowRight,
+  BadgeCheck,
+  Code2,
+  ExternalLink,
+  Eye,
+  Rocket,
+  Users,
+} from "@/components/icons";
 
 
-import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { getActiveWorkspace } from "@/lib/workspace";
 
+import { getActiveWorkspace } from "@/lib/workspace";
+import {
+  getWorkspaceSubscription,
+  hasStartupPlan,
+} from "@/lib/subscription";
+
+
+import { PlanBanner } from "@/components/plan-banner";
 import { EmbedSnippet } from "./snippet";
 import { LogoUploader } from "./logo-uploader";
+
 import { SurfaceToggle } from "./surface-toggle";
 import { WorkspaceEditor } from "./workspace-editor";
 import { WidgetAppearance } from "./widget-appearance";
@@ -54,6 +70,11 @@ export default async function SettingsPage() {
   // every other member. Membership is already scoped to this workspace.
   const supabase = createAdminClient();
   const canManage = workspace.role === "owner" || workspace.role === "admin";
+
+  // Current subscription for the Plan section.
+  const subscription = await getWorkspaceSubscription(workspace.id);
+  const hasPlan = hasStartupPlan(subscription);
+
 
   const { data: memberRows } = await supabase
     .from("workspace_members")
@@ -121,9 +142,12 @@ export default async function SettingsPage() {
         </p>
       </div>
 
+      <PlanBanner page="settings" />
+
       {/* Workspace info */}
       <section className="mb-10">
         <h2 className="mb-3 text-sm font-semibold">Workspace</h2>
+
         <WorkspaceEditor
           initialName={workspace.name}
           initialSlug={workspace.slug}
@@ -142,12 +166,57 @@ export default async function SettingsPage() {
       </section>
 
 
+      {/* Plan / subscription */}
+      <section className="mb-10">
+        <div className="mb-3 flex items-center gap-2">
+          <Rocket className="size-4 text-muted-foreground" />
+          <h2 className="text-sm font-semibold">Plan</h2>
+        </div>
+        <Link
+          href="/subscriptions/plan"
+          className="group flex items-center justify-between gap-4 rounded-xl border border-border bg-card p-4 transition-colors hover:border-foreground/20"
+        >
+          <div className="flex items-center gap-3">
+            <div
+              className={
+                "flex size-9 shrink-0 items-center justify-center rounded-full " +
+                (hasPlan
+                  ? "bg-primary/10 text-primary"
+                  : "bg-secondary text-muted-foreground")
+              }
+            >
+              {hasPlan ? (
+                <BadgeCheck className="size-5" />
+              ) : (
+                <Rocket className="size-5" />
+              )}
+            </div>
+            <div>
+              <p className="text-sm font-medium">
+                {hasPlan ? "You have Startup plan" : "Free plan"}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {hasPlan
+                  ? "Manage your subscription for this workspace."
+                  : "Upgrade to the Startup plan to unlock everything."}
+              </p>
+            </div>
+          </div>
+          <span className="inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground transition-colors group-hover:text-foreground">
+            {hasPlan ? "manage plan" : "upgrade plan"}
+            <ArrowRight className="size-3" />
+          </span>
+        </Link>
+      </section>
+
+
       {/* Editors / team */}
       <section className="mb-10">
         <div className="mb-3 flex items-center gap-2">
           <Users className="size-4 text-muted-foreground" />
           <h2 className="text-sm font-semibold">Editors</h2>
         </div>
+
         <p className="mb-4 max-w-prose text-sm text-muted-foreground">
           Invite teammates by email. When they sign in, this workspace appears
           in their switcher labelled{" "}

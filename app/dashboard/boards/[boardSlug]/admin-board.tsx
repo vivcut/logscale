@@ -9,11 +9,13 @@ import {
   Check,
 
   ChevronDown,
-  ExternalLink,
+  Eye,
   Flame,
+
   GitMerge,
   Inbox,
   Loader2,
+  Lock,
   MessageSquare,
   Plus,
   Trash2,
@@ -22,17 +24,22 @@ import {
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { ShareLink } from "@/components/share-link";
+
+import { PostForm, type CreatedPost } from "@/components/post-form";
+
 import { statusBadgeClass, statusLabel } from "@/lib/status";
-import { flairBadgeClass } from "@/lib/flairs";
+import { flairBadgeClass, DEFAULT_FLAIR, normalizeFlair } from "@/lib/flairs";
 import {
   updatePostStatus,
   mergePosts,
   deletePost,
-  createInternalPost,
+  setBoardPrivacy,
+  saveBoardFlairs,
 } from "./actions";
+
+
+
 
 
 
@@ -116,9 +123,15 @@ function timeAgo(iso: string): string {
 }
 
 export function AdminBoard({
+  boardId,
   boardSlug,
   boardName,
   boardDescription,
+  boardFlairs,
+  canCustomizeFlairs,
+  teamName,
+  teamEmail,
+  isPrivate,
   workspaceName,
   workspaceSlug,
   canManage,
@@ -126,9 +139,15 @@ export function AdminBoard({
   followerCounts,
   metrics,
 }: {
+  boardId: string;
   boardSlug: string;
   boardName: string;
   boardDescription: string | null;
+  boardFlairs: string[];
+  canCustomizeFlairs: boolean;
+  teamName: string | null;
+  teamEmail: string | null;
+  isPrivate: boolean;
   workspaceName: string;
   workspaceSlug: string;
   canManage: boolean;
@@ -136,11 +155,32 @@ export function AdminBoard({
   followerCounts: Record<string, number>;
   metrics: Metrics;
 }) {
+
   const [posts, setPosts] = React.useState<AdminPost[]>(initialPosts);
+  const [flairs, setFlairs] = React.useState<string[]>(boardFlairs);
   const [mergingId, setMergingId] = React.useState<string | null>(null);
   const [showInternal, setShowInternal] = React.useState(false);
   const [timeframe, setTimeframe] = React.useState<TimeframeKey>("all");
   const [pending, startTransition] = React.useTransition();
+
+
+  // Board visibility is editable inline; keep a local copy so the share link /
+  // disclaimer update instantly without waiting for a page reload.
+  const [boardPrivate, setBoardPrivate] = React.useState(isPrivate);
+  const [privacyPending, setPrivacyPending] = React.useState(false);
+
+  function handlePrivacyToggle(next: boolean) {
+    if (privacyPending || next === boardPrivate) return;
+    const previous = boardPrivate;
+    setBoardPrivate(next); // optimistic
+    setPrivacyPending(true);
+    startTransition(async () => {
+      const res = await setBoardPrivacy(boardSlug, next);
+      if (!res.ok) setBoardPrivate(previous); // revert on failure
+      setPrivacyPending(false);
+    });
+  }
+
 
   // Posts count for the selected timeframe.
   const timeframePostCount = React.useMemo(() => {
@@ -186,6 +226,60 @@ export function AdminBoard({
     });
   }
 
+  // ---- Flair management ----
+  const [newFlair, setNewFlair] = React.useState("");
+  const [flairSaving, setFlairSaving] = React.useState(false);
+  const [flairError, setFlairError] = React.useState<string | null>(null);
+
+  function persistFlairs(next: string[]) {
+    const previous = flairs;
+    setFlairs(next); // optimistic
+    setFlairError(null);
+    setFlairSaving(true);
+    startTransition(async () => {
+      const res = await saveBoardFlairs(boardSlug, next);
+      if (!res.ok) {
+        setFlairs(previous); // revert
+        setFlairError(res.error ?? "Couldn't save flairs.");
+      } else if (res.flairs) {
+        setFlairs(res.flairs);
+      }
+      setFlairSaving(false);
+    });
+  }
+
+  function handleAddFlair() {
+    if (!canCustomizeFlairs) {
+      setFlairError(
+        "Custom post flairs are a Startup plan feature. Upgrade to add your own flairs."
+      );
+      return;
+    }
+    const cleaned = normalizeFlair(newFlair);
+    if (!cleaned) return;
+    if (cleaned.length > 24) {
+      setFlairError("Flairs must be 24 characters or fewer.");
+      return;
+    }
+    if (flairs.includes(cleaned)) {
+      setFlairError("That flair already exists.");
+      return;
+    }
+    setNewFlair("");
+    persistFlairs([...flairs, cleaned]);
+  }
+
+  function handleRemoveFlair(flair: string) {
+    // A board must always keep at least one flair (any flair, incl. "general").
+    if (flairs.length <= 1) {
+      setFlairError("Keep at least one flair so people can tag their posts.");
+      return;
+    }
+    persistFlairs(flairs.filter((f) => f !== flair));
+  }
+
+
+
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-8">
       {/* Breadcrumb */}
@@ -210,23 +304,71 @@ export function AdminBoard({
             </p>
           ) : null}
         </div>
-        <div className="flex items-center gap-2">
-          <Link
-            href={`/public/${workspaceSlug}/${boardSlug}`}
-            target="_blank"
-            className="inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-2 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <ExternalLink className="size-3.5" />
-            public page
-          </Link>
+        {canManage ? (
+          <Button size="sm" onClick={() => setShowInternal(true)}>
+            <Plus className="size-4" />
+            Manually Add Post
+          </Button>
+        ) : null}
+      </div>
+
+      {/* ---- Visibility: toggle + share link / private disclaimer ---- */}
+      <div className="mb-6 rounded-xl border border-border bg-card p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            {boardPrivate ? (
+              <Lock className="size-4 text-muted-foreground" />
+            ) : (
+              <Eye className="size-4 text-muted-foreground" />
+            )}
+            <div>
+              <p className="text-sm font-medium">
+                {boardPrivate ? "Private board" : "Public board"}
+              </p>
+              <p className="font-mono text-[11px] text-muted-foreground">
+                {boardPrivate
+                  ? "only your team can see this board"
+                  : "anyone with the link can view & post"}
+              </p>
+            </div>
+          </div>
+
           {canManage ? (
-            <Button size="sm" onClick={() => setShowInternal(true)}>
-              <Plus className="size-4" />
-              Add internal
-            </Button>
-          ) : null}
+            <VisibilityToggle
+              isPrivate={boardPrivate}
+              pending={privacyPending}
+              onChange={handlePrivacyToggle}
+            />
+          ) : (
+            <span className="font-mono text-[11px] text-muted-foreground">
+              {boardPrivate ? "private" : "public"}
+            </span>
+          )}
+        </div>
+
+        <div className="mt-4 border-t border-border pt-4">
+          {boardPrivate ? (
+            <p className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
+              <Lock className="size-3.5 shrink-0" />
+              This board is private, so it has no public URL. Switch it to public
+              to share a link.
+            </p>
+          ) : (
+            <>
+              <p className="mb-1.5 font-mono text-xs text-muted-foreground">
+                public board link
+              </p>
+              <ShareLink
+                url={`/public/${workspaceSlug}/${boardSlug}`}
+                label={`${boardName} board`}
+              />
+            </>
+          )}
         </div>
       </div>
+
+
+
 
       {/* ---- Metrics Bar ---- */}
       <div className="mb-6 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2">
@@ -262,7 +404,100 @@ export function AdminBoard({
         />
       </div>
 
+      {/* ---- Post flairs (custom flairs = Startup plan) ---- */}
+      {canManage ? (
+        <div className="mb-6 rounded-xl border border-border bg-card p-4">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="text-sm font-medium">Post flairs</p>
+              <p className="font-mono text-[11px] text-muted-foreground">
+                {canCustomizeFlairs
+                  ? "tags people pick when posting — add your own"
+                  : "the “general” flair is included — add custom flairs on the Startup plan"}
+              </p>
+            </div>
+            {!canCustomizeFlairs ? (
+              <Link
+                href="/subscriptions/plan"
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-primary/40 bg-primary/10 px-2.5 py-1.5 font-mono text-[11px] text-primary transition-colors hover:bg-primary/20"
+              >
+                upgrade to Startup
+              </Link>
+            ) : null}
+          </div>
+
+          <div className="mt-3 flex flex-wrap items-center gap-1.5">
+            {flairs.map((f) => (
+              <span
+                key={f}
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-mono text-[10px] lowercase",
+                  flairBadgeClass(f)
+                )}
+              >
+                {f}
+                {/* Any flair (incl. "general") can be removed on the Startup
+                    plan, as long as at least one flair always remains. */}
+                {canCustomizeFlairs && flairs.length > 1 ? (
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFlair(f)}
+                    disabled={flairSaving}
+                    aria-label={`Remove ${f}`}
+                    className="opacity-70 transition-opacity hover:opacity-100 disabled:opacity-40"
+                  >
+                    <X className="size-2.5" />
+                  </button>
+                ) : null}
+
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-3 flex items-center gap-2">
+            <input
+              value={newFlair}
+              onChange={(e) => {
+                setNewFlair(e.target.value);
+                setFlairError(null);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleAddFlair();
+                }
+              }}
+              placeholder={
+                canCustomizeFlairs ? "add a flair…" : "upgrade to add flairs"
+              }
+              maxLength={24}
+              className="w-44 rounded-md border border-border bg-background/60 px-2.5 py-1.5 font-mono text-xs outline-none transition-colors focus:border-foreground/30"
+            />
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={handleAddFlair}
+              disabled={flairSaving}
+            >
+              {flairSaving ? (
+                <Loader2 className="size-3.5 animate-spin" />
+              ) : (
+                <Plus className="size-3.5" />
+              )}
+              Add flair
+            </Button>
+          </div>
+
+          {flairError ? (
+            <p className="mt-2 font-mono text-[11px] text-destructive">
+              {flairError}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+
       {/* ---- Admin Feedback List (same card UI as the public board) ---- */}
+
       {posts.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-16 text-center">
           <MessageSquare className="size-5 text-muted-foreground" />
@@ -427,11 +662,69 @@ export function AdminBoard({
 
       {showInternal ? (
         <InternalPostModal
-          boardSlug={boardSlug}
+          boardId={boardId}
+          flairs={flairs}
+          lockedName={teamName}
+          lockedEmail={teamEmail}
           onClose={() => setShowInternal(false)}
           onCreated={(p) => setPosts((prev) => [p, ...prev])}
         />
       ) : null}
+
+
+    </div>
+  );
+}
+
+// Segmented public/private switch. Optimistic state lives in the parent; this
+// is purely presentational + click handling.
+function VisibilityToggle({
+  isPrivate,
+  pending,
+  onChange,
+}: {
+  isPrivate: boolean;
+  pending: boolean;
+  onChange: (isPrivate: boolean) => void;
+}) {
+  return (
+    <div className="inline-flex items-center rounded-lg border border-border bg-secondary/40 p-0.5">
+      <button
+        type="button"
+        disabled={pending}
+        onClick={() => onChange(false)}
+        className={cn(
+          "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60",
+          !isPrivate
+            ? "bg-card text-foreground shadow-sm"
+            : "text-muted-foreground hover:text-foreground"
+        )}
+      >
+        {pending && !isPrivate ? (
+          <Loader2 className="size-3.5 animate-spin" />
+        ) : (
+          <Eye className="size-3.5" />
+        )}
+        Public
+      </button>
+      <button
+        type="button"
+        disabled={pending}
+        onClick={() => onChange(true)}
+        className={cn(
+          "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60",
+          isPrivate
+            ? "bg-card text-foreground shadow-sm"
+            : "text-muted-foreground hover:text-foreground"
+        )}
+      >
+        {pending && isPrivate ? (
+          <Loader2 className="size-3.5 animate-spin" />
+        ) : (
+          <Lock className="size-3.5" />
+        )}
+        Private
+      </button>
     </div>
   );
 }
@@ -439,6 +732,7 @@ export function AdminBoard({
 function Metric({
   icon,
   label,
+
   value,
   sub,
   subAccent,
@@ -632,121 +926,60 @@ function StatusDropdown({
 
 
 function InternalPostModal({
-
-  boardSlug,
+  boardId,
+  flairs,
+  lockedName,
+  lockedEmail,
   onClose,
   onCreated,
 }: {
-  boardSlug: string;
+  boardId: string;
+  flairs: string[];
+  lockedName: string | null;
+  lockedEmail: string | null;
   onClose: () => void;
   onCreated: (p: AdminPost) => void;
 }) {
-  const [title, setTitle] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [category, setCategory] = React.useState("");
-  const [saving, setSaving] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
-
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!title.trim()) return;
-    setSaving(true);
-    setError(null);
-    const res = await createInternalPost(
-      boardSlug,
-      title,
-      description,
-      category
-    );
-    if (!res.ok) {
-      setError(res.error ?? "Something went wrong.");
-      setSaving(false);
-      return;
-    }
-    // Optimistically add to the list; server revalidation will reconcile.
-    onCreated({
-      id: `temp-${Date.now()}`,
-      title: title.trim(),
-      description: description.trim() || null,
-      status: "under-review",
-      upvotes_count: 0,
-      category: category.trim() || null,
-      flair: null,
-      comments_count: 0,
-      created_at: new Date().toISOString(),
-      admin_notes: null,
-      pinned_response: null,
-      merged_into_id: null,
-      fingerprint_hash: null,
-      author_name: null,
-      author_email: null,
-      author: null,
-    });
-
-    onClose();
-  }
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <form
-        onSubmit={submit}
-        className="relative w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-2xl"
-      >
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-sm font-semibold">Add internal post</h2>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-muted-foreground hover:text-foreground"
-          >
-            <X className="size-4" />
-          </button>
-        </div>
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="i-title" className="text-muted-foreground">
-              Title
-            </Label>
-            <Input
-              id="i-title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Add Google Auth"
-              required
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="i-cat" className="text-muted-foreground">
-              Category <span className="text-muted-foreground/60">(optional)</span>
-            </Label>
-            <Input
-              id="i-cat"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              placeholder="Authentication"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="i-desc" className="text-muted-foreground">
-              Details <span className="text-muted-foreground/60">(optional)</span>
-            </Label>
-            <Textarea
-              id="i-desc"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows={3}
-            />
-          </div>
-          {error ? (
-            <p className="font-mono text-xs text-destructive">{error}</p>
-          ) : null}
-          <Button type="submit" disabled={saving || !title.trim()}>
-            {saving ? <Loader2 className="animate-spin" /> : <Plus />}
-            Create post
-          </Button>
-        </div>
-      </form>
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto p-4">
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      <div className="relative w-full max-w-md">
+        <PostForm
+          boardId={boardId}
+          flairs={flairs}
+          lockedName={lockedName}
+          lockedEmail={lockedEmail}
+          onClose={onClose}
+
+          onCreated={(post: CreatedPost) => {
+            // Reconcile with the admin list shape; server revalidation will
+            // backfill any missing columns on the next load.
+            onCreated({
+              id: post.id,
+              title: post.title,
+              description: post.description,
+              status: post.status,
+              upvotes_count: post.upvotes_count,
+              category: null,
+              flair: post.flair,
+              comments_count: 0,
+              created_at: post.created_at,
+              admin_notes: null,
+              pinned_response: null,
+              merged_into_id: null,
+              fingerprint_hash: null,
+              author_name: null,
+              author_email: null,
+              author: null,
+            });
+            onClose();
+          }}
+        />
+      </div>
     </div>
   );
 }
+

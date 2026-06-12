@@ -26,7 +26,10 @@ export {
   CaretUpDown as ChevronsUpDown,
   Code as Code2,
   Copy,
+  QrCode,
+  DownloadSimple as Download,
   ArrowSquareOut as ExternalLink,
+
   Eye,
   EyeSlash,
   FileText,

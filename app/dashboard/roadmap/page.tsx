@@ -1,6 +1,10 @@
 import { getActiveWorkspace } from "@/lib/workspace";
 import { getRoadmapPosts } from "@/lib/roadmap";
 import { RoadmapKanban } from "./kanban";
+import { PlanBanner } from "@/components/plan-banner";
+import { ShareLink } from "@/components/share-link";
+
+
 
 export const metadata = {
   title: "Roadmap — ToTheMoon",
@@ -32,7 +36,21 @@ export default async function RoadmapPage() {
         </p>
       </div>
 
+      <div className="mb-6">
+        <p className="mb-1.5 font-mono text-xs text-muted-foreground">
+          public roadmap link
+        </p>
+        <ShareLink
+          url={`/public/${workspace.slug}/roadmap`}
+          label={`${workspace.name} roadmap`}
+        />
+      </div>
+
+      <PlanBanner page="roadmap" />
+
       <RoadmapKanban posts={posts} />
+
+
     </div>
   );
 }

@@ -10,6 +10,8 @@ import {
 } from "@/components/icons";
 
 
+
+
 import { createClient } from "@/lib/supabase/server";
 import { getActiveWorkspace } from "@/lib/workspace";
 import { Badge } from "@/components/ui/badge";
@@ -25,6 +27,8 @@ import {
 } from "../implement-sections";
 import { buildImplementSections } from "../implement-data";
 import { ImportantFeaturesReport } from "./important-features-report";
+import { PlanBanner } from "@/components/plan-banner";
+
 
 
 export const metadata = {
@@ -80,6 +84,12 @@ export default async function BoardsPage() {
     name: b.name,
     slug: b.slug,
   }));
+  const boardsForImplement = list.map((b) => ({
+    id: b.id,
+    slug: b.slug,
+    name: b.name,
+  }));
+
 
   if (boardIds.length > 0) {
     const { data: posts } = await supabase
@@ -116,17 +126,19 @@ export default async function BoardsPage() {
     inProgress = postList.filter((p) => p.status === "in-progress").length;
     shipped = postList.filter((p) => p.status === "completed").length;
 
-    implementSections = await buildImplementSections(
+    implementSections = buildImplementSections(
       postList.map((p) => ({
         id: p.id,
         title: p.title,
         description: p.description,
         status: p.status,
         upvotes_count: p.upvotes_count,
+        comments_count: commentCounts[p.id] ?? 0,
         board_id: p.board_id,
       })),
-      overviewBoards
+      boardsForImplement
     );
+
   }
 
   const stats = [
@@ -152,7 +164,10 @@ export default async function BoardsPage() {
         <CreateBoardForm />
       </div>
 
+      <PlanBanner page="boards" />
+
       {list.length === 0 ? (
+
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-16 text-center">
           <div className="flex size-10 items-center justify-center rounded-md border border-border bg-secondary">
             <MessageSquare className="size-5 text-muted-foreground" />
