@@ -47,12 +47,27 @@ export default async function WidgetPage({
   const { data: workspace } = await supabase
     .from("workspaces")
     .select(
-      "id, name, slug, changelog_enabled, boards_enabled, roadmap_enabled, status_enabled, contact_enabled, contact_title, contact_placeholder, contact_email_required, contact_sms_required"
+      "id, name, slug, widget_theme, changelog_enabled, boards_enabled, roadmap_enabled, status_enabled, contact_enabled, contact_title, contact_placeholder, contact_email_required, contact_sms_required"
     )
     .eq("slug", workspaceSlug)
     .single();
 
   if (!workspace) notFound();
+
+  // Resolve the widget colour scheme chosen by the owner. "auto" defers to the
+  // visitor's OS via prefers-color-scheme; "dark"/"light" force the scheme.
+  // This runs before paint to avoid a flash of the wrong theme inside the frame.
+  const widgetTheme = (workspace.widget_theme ?? "auto") as
+    | "auto"
+    | "dark"
+    | "light";
+  const themeScript =
+    widgetTheme === "dark"
+      ? `document.documentElement.classList.add("dark");`
+      : widgetTheme === "light"
+        ? `document.documentElement.classList.remove("dark");`
+        : `document.documentElement.classList.toggle("dark",window.matchMedia("(prefers-color-scheme: dark)").matches);`;
+
 
   // Each surface only appears in the widget when its visibility toggle is on.
   const boardsEnabled = workspace.boards_enabled !== false;
@@ -177,8 +192,12 @@ export default async function WidgetPage({
     : null;
 
   return (
-    <WidgetShell
+    <>
+      {/* Apply the owner's chosen widget theme before paint. */}
+      <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      <WidgetShell
       workspaceName={workspace.name}
+
       workspaceSlug={workspace.slug}
       view={view ?? "all"}
       changelogEnabled={changelogEnabled}
@@ -200,7 +219,9 @@ export default async function WidgetPage({
           published_at: string;
         }[]
       }
-    />
+      />
+    </>
   );
 }
+
 

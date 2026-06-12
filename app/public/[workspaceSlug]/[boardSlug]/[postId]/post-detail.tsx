@@ -86,12 +86,8 @@ function formatDateTime(iso: string) {
   return moment(iso).format("MMM D, YYYY · h:mm A");
 }
 
-function formatDate(iso: string) {
-  return moment(iso).format("MMM D, YYYY");
-}
-
-
 function formatBytes(bytes: number) {
+
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;

@@ -9,6 +9,9 @@ import { getActiveWorkspace } from "@/lib/workspace";
 import { EmbedSnippet } from "./snippet";
 import { LogoUploader } from "./logo-uploader";
 import { SurfaceToggle } from "./surface-toggle";
+import { WorkspaceEditor } from "./workspace-editor";
+import { WidgetAppearance } from "./widget-appearance";
+
 
 
 import {
@@ -121,16 +124,12 @@ export default async function SettingsPage() {
       {/* Workspace info */}
       <section className="mb-10">
         <h2 className="mb-3 text-sm font-semibold">Workspace</h2>
-        <div className="grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2">
-          <div className="bg-card p-4">
-            <p className="font-mono text-xs text-muted-foreground">name</p>
-            <p className="mt-1 text-sm">{workspace.name}</p>
-          </div>
-          <div className="bg-card p-4">
-            <p className="font-mono text-xs text-muted-foreground">slug</p>
-            <p className="mt-1 font-mono text-sm">{workspace.slug}</p>
-          </div>
-        </div>
+        <WorkspaceEditor
+          initialName={workspace.name}
+          initialSlug={workspace.slug}
+          canManage={canManage}
+        />
+
 
         {/* Company logo */}
         <div className="mt-px rounded-b-xl border border-t-0 border-border bg-card p-4">
@@ -243,9 +242,24 @@ export default async function SettingsPage() {
           surveys={embedSurveys}
         />
 
+        {/* Widget appearance */}
+        <div className="mt-6">
+          <p className="mb-1 text-sm font-medium">Appearance</p>
+          <p className="mb-3 max-w-prose text-sm text-muted-foreground">
+            Choose the colour scheme for the widget and its drawer.{" "}
+            <span className="font-mono text-foreground">Auto</span> follows each
+            visitor&apos;s system preference.
+          </p>
+          <WidgetAppearance
+            initial={workspace.widget_theme ?? "auto"}
+            canManage={canManage}
+          />
+        </div>
+
 
         <a
           href={`/widget/${workspace.slug}`}
+
           target="_blank"
           rel="noreferrer"
           className="mt-3 inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"

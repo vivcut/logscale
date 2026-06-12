@@ -8,6 +8,95 @@ import { getActiveWorkspace } from "@/lib/workspace";
 
 export type SettingsActionState = { ok: boolean; error?: string; url?: string };
 
+function slugify(input: string) {
+  return input
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/**
+ * Updates the active workspace's name and/or slug. Owners/admins only.
+ *
+ * Changing the slug rewrites the public URL (and any embedded widgets pointing
+ * to the old slug), so the UI guards this behind a confirmation dialog. The
+ * slug is sanitized + uniqueness-checked here regardless.
+ */
+export async function updateWorkspace(input: {
+  name?: string;
+  slug?: string;
+}): Promise<SettingsActionState> {
+  const workspace = await getActiveWorkspace();
+  if (!workspace) return { ok: false, error: "No active workspace." };
+  if (workspace.role !== "owner" && workspace.role !== "admin") {
+    return { ok: false, error: "Insufficient permissions." };
+  }
+
+  const update: { name?: string; slug?: string } = {};
+
+  if (typeof input.name === "string") {
+    const name = input.name.trim();
+    if (!name) return { ok: false, error: "Workspace name is required." };
+    if (name.length > 80) return { ok: false, error: "Name is too long." };
+    update.name = name;
+  }
+
+  if (typeof input.slug === "string") {
+    const slug = slugify(input.slug);
+    if (!slug) return { ok: false, error: "Please provide a valid slug." };
+    update.slug = slug;
+  }
+
+  if (Object.keys(update).length === 0) {
+    return { ok: false, error: "Nothing to update." };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("workspaces")
+    .update(update)
+    .eq("id", workspace.id);
+
+  if (error) {
+    if (error.code === "23505") {
+      return { ok: false, error: "That slug is already taken." };
+    }
+    return { ok: false, error: error.message };
+  }
+
+  revalidatePath("/dashboard/settings");
+  revalidatePath("/dashboard");
+  return { ok: true };
+}
+
+/** Sets the widget appearance preference (auto / dark / light). Owners/admins. */
+export async function setWidgetTheme(
+  theme: "auto" | "dark" | "light"
+): Promise<SettingsActionState> {
+  const workspace = await getActiveWorkspace();
+  if (!workspace) return { ok: false, error: "No active workspace." };
+  if (workspace.role !== "owner" && workspace.role !== "admin") {
+    return { ok: false, error: "Insufficient permissions." };
+  }
+  if (!["auto", "dark", "light"].includes(theme)) {
+    return { ok: false, error: "Invalid theme." };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("workspaces")
+    .update({ widget_theme: theme })
+    .eq("id", workspace.id);
+
+  if (error) return { ok: false, error: error.message };
+
+  revalidatePath("/dashboard/settings");
+  return { ok: true };
+}
+
+
 const LOGO_BUCKET = "workspace-logos";
 const MAX_BYTES = 2 * 1024 * 1024; // 2MB
 const ALLOWED = ["image/png", "image/jpeg", "image/webp", "image/svg+xml"];

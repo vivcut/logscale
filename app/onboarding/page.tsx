@@ -8,7 +8,11 @@ export const metadata = {
   title: "Create your workspace — ToTheMoon",
 };
 
-export default async function OnboardingPage() {
+export default async function OnboardingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ new?: string }>;
+}) {
   const supabase = await createClient();
 
   const {
@@ -19,15 +23,23 @@ export default async function OnboardingPage() {
     redirect("/login");
   }
 
-  // If the user already belongs to a workspace, send them straight to the app.
-  const { count } = await supabase
-    .from("workspace_members")
-    .select("id", { count: "exact", head: true })
-    .eq("profile_id", user.id);
+  // When `?new=1` is present the user is intentionally creating an *additional*
+  // workspace from the switcher, so we skip the "already onboarded" redirect.
+  const { new: creatingAnother } = await searchParams;
 
-  if ((count ?? 0) > 0) {
-    redirect("/dashboard");
+  if (!creatingAnother) {
+    // First-time onboarding: if the user already belongs to a workspace, send
+    // them straight to the app.
+    const { count } = await supabase
+      .from("workspace_members")
+      .select("id", { count: "exact", head: true })
+      .eq("profile_id", user.id);
+
+    if ((count ?? 0) > 0) {
+      redirect("/dashboard");
+    }
   }
+
 
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center px-6 py-12">

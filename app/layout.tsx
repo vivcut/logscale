@@ -18,6 +18,12 @@ export const metadata: Metadata = {
     "The high-performance feedback platform for startups and indie developers. Feedback boards, kanban roadmaps, and public changelogs.",
 };
 
+// Runs before first paint to apply the saved theme (default: follow the OS).
+// Stored in localStorage under "theme" = "system" | "light" | "dark". This
+// prevents a flash of the wrong theme. Public pages never write this value, so
+// visitors always get the OS-resolved scheme there.
+const themeScript = `(function(){try{var t=localStorage.getItem("theme")||"system";var d=t==="dark"||(t!=="light"&&window.matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.classList.toggle("dark",d);}catch(e){document.documentElement.classList.add("dark");}})();`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -26,12 +32,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`dark ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         {children}
       </body>
     </html>
   );
 }
+

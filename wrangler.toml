@@ -1,0 +1,15 @@
+# Cloudflare Worker config for the changelog / summary AI endpoint (worker.js).
+#
+# The 500 "Cannot read properties of undefined (reading 'run')" error means the
+# Worker was deployed WITHOUT the Workers AI binding, so `env.AI` was undefined.
+# This binding wires `env.AI` to the Workers AI runtime. Redeploy after adding:
+#
+#   wrangler deploy
+#
+name = "summer-cherry-c965"
+main = "worker.js"
+compatibility_date = "2024-09-23"
+
+# Workers AI binding — exposes env.AI.run(...) inside the Worker.
+[ai]
+binding = "AI"

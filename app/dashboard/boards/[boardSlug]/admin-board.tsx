@@ -17,16 +17,16 @@ import {
   MessageSquare,
   Plus,
   Trash2,
-  Users,
   X,
 } from "@/components/icons";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { statusBadgeClass, statusLabel } from "@/lib/status";
+import { flairBadgeClass } from "@/lib/flairs";
 import {
   updatePostStatus,
   mergePosts,
@@ -44,7 +44,10 @@ export type AdminPost = {
   status: string;
   upvotes_count: number;
   category: string | null;
+  flair: string | null;
+  comments_count: number;
   created_at: string;
+
   admin_notes: string | null;
   pinned_response: string | null;
   merged_into_id: string | null;
@@ -64,8 +67,6 @@ type Metrics = {
   totalPosts: number;
   unreviewed: number;
   totalVotes: number;
-  activeVoters: number;
-  topCategory: string | null;
 };
 
 const STATUSES = [
@@ -78,6 +79,18 @@ const STATUSES = [
 
 const STATUS_MAP = Object.fromEntries(STATUSES.map((s) => [s.key, s]));
 
+// Timeframe options for the "posts" metric — lets the owner scope the count to
+// a recent window instead of all-time.
+const TIMEFRAMES = [
+  { key: "all", label: "all time", days: null },
+  { key: "7", label: "last 7 days", days: 7 },
+  { key: "14", label: "last 14 days", days: 14 },
+  { key: "30", label: "last 30 days", days: 30 },
+  { key: "90", label: "last 90 days", days: 90 },
+] as const;
+
+type TimeframeKey = (typeof TIMEFRAMES)[number]["key"];
+
 // A post is "trending" if it's accruing votes fast relative to its age.
 function isTrending(post: AdminPost): boolean {
   const ageHours =
@@ -85,6 +98,21 @@ function isTrending(post: AdminPost): boolean {
   if (ageHours < 1) return post.upvotes_count >= 3;
   const perDay = post.upvotes_count / (ageHours / 24);
   return perDay >= 10 && post.upvotes_count >= 5;
+}
+
+// Compact relative time ("3d", "5h", "just now") for the post meta row.
+function timeAgo(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d ago`;
+  const months = Math.floor(days / 30);
+  if (months < 12) return `${months}mo ago`;
+  return `${Math.floor(months / 12)}y ago`;
 }
 
 export function AdminBoard({
@@ -111,7 +139,17 @@ export function AdminBoard({
   const [posts, setPosts] = React.useState<AdminPost[]>(initialPosts);
   const [mergingId, setMergingId] = React.useState<string | null>(null);
   const [showInternal, setShowInternal] = React.useState(false);
+  const [timeframe, setTimeframe] = React.useState<TimeframeKey>("all");
   const [pending, startTransition] = React.useTransition();
+
+  // Posts count for the selected timeframe.
+  const timeframePostCount = React.useMemo(() => {
+    const tf = TIMEFRAMES.find((t) => t.key === timeframe);
+    if (!tf || tf.days == null) return posts.length;
+    const cutoff = Date.now() - tf.days * 86_400_000;
+    return posts.filter((p) => new Date(p.created_at).getTime() >= cutoff)
+      .length;
+  }, [posts, timeframe]);
 
   function patchPost(id: string, patch: Partial<AdminPost>) {
 
@@ -190,37 +228,41 @@ export function AdminBoard({
         </div>
       </div>
 
-      {/* ---- Advanced Metrics Bar ---- */}
-      <div className="mb-6 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-4">
-        <Metric
-          icon={<Inbox className="size-3.5" />}
-          label="posts"
-          value={`${metrics.totalPosts}`}
-          sub={
-            metrics.unreviewed > 0
-              ? `${metrics.unreviewed} new`
-              : "all reviewed"
-          }
-          subAccent={metrics.unreviewed > 0}
-        />
+      {/* ---- Metrics Bar ---- */}
+      <div className="mb-6 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2">
+        {/* Posts metric with a timeframe selector. */}
+        <div className="bg-card p-4">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+              <Inbox className="size-3.5" />
+              posts
+            </div>
+            <TimeframeSelect value={timeframe} onChange={setTimeframe} />
+          </div>
+          <div className="mt-1.5 flex items-baseline gap-2">
+            <span className="truncate text-xl font-semibold tabular-nums">
+              {timeframePostCount.toLocaleString()}
+            </span>
+            {metrics.unreviewed > 0 ? (
+              <span className="font-mono text-[11px] text-orange-400">
+                {metrics.unreviewed} new
+              </span>
+            ) : (
+              <span className="font-mono text-[11px] text-muted-foreground">
+                all reviewed
+              </span>
+            )}
+          </div>
+        </div>
+
         <Metric
           icon={<ArrowUp className="size-3.5" />}
           label="total votes"
           value={metrics.totalVotes.toLocaleString()}
         />
-        <Metric
-          icon={<Users className="size-3.5" />}
-          label="active voters"
-          value={metrics.activeVoters.toLocaleString()}
-        />
-        <Metric
-          icon={<Flame className="size-3.5" />}
-          label="top category"
-          value={metrics.topCategory ?? "—"}
-        />
       </div>
 
-      {/* ---- Admin Feedback Table ---- */}
+      {/* ---- Admin Feedback List (same card UI as the public board) ---- */}
       {posts.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-16 text-center">
           <MessageSquare className="size-5 text-muted-foreground" />
@@ -230,195 +272,141 @@ export function AdminBoard({
           </p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-border">
-          {/* header row */}
-          <div className="grid grid-cols-[64px_1fr_160px_150px_auto] items-center gap-3 border-b border-border bg-card/60 px-4 py-2.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-            <span className="text-center">votes</span>
-            <span>post</span>
-            <span>user</span>
-            <span>status</span>
-            <span className="text-right">actions</span>
-          </div>
+        <ul className="divide-y divide-border overflow-hidden rounded-xl border border-border">
+          {posts.map((post) => {
+            const isMergeTarget = mergingId && mergingId !== post.id;
+            return (
+              <li
+                key={post.id}
+                className={cn(
+                  "flex gap-4 bg-card p-4 transition-colors hover:bg-secondary/30",
+                  isMergeTarget &&
+                    "cursor-pointer ring-1 ring-inset ring-indigo-500/40 hover:bg-indigo-500/5",
+                  mergingId === post.id && "opacity-50"
+                )}
+                onClick={isMergeTarget ? () => handleMerge(post.id) : undefined}
+              >
+                {/* votes */}
+                <div className="flex flex-col items-center gap-1">
+                  <div className="flex h-fit w-12 flex-col items-center gap-0.5 rounded-md border border-border py-2 text-muted-foreground">
+                    <ArrowUp className="size-4" />
+                    <span className="font-mono text-xs font-medium tabular-nums">
+                      {post.upvotes_count}
+                    </span>
+                  </div>
+                  {isTrending(post) ? (
+                    <span className="inline-flex items-center gap-0.5 font-mono text-[9px] uppercase text-orange-400">
+                      <Flame className="size-2.5" />
+                      hot
+                    </span>
+                  ) : null}
+                </div>
 
-          <ul className="divide-y divide-border">
-            {posts.map((post) => {
-              const isMergeTarget = mergingId && mergingId !== post.id;
-              return (
-                <li
-                  key={post.id}
-                  className={cn(
-                    "grid grid-cols-[64px_1fr_160px_150px_auto] items-center gap-3 bg-card px-4 py-3 transition-colors hover:bg-secondary/30",
-                    isMergeTarget && "cursor-pointer ring-1 ring-inset ring-indigo-500/40 hover:bg-indigo-500/5",
-                    mergingId === post.id && "opacity-50"
-                  )}
-                  onClick={
-                    isMergeTarget ? () => handleMerge(post.id) : undefined
-                  }
-                >
-                  {/* votes + velocity */}
-                  <div className="flex flex-col items-center">
-                    <div className="flex w-full flex-col items-center rounded-md border border-border py-1.5">
-                      <ArrowUp className="size-3.5 text-muted-foreground" />
-                      <span className="font-mono text-xs font-medium tabular-nums">
-                        {post.upvotes_count}
+                {/* body */}
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-start justify-between gap-2">
+                    {isMergeTarget ? (
+                      <h3 className="text-sm font-medium">{post.title}</h3>
+                    ) : (
+                      <Link
+                        href={`/public/${workspaceSlug}/${boardSlug}/${post.id}`}
+                        target="_blank"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-sm font-medium hover:underline"
+                      >
+                        {post.title}
+                      </Link>
+                    )}
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      {post.flair ? (
+                        <span
+                          className={cn(
+                            "rounded-full px-2 py-0.5 font-mono text-[10px] lowercase",
+                            flairBadgeClass(post.flair)
+                          )}
+                        >
+                          {post.flair}
+                        </span>
+                      ) : null}
+                      <span
+                        className={cn(
+                          "rounded-full px-2 py-0.5 font-mono text-[10px] lowercase",
+                          statusBadgeClass(post.status)
+                        )}
+                      >
+                        {statusLabel(post.status)}
                       </span>
                     </div>
-                    {isTrending(post) ? (
-                      <span className="mt-1 inline-flex items-center gap-0.5 font-mono text-[9px] uppercase text-orange-400">
-                        <Flame className="size-2.5" />
-                        hot
-                      </span>
-                    ) : null}
                   </div>
 
-                  {/* title — opens the public post page (with team controls) */}
-                  {isMergeTarget ? (
-                    <div className="min-w-0 text-left">
-                      <div className="flex items-center gap-2">
-                        <span className="truncate text-sm font-medium">
-                          {post.title}
-                        </span>
-                        {post.category ? (
-                          <Badge
-                            variant="outline"
-                            className="shrink-0 font-mono text-[9px] text-muted-foreground"
-                          >
-                            {post.category}
-                          </Badge>
-                        ) : null}
-                      </div>
-                      {post.description ? (
-                        <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                          {post.description}
-                        </p>
-                      ) : null}
-                    </div>
-                  ) : (
-                    <Link
-                      href={`/public/${workspaceSlug}/${boardSlug}/${post.id}`}
-                      target="_blank"
-                      className="min-w-0 text-left"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="truncate text-sm font-medium hover:underline">
-                          {post.title}
-                        </span>
-                        {post.category ? (
-                          <Badge
-                            variant="outline"
-                            className="shrink-0 font-mono text-[9px] text-muted-foreground"
-                          >
-                            {post.category}
-                          </Badge>
-                        ) : null}
-                      </div>
-                      {post.description ? (
-                        <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                          {post.description}
-                        </p>
-                      ) : null}
-                    </Link>
-                  )}
+                  {post.description ? (
+                    <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+                      {post.description}
+                    </p>
+                  ) : null}
 
-
-                  {/* user */}
-                  <div className="flex items-center gap-2">
-                    <div className="flex size-6 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-secondary text-[10px] font-medium">
-                      {post.author?.avatar_url ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={post.author.avatar_url}
-                          alt=""
-                          className="size-full object-cover"
-                        />
-                      ) : post.author ? (
-                        (post.author.name ?? post.author.email ?? "?")
-                          .charAt(0)
-                          .toUpperCase()
-                      ) : post.author_name || post.author_email ? (
-                        (post.author_name ?? post.author_email ?? "?")
-                          .charAt(0)
-                          .toUpperCase()
-                      ) : (
-                        "?"
-                      )}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="truncate text-xs">
-                        {post.author?.name ??
-                          post.author?.email ??
-                          post.author_name ??
-                          "anonymous"}
-                      </p>
-                      {/* Surface the contact email left by anonymous submitters
-                          so the owner can follow up. */}
+                  {/* meta row: time posted · comments · author */}
+                  <div className="mt-2 flex flex-wrap items-center gap-3 font-mono text-[11px] text-muted-foreground">
+                    <span>{timeAgo(post.created_at)}</span>
+                    <span className="inline-flex items-center gap-1">
+                      <MessageSquare className="size-3" />
+                      {post.comments_count}
+                    </span>
+                    <span className="truncate">
+                      {post.author?.name ??
+                        post.author?.email ??
+                        post.author_name ??
+                        (post.author_email ? null : "anonymous")}
                       {!post.author && post.author_email ? (
                         <a
                           href={`mailto:${post.author_email}`}
                           onClick={(e) => e.stopPropagation()}
-                          className="block truncate font-mono text-[10px] text-indigo-400 hover:underline"
+                          className="text-indigo-400 hover:underline"
                         >
                           {post.author_email}
                         </a>
-                      ) : (
-                        <Badge
-                          variant="secondary"
-                          className="mt-0.5 font-mono text-[8px] uppercase text-muted-foreground"
-                        >
-                          {post.author ? "free" : "guest"}
-                        </Badge>
-                      )}
+                      ) : null}
+                    </span>
+                  </div>
+
+                  {/* controls */}
+                  {canManage ? (
+                    <div
+                      className="mt-3 flex items-center gap-2"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <StatusDropdown
+                        value={post.status}
+                        disabled={pending}
+                        onChange={(s) => handleStatus(post, s)}
+                      />
+                      <button
+                        title="Merge into another post"
+                        onClick={() =>
+                          setMergingId(mergingId === post.id ? null : post.id)
+                        }
+                        className={cn(
+                          "rounded-md border border-border p-1.5 text-muted-foreground transition-colors hover:text-foreground",
+                          mergingId === post.id &&
+                            "border-indigo-500/50 text-indigo-400"
+                        )}
+                      >
+                        <GitMerge className="size-3.5" />
+                      </button>
+                      <button
+                        title="Delete"
+                        onClick={() => handleDelete(post)}
+                        className="rounded-md border border-border p-1.5 text-muted-foreground transition-colors hover:border-destructive/50 hover:text-destructive"
+                      >
+                        <Trash2 className="size-3.5" />
+                      </button>
                     </div>
-
-                  </div>
-
-                  {/* status dropdown */}
-                  <div onClick={(e) => e.stopPropagation()}>
-                    <StatusDropdown
-                      value={post.status}
-                      disabled={!canManage || pending}
-                      onChange={(s) => handleStatus(post, s)}
-                    />
-                  </div>
-
-                  {/* actions */}
-                  <div
-                    className="flex items-center justify-end gap-1"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {canManage ? (
-                      <>
-                        <button
-                          title="Merge into another post"
-                          onClick={() =>
-                            setMergingId(
-                              mergingId === post.id ? null : post.id
-                            )
-                          }
-                          className={cn(
-                            "rounded-md border border-border p-1.5 text-muted-foreground transition-colors hover:text-foreground",
-                            mergingId === post.id &&
-                              "border-indigo-500/50 text-indigo-400"
-                          )}
-                        >
-                          <GitMerge className="size-3.5" />
-                        </button>
-                        <button
-                          title="Delete"
-                          onClick={() => handleDelete(post)}
-                          className="rounded-md border border-border p-1.5 text-muted-foreground transition-colors hover:border-destructive/50 hover:text-destructive"
-                        >
-                          <Trash2 className="size-3.5" />
-                        </button>
-                      </>
-                    ) : null}
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+                  ) : null}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       )}
 
       {mergingId ? (
@@ -482,6 +470,53 @@ function Metric({
           </span>
         ) : null}
       </div>
+    </div>
+  );
+}
+
+function TimeframeSelect({
+  value,
+  onChange,
+}: {
+  value: TimeframeKey;
+  onChange: (v: TimeframeKey) => void;
+}) {
+  const [open, setOpen] = React.useState(false);
+  const current = TIMEFRAMES.find((t) => t.key === value) ?? TIMEFRAMES[0];
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="flex items-center gap-1.5 rounded-md border border-border bg-secondary/40 px-2 py-1 font-mono text-[10px] transition-colors hover:bg-secondary"
+      >
+        {current.label}
+        <ChevronDown className="size-3 text-muted-foreground" />
+      </button>
+      {open ? (
+        <>
+          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
+          <div className="absolute right-0 top-full z-20 mt-1 w-36 overflow-hidden rounded-md border border-border bg-popover p-1 shadow-xl">
+            {TIMEFRAMES.map((t) => (
+              <button
+                key={t.key}
+                type="button"
+                onClick={() => {
+                  onChange(t.key);
+                  setOpen(false);
+                }}
+                className={cn(
+                  "flex w-full items-center justify-between rounded-sm px-2 py-1.5 text-left font-mono text-[11px] transition-colors hover:bg-secondary",
+                  value === t.key && "bg-secondary"
+                )}
+              >
+                {t.label}
+                {value === t.key ? <Check className="size-3" /> : null}
+              </button>
+            ))}
+          </div>
+        </>
+      ) : null}
     </div>
   );
 }
@@ -550,7 +585,7 @@ function StatusDropdown({
         type="button"
         disabled={disabled}
         onClick={() => setOpen((o) => !o)}
-        className="inline-flex w-full items-center justify-between gap-1.5 rounded-md border border-border bg-secondary/40 px-2.5 py-1.5 text-xs transition-colors hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex items-center justify-between gap-1.5 rounded-md border border-border bg-secondary/40 px-2.5 py-1.5 text-xs transition-colors hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-60"
       >
         <span className="flex items-center gap-1.5">
           <span className={cn("size-1.5 rounded-full", current.dot)} />
@@ -636,6 +671,8 @@ function InternalPostModal({
       status: "under-review",
       upvotes_count: 0,
       category: category.trim() || null,
+      flair: null,
+      comments_count: 0,
       created_at: new Date().toISOString(),
       admin_notes: null,
       pinned_response: null,

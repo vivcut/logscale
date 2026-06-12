@@ -1,9 +1,11 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { Check, ChevronsUpDown, Plus } from "@/components/icons";
 
 import { cn } from "@/lib/utils";
+
 
 type Workspace = {
   id: string;
@@ -28,14 +30,18 @@ export function WorkspaceSwitcher({
 
   if (workspaces.length === 0) {
     return (
-      <button className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
+      <Link
+        href="/onboarding?new=1"
+        className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+      >
         <span className="flex size-6 items-center justify-center rounded border border-dashed border-border">
           <Plus className="size-3.5" />
         </span>
         Create workspace
-      </button>
+      </Link>
     );
   }
+
 
   return (
     <div className="relative w-full">
@@ -104,12 +110,17 @@ export function WorkspaceSwitcher({
               </button>
             ))}
             <div className="my-1 h-px bg-border" />
-            <button className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
+            <Link
+              href="/onboarding?new=1"
+              onClick={() => setOpen(false)}
+              className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+            >
               <span className="flex size-5 items-center justify-center rounded border border-dashed border-border">
                 <Plus className="size-3" />
               </span>
               New workspace
-            </button>
+            </Link>
+
           </div>
         </>
       ) : null}

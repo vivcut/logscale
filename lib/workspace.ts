@@ -11,8 +11,10 @@ export type ActiveWorkspace = {
   surveys_enabled: boolean;
   status_enabled: boolean;
   contact_enabled: boolean;
+  widget_theme: "auto" | "dark" | "light";
   role: string;
 };
+
 
 
 
@@ -30,12 +32,12 @@ export async function getActiveWorkspace(): Promise<ActiveWorkspace | null> {
 
   if (!user) return null;
 
+  // Select the whole workspace row (rather than naming optional columns) so a
+  // not-yet-applied migration (e.g. widget_theme, *_enabled) can't make the
+  // entire join fail and surface as "No active workspace" everywhere.
   const { data: membership } = await supabase
     .from("workspace_members")
-    .select(
-      "role, workspaces ( id, name, slug, logo_url, changelog_enabled, boards_enabled, roadmap_enabled, surveys_enabled, status_enabled, contact_enabled )"
-    )
-
+    .select("role, workspaces ( * )")
     .eq("profile_id", user.id)
     .order("created_at", { ascending: true })
     .limit(1)
@@ -48,13 +50,15 @@ export async function getActiveWorkspace(): Promise<ActiveWorkspace | null> {
     name: string;
     slug: string;
     logo_url: string | null;
-    changelog_enabled: boolean | null;
-    boards_enabled: boolean | null;
-    roadmap_enabled: boolean | null;
-    surveys_enabled: boolean | null;
-    status_enabled: boolean | null;
-    contact_enabled: boolean | null;
+    changelog_enabled?: boolean | null;
+    boards_enabled?: boolean | null;
+    roadmap_enabled?: boolean | null;
+    surveys_enabled?: boolean | null;
+    status_enabled?: boolean | null;
+    contact_enabled?: boolean | null;
+    widget_theme?: "auto" | "dark" | "light" | null;
   };
+
 
   return {
     id: ws.id,
@@ -67,8 +71,10 @@ export async function getActiveWorkspace(): Promise<ActiveWorkspace | null> {
     surveys_enabled: ws.surveys_enabled ?? true,
     status_enabled: ws.status_enabled ?? true,
     contact_enabled: ws.contact_enabled ?? true,
+    widget_theme: ws.widget_theme ?? "auto",
     role: membership.role as string,
   };
+
 
 }
 
