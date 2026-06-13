@@ -21,8 +21,8 @@ export const metadata: Metadata = {
 };
 
 const COMPANIES = [
-  "Acme Corp", "Linear", "Vercel", "Supabase", "Stripe", "Clerk", "Resend",
-  "Shadcn", "Framer", "Railway", "Dub.co", "Cal.com", "PostHog", "PlanetScale"
+  "NexusForge", "Kinetik", "VaporIO", "Stratum", "PrismIQ", "OmniCore", "Logix",
+  "DevFlow", "Aether", "SentryX", "Plinth", "Volt.io", "ByteMesh", "GridScale"
 ];
 
 export default function Home() {
