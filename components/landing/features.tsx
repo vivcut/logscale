@@ -240,7 +240,7 @@ function FeatureVisual({ id }: { id: string }) {
   if (id === "boards") {
 
 
-  const previewSrc = `${origin}/widget/acme?view=boards`;
+  const previewSrc = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/widget/acme?view=boards`;
 
   // 2. Return the pure, safe JSX UI representation of the snippet and iframe
   return (
@@ -262,7 +262,7 @@ function FeatureVisual({ id }: { id: string }) {
 }
 
   if (id === "roadmap") {
-     const previewSrc = `${origin}/widget/acme?view=roadmap`;
+     const previewSrc = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/widget/acme?view=roadmap`;
 
   // 2. Return the pure, safe JSX UI representation of the snippet and iframe
   return (
@@ -284,7 +284,7 @@ function FeatureVisual({ id }: { id: string }) {
   }
 
   if (id === "changelog") {
-     const previewSrc = `${origin}/widget/acme?view=changelog`;
+     const previewSrc = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/widget/acme?view=changelog`;
 
   // 2. Return the pure, safe JSX UI representation of the snippet and iframe
   return (
@@ -306,7 +306,7 @@ function FeatureVisual({ id }: { id: string }) {
   }
 
   if (id === "surveys") {
-     const previewSrc = `${origin}/widget/acme?view=survey%3Ahow-do-you-like-our-services`;
+     const previewSrc = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/widget/acme?view=survey%3Ahow-do-you-like-our-services`;
 
   // 2. Return the pure, safe JSX UI representation of the snippet and iframe
   return (
@@ -328,7 +328,7 @@ function FeatureVisual({ id }: { id: string }) {
   }
 
   if (id === "status") {
-    const previewSrc = `${origin}/widget/acme?view=status`;
+    const previewSrc = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/widget/acme?view=status`;
 
   // 2. Return the pure, safe JSX UI representation of the snippet and iframe
   return (
@@ -350,7 +350,7 @@ function FeatureVisual({ id }: { id: string }) {
   }
 
   if (id === "contact-page") {
-    const previewSrc = `${origin}/widget/acme?view=contact`;
+    const previewSrc = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/widget/acme?view=contact`;
 
   // 2. Return the pure, safe JSX UI representation of the snippet and iframe
   return (

@@ -53,15 +53,15 @@ export function EmbedSnippet({
 
   const previewSrc =
     view === "all"
-      ? `${origin}/widget/${workspaceSlug}`
-      : `${origin}/widget/${workspaceSlug}?view=${encodeURIComponent(view)}`;
+      ? `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/widget/${workspaceSlug}`
+      : `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/widget/${workspaceSlug}?view=${encodeURIComponent(view)}`;
 
   // 2. Compute both code snippets dynamically
   const scriptSnippet = `<script>
   (function(w,d,s,o,f,js,fjs){
     w['CannyKillerObject']=o;w[o]=w[o]||function(){(w[o].q=w[o].q||[]).push(arguments)},w[o].l=1*new Date();
     js=d.createElement(s),fjs=d.getElementsByTagName(s)[0];js.id=o;js.src=f;js.async=1;fjs.parentNode.insertBefore(js,fjs);
-  }(window,document,'script','ck','${origin}/embed.js'));
+  }(window,document,'script','ck','${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/embed.js'));
   ck('init', ${initOpts});
 </script>`;
 

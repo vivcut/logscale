@@ -305,7 +305,7 @@ export default async function SettingsPage() {
         </p>
 
         <EmbedSnippet
-          origin={origin}
+          origin={process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}
           workspaceSlug={workspace.slug}
           boards={embedBoards}
           surveys={embedSurveys}

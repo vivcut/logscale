@@ -48,7 +48,7 @@ export default async function ContactPageSettings() {
     h.get("x-forwarded-proto") ??
     (host.startsWith("localhost") ? "http" : "https");
   const origin = process.env.NEXT_PUBLIC_SITE_URL ?? `${proto}://${host}`;
-  const publicUrl = `${origin}/public/${workspace.slug}/contact`;
+  const publicUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/public/${workspace.slug}/contact`;
 
   return (
     <div className="mx-auto w-full max-w-3xl px-6 py-10">

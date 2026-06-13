@@ -52,7 +52,7 @@ export default async function SurveyEditorPage({
     (host.startsWith("localhost") ? "http" : "https");
   const origin = process.env.NEXT_PUBLIC_SITE_URL ?? `${proto}://${host}`;
 
-  const publicUrl = `${origin}/forms/${workspace.slug}/${survey.slug}`;
+  const publicUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/forms/${workspace.slug}/${survey.slug}`;
 
   return (
     <div className="mx-auto w-full max-w-3xl px-6 py-10">

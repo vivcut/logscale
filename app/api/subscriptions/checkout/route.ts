@@ -100,8 +100,8 @@ export async function POST(request: NextRequest) {
       ...(existing?.stripe_customer_id
         ? { customer: existing.stripe_customer_id }
         : { customer_email: user.email ?? undefined }),
-      success_url: `${origin}/subscriptions/plan?success=1`,
-      cancel_url: `${origin}/subscriptions/plan?canceled=1`,
+      success_url: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/subscriptions/plan?success=1`,
+      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/subscriptions/plan?canceled=1`,
       // Attribute this checkout (and the resulting subscription) to the
       // workspace so the webhook can find it.
       client_reference_id: workspace.id,
