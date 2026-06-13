@@ -8,6 +8,8 @@ const geistSans = Google_Sans({
   subsets: ["latin"],
 });
 
+import { Analytics } from "@vercel/analytics/next"
+
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -38,6 +40,7 @@ export default function RootLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <Analytics />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         {children}
