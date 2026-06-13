@@ -4,8 +4,8 @@ import type { Metadata } from "next";
 import { LoginForm } from "./login-form";
 
 export const metadata: Metadata = {
-  title: "Sign in — ToTheMoon",
-  description: "Sign in to your ToTheMoon workspace.",
+  title: "Sign in — LogScale",
+  description: "Sign in to your LogScale workspace.",
 };
 
 export default function LoginPage() {
@@ -27,7 +27,7 @@ export default function LoginPage() {
             <span className="font-mono text-xs font-bold">↑</span>
           </div>
           <span className="font-mono text-sm font-semibold tracking-tight">
-            tothemoon
+            LogScale
           </span>
         </Link>
 

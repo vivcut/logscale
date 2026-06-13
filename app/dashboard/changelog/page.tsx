@@ -11,7 +11,7 @@ import { ShareLink } from "@/components/share-link";
 
 
 export const metadata = {
-  title: "Changelog — ToTheMoon",
+  title: "Changelog — LogScale",
 };
 
 export default async function ChangelogPage() {

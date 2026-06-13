@@ -93,7 +93,7 @@ export default async function DashboardLayout({
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex h-14 items-center justify-between border-b border-border px-6 md:hidden">
-          <span className="font-mono text-sm font-semibold">tothemoon</span>
+          <span className="font-mono text-sm font-semibold">LogScale</span>
           <SignOutButton />
         </header>
         <main className="flex-1 overflow-y-auto">

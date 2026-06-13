@@ -3,12 +3,12 @@ import Link from "next/link";
 import { ArrowRight } from "@/components/icons";
 
 export const metadata = {
-  title: "Not found — ToTheMoon",
+  title: "Not found — LogScale",
 };
 
 /**
  * Global 404. Rendered by Next.js whenever a route (or a `notFound()` call,
- * e.g. a private board) has no match. Branded with the ToTheMoon watermark so
+ * e.g. a private board) has no match. Branded with the LogScale watermark so
  * even missing/private pages feel like part of the product.
  */
 export default function NotFound() {
@@ -25,7 +25,7 @@ export default function NotFound() {
       <div className="relative z-10 flex flex-col items-center">
         <div className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 font-mono text-xs text-muted-foreground">
           <span aria-hidden>🚀</span>
-          <span className="font-medium text-foreground">ToTheMoon</span>
+          <span className="font-medium text-foreground">LogScale</span>
         </div>
 
         <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl">

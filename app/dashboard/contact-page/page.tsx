@@ -10,7 +10,7 @@ import { PlanBanner } from "@/components/plan-banner";
 
 
 export const metadata = {
-  title: "Contact Page — ToTheMoon",
+  title: "Contact Page — LogScale",
 };
 
 export default async function ContactPageSettings() {

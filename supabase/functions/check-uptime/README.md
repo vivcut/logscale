@@ -34,7 +34,7 @@ supabase link --project-ref <PROJECT_REF>
 
 ## 4. Deploy the function
 
-From the repo root (`/Users/vivaan/tothemoon`):
+From the repo root (`/Users/vivaan/LogScale`):
 
 ```bash
 supabase functions deploy check-uptime --no-verify-jwt

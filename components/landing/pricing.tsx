@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 
@@ -8,47 +9,44 @@ import { Button } from "@/components/ui/button";
 import { Reveal } from "./reveal";
 import { cn } from "@/lib/utils";
 
-const PLANS = [
-  {
-    name: "Hobby",
-    price: "$0",
-    cadence: "forever",
-    tagline: "Everything an indie hacker needs to start the loop.",
-    highlighted: false,
-    features: [
-      "1 feedback board",
-      "Public kanban roadmap",
-      "Changelog timeline",
-      "1 survey · up to 3 questions",
-      "2 monitored status sites",
-      "Anonymous voting & comments",
-    ],
-    cta: "Start for free",
-  },
-  {
-    name: "Startup",
-    price: "$19",
-    cadence: "per month",
-    tagline: "Remove the limits and the watermark as you scale.",
-    highlighted: true,
-    features: [
-      "Unlimited boards & surveys",
-      "Unlimited status sites + custom paths",
-      "Image uploads in posts & changelog",
-      "Team members & multiple editors",
-      "Custom contact page copy",
-      "No “Built with ToTheMoon” watermark",
-    ],
-    cta: "Upgrade to Startup",
-  },
-];
-
-/**
- * Pricing — two plans mirroring the real Hobby (free) and Startup tiers from
- * lib/subscription.ts. The Startup card is visually elevated with a glow and
- * gradient ring. Both CTAs route to /login (sign-in is the gate to checkout).
- */
 export function Pricing() {
+  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "yearly">("monthly");
+
+  const PLANS = [
+    {
+      name: "Hobby",
+      price: "$0",
+      cadence: "forever",
+      tagline: "Everything an indie hacker needs to start the loop.",
+      highlighted: false,
+      features: [
+        "1 feedback board",
+        "Public kanban roadmap",
+        "Changelog timeline",
+        "1 survey · up to 3 questions",
+        "2 monitored status sites",
+        "Anonymous voting & comments",
+      ],
+      cta: "Start for free",
+    },
+    {
+      name: "Startup",
+      price: billingPeriod === "monthly" ? "$14" : "$94",
+      cadence: billingPeriod === "monthly" ? "per month" : "per year",
+      tagline: "Remove the limits and the watermark as you scale.",
+      highlighted: true,
+      features: [
+        "Unlimited boards & surveys",
+        "Unlimited status sites + custom paths",
+        "Image uploads in posts & changelog",
+        "Team members & multiple editors",
+        "Custom contact page copy",
+        "No “Built with LogScale” watermark",
+      ],
+      cta: "Upgrade to Startup",
+    },
+  ];
+
   return (
     <section id="pricing" className="relative mx-auto w-full max-w-6xl px-6 py-28">
       <Reveal className="mx-auto max-w-2xl text-center">
@@ -62,6 +60,37 @@ export function Pricing() {
           Begin on the Hobby plan with no credit card. Upgrade to Startup when
           you outgrow the limits — cancel anytime.
         </p>
+
+        {/* Billing Period Switcher */}
+        <div className="mt-10 flex justify-center">
+          <div className="relative flex rounded-full border border-border bg-muted p-1">
+            <button
+              onClick={() => setBillingPeriod("monthly")}
+              className={cn(
+                "rounded-full px-4 py-1.5 font-mono text-xs font-medium transition-all",
+                billingPeriod === "monthly"
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Monthly
+            </button>
+            <button
+              onClick={() => setBillingPeriod("yearly")}
+              className={cn(
+                "flex items-center gap-1.5 rounded-full px-4 py-1.5 font-mono text-xs font-medium transition-all",
+                billingPeriod === "yearly"
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Yearly
+              <span className="rounded-full bg-chart-1/10 px-1.5 py-0.5 text-[10px] font-semibold text-chart-1">
+                Save ~44%
+              </span>
+            </button>
+          </div>
+        </div>
       </Reveal>
 
       <div className="mx-auto mt-14 grid max-w-4xl gap-6 md:grid-cols-2">
@@ -71,9 +100,9 @@ export function Pricing() {
               whileHover={{ y: -4 }}
               transition={{ type: "spring", stiffness: 300, damping: 22 }}
               className={cn(
-                "relative flex h-full flex-col rounded-2xl border p-7",
+                "relative flex h-full flex-col rounded-2xl border-2 p-7",
                 plan.highlighted
-                  ? "border-transparent bg-card [background:linear-gradient(var(--card),var(--card))_padding-box,linear-gradient(140deg,oklch(0.55_0.21_277),transparent_60%)_border-box]"
+                  ? "border-transparent bg-card [background:linear-gradient(var(--card),var(--card))_padding-box,linear-gradient(140deg,black,transparent_60%)_border-box]"
                   : "border-border bg-card"
               )}
             >
@@ -100,7 +129,7 @@ export function Pricing() {
                 <span className="text-4xl font-semibold tracking-tight">
                   {plan.price}
                 </span>
-                <span className="mb-1 font-mono text-xs text-muted-foreground">
+                <span className="mb-1 font-mono text-xs text-muted-foreground transition-all">
                   {plan.cadence}
                 </span>
               </div>

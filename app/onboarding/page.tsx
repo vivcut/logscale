@@ -5,7 +5,7 @@ import { SignOutButton } from "../dashboard/sign-out-button";
 import { OnboardingForm } from "./onboarding-form";
 
 export const metadata = {
-  title: "Create your workspace — ToTheMoon",
+  title: "Create your workspace — LogScale",
 };
 
 export default async function OnboardingPage({
@@ -54,7 +54,7 @@ export default async function OnboardingPage({
             <span className="font-mono text-xs font-bold">↑</span>
           </div>
           <span className="font-mono text-sm font-semibold tracking-tight">
-            tothemoon
+            LogScale
           </span>
         </div>
 

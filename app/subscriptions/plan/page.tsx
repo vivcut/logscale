@@ -12,7 +12,7 @@ import { ManageSubscriptionButton } from "./manage-button";
 
 
 export const metadata = {
-  title: "Plan — ToTheMoon",
+  title: "Plan — LogScale",
 };
 
 export default async function PlanPage({
@@ -80,7 +80,7 @@ export default async function PlanPage({
           <div>
             <p className="text-base font-semibold">You have Startup plan</p>
             <p className="mt-0.5 text-sm text-muted-foreground">
-              Thanks for subscribing. Everything in ToTheMoon is unlocked for
+              Thanks for subscribing. Everything in LogScale is unlocked for
               this workspace.
             </p>
             <div className="mt-4">

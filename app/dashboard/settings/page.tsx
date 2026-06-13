@@ -38,7 +38,7 @@ import {
 
 
 export const metadata = {
-  title: "Settings — ToTheMoon",
+  title: "Settings — LogScale",
 };
 
 export default async function SettingsPage() {

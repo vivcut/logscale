@@ -45,7 +45,7 @@ export function Footer() {
                 <span className="font-mono text-sm font-bold">↑</span>
               </span>
               <span className="font-mono text-sm font-semibold tracking-tight">
-                tothemoon
+                LogScale
               </span>
             </Link>
             <p className="max-w-xs text-sm text-muted-foreground">
@@ -76,7 +76,7 @@ export function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-border pt-8 text-xs text-muted-foreground md:flex-row">
-          <span className="font-mono">© 2026 tothemoon. All rights reserved.</span>
+          <span className="font-mono">© 2026 LogScale. All rights reserved.</span>
           <span className="font-mono">built with next.js · supabase · shadcn/ui</span>
         </div>
       </div>

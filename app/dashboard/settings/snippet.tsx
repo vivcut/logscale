@@ -6,13 +6,8 @@ import { Check, Copy, ExternalLink } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-
 export type EmbedItem = { name: string; slug: string };
 
-// The surfaces an embed can expose. "all" shows every tab; the generic single
-// views ("board", "roadmap", …) lock the widget to one surface; and the
-// per-item views ("board:slug" / "survey:slug") lock it to one specific board
-// or published survey.
 type ViewOption = { id: string; label: string };
 
 export function EmbedSnippet({
@@ -28,10 +23,9 @@ export function EmbedSnippet({
 }) {
   const [copied, setCopied] = React.useState(false);
   const [view, setView] = React.useState<string>("all");
+  // 1. State tracking whether the user wants the script or raw iframe
+  const [embedType, setEmbedType] = React.useState<"script" | "iframe">("script");
 
-  // Build the full ordered list of view options. Generic surfaces first, then
-  // a dedicated entry per board ("Board - NAME") and per survey ("Survey -
-  // NAME"). Each per-item view targets that single board/survey only.
   const views = React.useMemo<ViewOption[]>(() => {
     const base: ViewOption[] = [
       { id: "all", label: "All tabs" },
@@ -52,22 +46,18 @@ export function EmbedSnippet({
     return base;
   }, [boards, surveys]);
 
-  // Only emit the view option when it's not the default ("all"), keeping the
-  // common snippet clean.
   const initOpts =
     view === "all"
       ? `{ workspace: '${workspaceSlug}' }`
       : `{ workspace: '${workspaceSlug}', view: '${view}' }`;
 
-  // The widget URL the live preview iframe points at — mirrors what embed.js
-  // loads, including the selected view.
   const previewSrc =
     view === "all"
       ? `${origin}/widget/${workspaceSlug}`
       : `${origin}/widget/${workspaceSlug}?view=${encodeURIComponent(view)}`;
 
-
-  const snippet = `<script>
+  // 2. Compute both code snippets dynamically
+  const scriptSnippet = `<script>
   (function(w,d,s,o,f,js,fjs){
     w['CannyKillerObject']=o;w[o]=w[o]||function(){(w[o].q=w[o].q||[]).push(arguments)},w[o].l=1*new Date();
     js=d.createElement(s),fjs=d.getElementsByTagName(s)[0];js.id=o;js.src=f;js.async=1;fjs.parentNode.insertBefore(js,fjs);
@@ -75,9 +65,20 @@ export function EmbedSnippet({
   ck('init', ${initOpts});
 </script>`;
 
+  const iframeSnippet = `<iframe 
+  src="${previewSrc}" 
+  title="LogScale Widget" 
+  width="100%" 
+  height="600px" 
+  style="border: none; border-radius: 8px;"
+></iframe>`;
+
+  // Determine active text display for the copy function and code block display
+  const activeSnippet = embedType === "script" ? scriptSnippet : iframeSnippet;
+
   async function copy() {
     try {
-      await navigator.clipboard.writeText(snippet);
+      await navigator.clipboard.writeText(activeSnippet);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -85,9 +86,7 @@ export function EmbedSnippet({
     }
   }
 
-  // Friendly label for the currently selected view (used in the preview header).
-  const activeLabel =
-    views.find((v) => v.id === view)?.label ?? view;
+  const activeLabel = views.find((v) => v.id === view)?.label ?? view;
 
   return (
     <div className="space-y-3">
@@ -113,20 +112,46 @@ export function EmbedSnippet({
         ))}
       </div>
 
+      {/* Code Snippet Container */}
       <div className="rounded-xl border border-border bg-card">
-        <div className="flex items-center justify-between border-b border-border px-4 py-3">
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-xs text-muted-foreground">
-              embed.js
-            </span>
+        <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
+          {/* Format Toggle Segment */}
+          <div className="flex items-center gap-1 rounded-lg bg-background/60 p-0.5 border border-border/60">
+            <button
+              type="button"
+              onClick={() => setEmbedType("script")}
+              className={cn(
+                "rounded-md px-2.5 py-1 text-xs font-medium transition-all",
+                embedType === "script"
+                  ? "bg-muted text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              JS Snippet
+            </button>
+            <button
+              type="button"
+              onClick={() => setEmbedType("iframe")}
+              className={cn(
+                "rounded-md px-2.5 py-1 text-xs font-medium transition-all",
+                embedType === "iframe"
+                  ? "bg-muted text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Raw HTML Iframe
+            </button>
           </div>
+
           <Button size="sm" variant="outline" onClick={copy}>
-            {copied ? <Check className="text-emerald-400" /> : <Copy />}
+            {copied ? <Check className="text-emerald-400 size-3.5" /> : <Copy className="size-3.5" />}
             {copied ? "Copied" : "Copy"}
           </Button>
         </div>
-        <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed text-muted-foreground">
-          <code>{snippet}</code>
+        
+        {/* Code Content Window */}
+        <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed text-muted-foreground bg-black/5 dark:bg-black/20">
+          <code>{activeSnippet}</code>
         </pre>
       </div>
 
@@ -147,7 +172,6 @@ export function EmbedSnippet({
           </a>
         </div>
         <div className="flex justify-center bg-background/40 p-4">
-          {/* key forces a remount when the view changes so the iframe reloads */}
           <iframe
             key={view}
             src={previewSrc}

@@ -4,9 +4,9 @@ import Link from "next/link";
 import { LegalPage, type LegalSection } from "@/components/landing/legal-page";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — ToTheMoon",
+  title: "Privacy Policy — LogScale",
   description:
-    "How ToTheMoon collects, uses, and protects your data and the data your users submit.",
+    "How LogScale collects, uses, and protects your data and the data your users submit.",
 };
 
 const SECTIONS: LegalSection[] = [
@@ -45,7 +45,7 @@ const SECTIONS: LegalSection[] = [
       <>
         <p>We use the information we collect to:</p>
         <ul>
-          <li>Provide, maintain, and improve the ToTheMoon platform.</li>
+          <li>Provide, maintain, and improve the LogScale platform.</li>
           <li>Authenticate you and keep your workspace secure.</li>
           <li>Process subscription payments through our payment provider.</li>
           <li>Prevent abuse, spam, and duplicate voting.</li>
@@ -168,7 +168,7 @@ export default function PrivacyPage() {
       updated="June 13, 2026"
       intro={
         <p>
-          This Privacy Policy explains how ToTheMoon (&ldquo;we&rdquo;,
+          This Privacy Policy explains how LogScale (&ldquo;we&rdquo;,
           &ldquo;us&rdquo;) collects, uses, and protects information when you
           use our feedback platform — both as a customer running a workspace and
           as an end user submitting feedback. We keep things minimal: we only

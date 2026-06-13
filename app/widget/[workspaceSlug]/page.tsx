@@ -59,7 +59,7 @@ export default async function WidgetPage({
 
   if (!workspace) notFound();
 
-  // Hobby (free) workspaces show the "Built with ToTheMoon" watermark in the
+  // Hobby (free) workspaces show the "Built with LogScale" watermark in the
   // widget footer; the Startup plan removes it.
   const subscription = await getWorkspaceSubscription(workspace.id);
   const showWatermark = !hasStartupPlan(subscription);

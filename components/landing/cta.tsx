@@ -15,16 +15,16 @@ export function CTA() {
   return (
     <section className="relative mx-auto w-full max-w-6xl px-6 pb-28">
       <Reveal>
-        <div className="relative overflow-hidden rounded-3xl border border-border bg-card px-6 py-20 text-center md:py-28">
+        <div className="relative overflow-hidden rounded-3xl border-2 border-border bg-card px-6 py-20 text-center md:py-28">
           {/* Glow */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 [background:radial-gradient(70%_80%_at_50%_120%,oklch(0.55_0.21_277/0.28)_0%,transparent_60%)]"
+            // className="pointer-events-none absolute inset-0 [background:radial-gradient(70%_80%_at_50%_120%,oklch(0.55_0.21_277/0.28)_0%,transparent_60%)]"
           />
           {/* Grid */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 opacity-[0.04] [background-image:linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)] [background-size:44px_44px]"
+            // className="pointer-events-none absolute inset-0 opacity-[0.04] [background-image:linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)] [background-size:44px_44px]"
           />
 
           <div className="relative">
@@ -32,7 +32,7 @@ export function CTA() {
               ready for liftoff
             </span>
             <h2 className="mx-auto mt-4 max-w-2xl text-balance text-3xl font-semibold tracking-tight md:text-5xl">
-              Start collecting feedback in two minutes.
+              Put your users in the loop
             </h2>
             <p className="mx-auto mt-5 max-w-lg text-balance text-muted-foreground">
               Join the startups and indie developers shipping what their users

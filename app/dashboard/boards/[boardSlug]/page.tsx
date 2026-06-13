@@ -7,7 +7,7 @@ import { AdminBoard, type AdminPost } from "./admin-board";
 
 
 export const metadata = {
-  title: "Board — ToTheMoon",
+  title: "Board — LogScale",
 };
 
 type PageParams = { boardSlug: string };

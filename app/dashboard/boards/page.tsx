@@ -32,7 +32,7 @@ import { PlanBanner } from "@/components/plan-banner";
 
 
 export const metadata = {
-  title: "Boards — ToTheMoon",
+  title: "Boards — LogScale",
 };
 
 type Board = {

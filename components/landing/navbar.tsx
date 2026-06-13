@@ -50,11 +50,11 @@ export function Navbar() {
           : " border-transparent bg-transparent"
       )}
     >
-      <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-6">
+      <div className="mx-auto flex h-20 max-w-8xl items-center justify-between px-20">
         <Link href="/" className="flex items-center gap-2">
-          <Circle className="size-8" weight="fill" />
+          {/* <Circle className="size-8" weight="fill" /> */}
           <span className="text-2xl ml-1 font-medium tracking-tight">
-            Adrift
+            LogScale
           </span>
         </Link>
 
@@ -63,7 +63,7 @@ export function Navbar() {
             <a
               key={l.href}
               href={l.href}
-              className="relative transition-colors hover:text-foreground"
+              className="relative transition-colors hover:text-foreground font-semibold"
             >
               {l.label}
             </a>

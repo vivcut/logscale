@@ -341,7 +341,7 @@ export function WidgetShell({
         {showWatermark ? (
           <div className="flex items-center justify-center pt-6">
             <a
-              href="https://tothemoon.dev"
+              href="https://LogScale.dev"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-[11px] text-muted-foreground transition-colors hover:text-foreground"
@@ -349,7 +349,7 @@ export function WidgetShell({
               <span aria-hidden>🚀</span>
               Built with{" "}
               <span className="font-mono font-medium text-foreground">
-                ToTheMoon
+                LogScale
               </span>
             </a>
           </div>

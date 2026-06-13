@@ -9,7 +9,7 @@ import { PlanBanner } from "@/components/plan-banner";
 
 
 export const metadata = {
-  title: "Surveys — ToTheMoon",
+  title: "Surveys — LogScale",
 };
 
 export default async function SurveysPage() {
