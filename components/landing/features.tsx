@@ -306,7 +306,7 @@ function FeatureVisual({ id }: { id: string }) {
   }
 
   if (id === "surveys") {
-     const previewSrc = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/widget/acme?view=survey%3Ahow-do-you-like-our-services`;
+     const previewSrc = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/widget/acme?view=survey%3Abeta-tester-form`;
 
   // 2. Return the pure, safe JSX UI representation of the snippet and iframe
   return (
