@@ -16,9 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LogScale — Feedback, Roadmaps & Changelogs",
+  title: "LogScale — Let your users know what's going on",
   description:
-    "The high-performance feedback platform for startups and indie developers. Feedback boards, kanban roadmaps, and public changelogs.",
+    "The high-performance platform for startups and indie developers. Feedback boards, kanban roadmaps,  public changelogs and more.",
 };
 
 // Runs before first paint to apply the saved theme (default: follow the OS).
