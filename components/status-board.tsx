@@ -109,7 +109,7 @@ function HistoryBar({
         )}
       />
       {/* Tooltip */}
-      <div className="pointer-events-none absolute bottom-full left-1/2 z-30 mb-2 hidden -translate-x-1/2 whitespace-nowrap rounded-md border border-border bg-popover px-2.5 py-1.5 text-left shadow-xl group-hover/bar:block">
+      <div className="pointer-events-none absolute bottom-full left-1/2 z-30 mb-2 hidden -translate-x-1/2 whitespace-nowrap rounded-xl border-2 border-border-2 bg-popover px-2.5 py-1.5 text-left shadow-xl group-hover/bar:block">
         <p className="flex items-center gap-1.5 text-[11px] font-medium text-foreground">
           <span className={cn("size-1.5 rounded-full", meta.dot)} />
           {meta.label}
@@ -135,7 +135,7 @@ function IncidentLog({ timeline }: { timeline: TimelineEntry[] }) {
   if (timeline.length === 0) return null;
 
   return (
-    <div className="mt-3 border-t border-border pt-3">
+    <div className="mt-3 border-t-2 border-border-2 pt-3">
       <p className="mb-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
         incident log
       </p>
@@ -188,7 +188,7 @@ function IncidentLog({ timeline }: { timeline: TimelineEntry[] }) {
                   <div className="flex flex-wrap items-center gap-1.5">
                     <span
                       className={cn(
-                        "inline-flex items-center rounded-full border px-1.5 py-0.5 font-mono text-[9px] font-medium uppercase tracking-wide",
+                        "inline-flex items-center rounded-full border-2 px-1.5 py-0.5 font-mono text-[9px] font-medium uppercase tracking-wide",
                         TAG_META[entry.tag].pill
                       )}
                     >
@@ -247,14 +247,14 @@ function SiteRow({
   );
 
   return (
-    <div className="border-b border-border px-4 py-4 last:border-b-0">
+    <div className="border-b-2 border-border-2 px-4 py-4 last:border-b-0">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
             <span className="truncate text-sm font-medium">{display}</span>
             <span
               className={cn(
-                "inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2 py-0.5 font-mono text-[10px] font-medium",
+                "inline-flex shrink-0 items-center gap-1.5 rounded-full border-2 px-2 py-0.5 font-mono text-[10px] font-medium",
                 meta.pill
               )}
             >
@@ -338,14 +338,14 @@ export function StatusBoard({
 }) {
   if (sites.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-border px-4 py-12 text-center text-sm text-muted-foreground">
+      <div className="rounded-xl border-2 border-dashed border-border-2 px-4 py-12 text-center text-sm text-muted-foreground">
         No services are being monitored yet.
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-border bg-card">
+    <div className="overflow-hidden rounded-xl border-2 border-border-2 bg-card">
       {sites.map((site) => (
         <SiteRow
           key={site.id}

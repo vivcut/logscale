@@ -97,9 +97,9 @@ export default async function PublicBoardPage({
 
     <div className="min-h-screen">
       {/* Header */}
-      <header className="border-b border-border">
-        <div className="mx-auto flex max-w-5xl items-center gap-3 px-6 py-5">
-          <div className="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-md bg-primary text-sm font-bold text-primary-foreground">
+      <header className="border-b-2 border-popover/50">
+        <div className="mx-auto flex max-w-7xl items-center gap-3 px-6 py-5">
+          <div className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-primary text-sm font-bold text-primary-foreground">
             {workspace.logo_url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -124,7 +124,7 @@ export default async function PublicBoardPage({
 
       </header>
 
-      <main className="mx-auto max-w-5xl px-6 py-8">
+      <main className="mx-auto max-w-7xl px-6 py-8">
         {board.description ? (
           <p className="mb-6 text-sm text-muted-foreground">
             {board.description}
@@ -135,7 +135,7 @@ export default async function PublicBoardPage({
           boardId={board.id}
           workspaceSlug={workspace.slug}
           boardSlug={board.slug}
-          flairs={(board.flairs ?? ["feedback", "bug"]) as string[]}
+          flairs={(board.flairs ?? ["general"]) as string[]}
           initialPosts={(posts ?? []) as PublicPost[]}
           lockedName={teamName}
           lockedEmail={teamEmail}

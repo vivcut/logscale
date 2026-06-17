@@ -38,7 +38,7 @@ import {
 
 
 export const metadata = {
-  title: "Settings — LogScale",
+  title: "Settings — Pitstop",
 };
 
 export default async function SettingsPage() {
@@ -48,7 +48,7 @@ export default async function SettingsPage() {
 
     return (
       <div className="mx-auto w-full max-w-3xl px-6 py-10">
-        <div className="rounded-xl border border-dashed border-border p-10 text-center">
+        <div className="rounded-xl border-2 border-dashed border-border-2 p-10 text-center">
           <h1 className="text-sm font-medium">No active workspace</h1>
         </div>
       </div>
@@ -104,30 +104,6 @@ export default async function SettingsPage() {
 
   const invites: PendingInvite[] = (inviteRows ?? []) as PendingInvite[];
 
-  // Public boards + published surveys — used to offer per-item embed views
-  // (e.g. "Board - Feature requests", "Survey - Customer support").
-  const { data: boardRows } = await supabase
-    .from("boards")
-    .select("name, slug")
-    .eq("workspace_id", workspace.id)
-    .eq("is_private", false)
-    .order("created_at", { ascending: true });
-
-  const { data: surveyRows } = await supabase
-    .from("surveys")
-    .select("title, slug")
-    .eq("workspace_id", workspace.id)
-    .eq("is_published", true)
-    .order("created_at", { ascending: true });
-
-  const embedBoards = (boardRows ?? []).map((b) => ({
-    name: b.name as string,
-    slug: b.slug as string,
-  }));
-  const embedSurveys = (surveyRows ?? []).map((s) => ({
-    name: s.title as string,
-    slug: s.slug as string,
-  }));
 
 
 
@@ -135,8 +111,8 @@ export default async function SettingsPage() {
 
     <div className="mx-auto w-full max-w-3xl px-6 py-10">
       <div className="mb-8">
-        <p className="font-mono text-xs text-muted-foreground">/settings</p>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight">Settings</h1>
+        {/* <p className="font-mono text-xs text-muted-foreground">/settings</p> */}
+        <h1 className="mt-1 text-4xl font-semibold tracking-tight">Settings</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Configure your workspace and install the in-app widget.
         </p>
@@ -156,7 +132,7 @@ export default async function SettingsPage() {
 
 
         {/* Company logo */}
-        <div className="mt-px rounded-b-xl border border-t-0 border-border bg-card p-4">
+        <div className="mt-2 rounded-b-xl border-2 border-t-0 border-border-2 bg-card rounded-t-xl p-4">
           <p className="mb-3 font-mono text-xs text-muted-foreground">logo</p>
           <LogoUploader
             workspaceName={workspace.name}
@@ -174,7 +150,7 @@ export default async function SettingsPage() {
         </div>
         <Link
           href="/subscriptions/plan"
-          className="group flex items-center justify-between gap-4 rounded-xl border border-border bg-card p-4 transition-colors hover:border-foreground/20"
+          className="group flex items-center justify-between gap-4 rounded-xl border-2 border-border-2 bg-card p-4 transition-colors hover:border-foreground/20"
         >
           <div className="flex items-center gap-3">
             <div
@@ -241,47 +217,26 @@ export default async function SettingsPage() {
           on its public page and removes it from the widget — your data is
           preserved and reappears the moment you switch it back on.
         </p>
-        <div className="divide-y divide-border overflow-hidden rounded-xl border border-border">
+        <div className="divide-y divide-border-2 overflow-hidden rounded-xl border-2 border-border">
           <SurfaceToggle
             surface="boards"
             label="Boards"
-            description="Your feedback boards are live and publicly viewable."
+            description="Toggle if Boards are visible on your public page"
             initialEnabled={workspace.boards_enabled}
             canManage={canManage}
           />
           <SurfaceToggle
             surface="roadmap"
             label="Roadmap"
-            description="Your public roadmap is live and linked from public pages."
+            description="Toggle if Roadmaps are visible on your public page"
             initialEnabled={workspace.roadmap_enabled}
             canManage={canManage}
           />
           <SurfaceToggle
             surface="changelog"
             label="Changelog"
-            description="Your changelog is live and linked from public pages."
+            description="Toggle if Changelogs are visible on your public page"
             initialEnabled={workspace.changelog_enabled}
-            canManage={canManage}
-          />
-          <SurfaceToggle
-            surface="surveys"
-            label="Surveys"
-            description="Published survey links are reachable by respondents."
-            initialEnabled={workspace.surveys_enabled}
-            canManage={canManage}
-          />
-          <SurfaceToggle
-            surface="status"
-            label="Status page"
-            description="Your public status page is live and viewable."
-            initialEnabled={workspace.status_enabled}
-            canManage={canManage}
-          />
-          <SurfaceToggle
-            surface="contact"
-            label="Contact page"
-            description="Your public contact form is live and accepting messages."
-            initialEnabled={workspace.contact_enabled}
             canManage={canManage}
           />
         </div>
@@ -307,26 +262,13 @@ export default async function SettingsPage() {
         <EmbedSnippet
           origin={process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}
           workspaceSlug={workspace.slug}
-          boards={embedBoards}
-          surveys={embedSurveys}
         />
 
         {/* Widget appearance */}
-        <div className="mt-6">
-          <p className="mb-1 text-sm font-medium">Appearance</p>
-          <p className="mb-3 max-w-prose text-sm text-muted-foreground">
-            Choose the colour scheme for the widget and its drawer.{" "}
-            <span className="font-mono text-foreground">Auto</span> follows each
-            visitor&apos;s system preference.
-          </p>
-          <WidgetAppearance
-            initial={workspace.widget_theme ?? "auto"}
-            canManage={canManage}
-          />
-        </div>
+        
 
 
-        <a
+        {/* <a
           href={`/widget/${workspace.slug}`}
 
           target="_blank"
@@ -335,7 +277,7 @@ export default async function SettingsPage() {
         >
           <ExternalLink className="size-3" />
           preview widget
-        </a>
+        </a> */}
       </section>
     </div>
   );

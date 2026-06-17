@@ -1,94 +1,47 @@
 import { NextResponse } from "next/server";
-
 import { createClient } from "@/lib/supabase/server";
 import { getActiveWorkspace } from "@/lib/workspace";
 
-const WORKER_ENDPOINT = "https://summer-cherry-c965.vivaancut.workers.dev/";
-
-/**
- * Generates the "most important features" report for the active workspace.
- *
- * Pulls the top 3 most-upvoted `under-review` posts across all boards and asks
- * the AI worker (mode: "report") for an actionable build recommendation.
- * Returns { markdown } or { empty: true } when there's nothing under review.
- */
 export async function GET() {
   const workspace = await getActiveWorkspace();
+  // Ensure workspace has a slug (fallback to its ID if not)
+  const workspaceSlug = workspace?.slug || workspace?.id;
+
   if (!workspace) {
     return NextResponse.json({ error: "No active workspace." }, { status: 401 });
   }
 
   const supabase = await createClient();
 
-  // Boards in this workspace (strict tenant scoping).
+  // 1. Fetch both ID and slug for the boards in this workspace
   const { data: boards } = await supabase
     .from("boards")
-    .select("id")
+    .select("id, slug")
     .eq("workspace_id", workspace.id);
 
-  const boardIds = (boards ?? []).map((b) => b.id as string);
+  const boardMap = new Map((boards ?? []).map((b) => [b.id, b.slug]));
+  const boardIds = Array.from(boardMap.keys());
+
   if (boardIds.length === 0) {
-    return NextResponse.json({ empty: true });
+    return NextResponse.json({ workspaceSlug, posts: [] });
   }
 
-  // Top 3 under-review posts by upvotes.
+  // 2. Fetch up to 3 under-review posts
   const { data: posts } = await supabase
     .from("posts")
-    .select("title, description, upvotes_count")
+    .select("id, title, description, upvotes_count, board_id")
     .in("board_id", boardIds)
     .eq("status", "under-review")
     .order("upvotes_count", { ascending: false })
     .limit(3);
 
-  const list = (posts ?? []) as {
-    title: string;
-    description: string | null;
-    upvotes_count: number;
-  }[];
+  const list = (posts ?? []).map((p) => ({
+    id: p.id,
+    title: p.title,
+    description: p.description ?? "",
+    upvotes: p.upvotes_count,
+    boardSlug: boardMap.get(p.board_id) || "general", // Fallback string if slug is empty
+  }));
 
-  if (list.length === 0) {
-    return NextResponse.json({ empty: true });
-  }
-
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 20000);
-    const res = await fetch(WORKER_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        mode: "report",
-        posts: list.map((p) => ({
-          title: p.title,
-          description: p.description ?? "",
-          upvotes: p.upvotes_count,
-        })),
-      }),
-      signal: controller.signal,
-    });
-    clearTimeout(timeout);
-
-    if (!res.ok) {
-      return NextResponse.json(
-        { error: "The AI service is unavailable right now." },
-        { status: 502 }
-      );
-    }
-
-    const json = (await res.json()) as { markdown?: string; error?: string };
-    const markdown = (json.markdown || "").trim();
-    if (!markdown) {
-      return NextResponse.json(
-        { error: json.error || "No report was generated." },
-        { status: 502 }
-      );
-    }
-
-    return NextResponse.json({ markdown, count: list.length });
-  } catch {
-    return NextResponse.json(
-      { error: "The AI service timed out. Try again." },
-      { status: 504 }
-    );
-  }
+  return NextResponse.json({ workspaceSlug, posts: list });
 }

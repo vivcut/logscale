@@ -77,9 +77,6 @@ export async function POST(request: NextRequest) {
     .eq("workspace_id", workspace.id)
     .maybeSingle();
 
-  const origin =
-    process.env.NEXT_PUBLIC_SITE_URL ?? new URL(request.url).origin;
-
   try {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
@@ -108,6 +105,7 @@ export async function POST(request: NextRequest) {
       client_reference_id: workspace.id,
       metadata: { workspace_id: workspace.id },
       subscription_data: {
+        trial_period_days: 14, // 👈 Configures the 14-day free trial period in Stripe
         metadata: { workspace_id: workspace.id },
       },
     });

@@ -4,9 +4,9 @@ import Link from "next/link";
 import { LegalPage, type LegalSection } from "@/components/landing/legal-page";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — LogScale",
+  title: "Terms of Service — Pitstop",
   description:
-    "The terms and conditions for using the LogScale feedback platform.",
+    "The terms and conditions for using the Pitstop feedback platform.",
 };
 
 const SECTIONS: LegalSection[] = [
@@ -14,7 +14,7 @@ const SECTIONS: LegalSection[] = [
     heading: "Acceptance of terms",
     body: (
       <p>
-        By creating an account or using LogScale, you agree to these Terms of
+        By creating an account or using Pitstop, you agree to these Terms of
         Service. If you are using the service on behalf of an organization, you
         represent that you have authority to bind that organization to these
         terms.
@@ -35,7 +35,7 @@ const SECTIONS: LegalSection[] = [
     heading: "Acceptable use",
     body: (
       <>
-        <p>You agree not to use LogScale to:</p>
+        <p>You agree not to use Pitstop to:</p>
         <ul>
           <li>Violate any law or infringe anyone&apos;s rights.</li>
           <li>
@@ -67,7 +67,7 @@ const SECTIONS: LegalSection[] = [
     body: (
       <>
         <p>
-          LogScale offers a free <strong>Hobby</strong> plan and a paid{" "}
+          Pitstop offers a free <strong>Hobby</strong> plan and a paid{" "}
           <strong>Startup</strong> plan. Paid subscriptions are billed in
           advance on a recurring basis through our payment provider, Stripe.
         </p>
@@ -83,7 +83,7 @@ const SECTIONS: LegalSection[] = [
     heading: "Service availability",
     body: (
       <p>
-        We work hard to keep LogScale fast and reliable, but the service is
+        We work hard to keep Pitstop fast and reliable, but the service is
         provided on an &ldquo;as is&rdquo; and &ldquo;as available&rdquo; basis.
         We do not guarantee uninterrupted or error-free operation and may
         perform maintenance that temporarily affects availability.
@@ -104,7 +104,7 @@ const SECTIONS: LegalSection[] = [
     heading: "Limitation of liability",
     body: (
       <p>
-        To the maximum extent permitted by law, LogScale and its team will not
+        To the maximum extent permitted by law, Pitstop and its team will not
         be liable for any indirect, incidental, or consequential damages, or for
         any loss of data, revenue, or profits arising from your use of the
         service.
@@ -140,7 +140,7 @@ export default function TermsPage() {
       updated="June 13, 2026"
       intro={
         <p>
-          These Terms of Service govern your use of LogScale. Please read them
+          These Terms of Service govern your use of Pitstop. Please read them
           carefully — by using the platform you agree to be bound by them. We
           aim to keep them clear and fair for the startups and indie developers
           we build for.

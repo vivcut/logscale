@@ -8,6 +8,12 @@ import { ArrowRight, Check } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "./reveal";
 import { cn } from "@/lib/utils";
+import { Cardo } from "next/font/google";
+
+const serif = Cardo({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+});
 
 export function Pricing() {
   const [billingPeriod, setBillingPeriod] = useState<"monthly" | "yearly">("monthly");
@@ -41,7 +47,7 @@ export function Pricing() {
         "Image uploads in posts & changelog",
         "Team members & multiple editors",
         "Custom contact page copy",
-        "No “Built with LogScale” watermark",
+        "No “Built with Pitstop” watermark",
       ],
       cta: "Upgrade to Startup",
     },
@@ -53,8 +59,11 @@ export function Pricing() {
         <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
           pricing
         </span>
-        <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight md:text-4xl">
-          Free to start. Fair as you grow.
+        <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight md:text-6xl">
+          <span className={serif.className}>
+            Free to start. Fair as you grow.
+          </span>
+          
         </h2>
         <p className="mt-4 text-balance text-muted-foreground">
           Begin on the Hobby plan with no credit card. Upgrade to Startup when
@@ -63,7 +72,7 @@ export function Pricing() {
 
         {/* Billing Period Switcher */}
         <div className="mt-10 flex justify-center">
-          <div className="relative flex rounded-full border border-border bg-muted p-1">
+          <div className="relative flex rounded-full border-2 border-border-2 bg-muted p-1">
             <button
               onClick={() => setBillingPeriod("monthly")}
               className={cn(
@@ -85,7 +94,7 @@ export function Pricing() {
               )}
             >
               Yearly
-              <span className="rounded-full bg-chart-1/10 px-1.5 py-0.5 text-[10px] font-semibold text-chart-1">
+              <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
                 Save ~44%
               </span>
             </button>
@@ -102,17 +111,17 @@ export function Pricing() {
               className={cn(
                 "relative flex h-full flex-col rounded-2xl border-2 p-7",
                 plan.highlighted
-                  ? "border-transparent bg-card [background:linear-gradient(var(--card),var(--card))_padding-box,linear-gradient(140deg,black,transparent_60%)_border-box]"
-                  : "border-border bg-card"
+                  ? "border-transparent bg-card [background:linear-gradient(var(--card),var(--card))_padding-box,linear-gradient(140deg,#8caa4a,transparent_60%)_border-box]"
+                  : "border-border-2 bg-card"
               )}
             >
               {plan.highlighted ? (
                 <>
                   <div
                     aria-hidden
-                    className="pointer-events-none absolute inset-0 -z-10 rounded-2xl [background:radial-gradient(80%_60%_at_50%_0%,oklch(0.55_0.21_277/0.12)_0%,transparent_70%)]"
+                    className="pointer-events-none absolute inset-0 -z-10 rounded-2xl"
                   />
-                  <span className="absolute -top-3 left-7 rounded-full border border-border bg-foreground px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-background">
+                  <span className="absolute -top-3 left-7 rounded-full border-2 border-border-2 bg-foreground px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-background">
                     Most popular
                   </span>
                 </>
@@ -137,7 +146,7 @@ export function Pricing() {
               <ul className="mt-6 flex flex-1 flex-col gap-3">
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-start gap-2.5 text-sm">
-                    <Check className="mt-0.5 size-4 shrink-0 text-chart-1" />
+                    <Check className="mt-0.5 size-4 shrink-0 text-primary" />
                     <span className="text-muted-foreground">{f}</span>
                   </li>
                 ))}

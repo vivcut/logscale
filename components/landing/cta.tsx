@@ -15,7 +15,7 @@ export function CTA() {
   return (
     <section className="relative mx-auto w-full max-w-6xl px-6 pb-28">
       <Reveal>
-        <div className="relative overflow-hidden rounded-3xl border-2 border-border bg-card px-6 py-20 text-center md:py-28">
+        <div className="relative overflow-hidden rounded-3xl border-2 border-border-2 bg-card px-6 py-20 text-center md:py-28">
           {/* Glow */}
           <div
             aria-hidden

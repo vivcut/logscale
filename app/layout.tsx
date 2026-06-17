@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Google_Sans } from "next/font/google";
+import { Cal_Sans, Geist, Geist_Mono, Google_Sans, Noto_Sans, Poppins } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Google_Sans({
   variable: "--font-geist-sans",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "600"],
   subsets: ["latin"],
 });
 
@@ -16,22 +16,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LogScale — Let your users know what's going on",
+  title: "Pitstop — Let your users know what's going on",
   description:
     "The high-performance platform for startups and indie developers. Feedback boards, kanban roadmaps, public changelogs, and more.",
   
   // 1. The base URL for all your relative metadata paths
-  metadataBase: new URL("https://logscale.com"), // <-- Change to your actual domain
+  metadataBase: new URL("https://Pitstop.com"), // <-- Change to your actual domain
   
   // 2. Standard SEO Keywords
   keywords: ["feedback board", "kanban roadmap", "public changelog", "product management tool", "startup tools"],
   
   // 3. Open Graph (How it looks on Facebook, LinkedIn, Discord)
   openGraph: {
-    title: "LogScale — Let your users know what's going on",
+    title: "Pitstop — Let your users know what's going on",
     description: "The high-performance platform for startups and indie developers. Feedback boards, kanban roadmaps, public changelogs, and more.",
-    url: "https://logscale.com", // <-- Change to your actual domain
-    siteName: "LogScale",
+    url: "https://Pitstop.com", // <-- Change to your actual domain
+    siteName: "Pitstop",
     locale: "en_US",
     type: "website",
     images: [
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
         url: "/og-image.png", // Path to your OG image file (usually 1200x630px) in public folder
         width: 1200,
         height: 630,
-        alt: "LogScale Platform Preview",
+        alt: "Pitstop Platform Preview",
       },
     ],
   },
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   // 4. Twitter Cards (How it looks on X/Twitter)
   twitter: {
     card: "summary_large_image",
-    title: "LogScale — Let your users know what's going on",
+    title: "Pitstop — Let your users know what's going on",
     description: "The high-performance platform for startups and indie developers.",
     creator: "@your_twitter_handle", // <-- Change to your Twitter handle
     images: ["/og-image.png"], // Reuse the same image
@@ -93,6 +93,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
+<link rel="manifest" href="/site.webmanifest"/>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <Analytics />
       </head>

@@ -11,7 +11,7 @@ import { ShareLink } from "@/components/share-link";
 
 
 export const metadata = {
-  title: "Changelog — LogScale",
+  title: "Changelog — Pitstop",
 };
 
 export default async function ChangelogPage() {
@@ -20,7 +20,7 @@ export default async function ChangelogPage() {
   if (!workspace) {
     return (
       <div className="mx-auto w-full max-w-4xl px-6 py-10">
-        <div className="rounded-xl border border-dashed border-border p-10 text-center">
+        <div className="rounded-xl border-2 border-dashed border-border-2 p-10 text-center">
           <h1 className="text-sm font-medium">No active workspace</h1>
         </div>
       </div>
@@ -40,8 +40,8 @@ export default async function ChangelogPage() {
     <div className="mx-auto w-full max-w-4xl px-6 py-10">
       <div className="mb-8 flex items-start justify-between gap-4">
         <div>
-          <p className="font-mono text-xs text-muted-foreground">/changelog</p>
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight">
+          {/* <p className="font-mono text-xs text-muted-foreground">/changelog</p> */}
+          <h1 className="mt-1 text-4xl font-semibold tracking-tight">
             Changelog
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -61,7 +61,7 @@ export default async function ChangelogPage() {
           public changelog link
         </p>
         <ShareLink
-          url={`/public/${workspace.slug}/changelog`}
+          url={`/public/${workspace.slug}?type=changelog`}
           label={`${workspace.name} changelog`}
         />
       </div>
@@ -70,7 +70,7 @@ export default async function ChangelogPage() {
 
 
       {list.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-16 text-center">
+        <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border-2 py-16 text-center">
           <Sparkles className="mb-3 size-5 text-muted-foreground" />
 
           <h3 className="text-sm font-medium">No releases yet</h3>
@@ -86,7 +86,7 @@ export default async function ChangelogPage() {
           </Link>
         </div>
       ) : (
-        <ul className="divide-y divide-border overflow-hidden rounded-xl border border-border">
+        <ul className="divide-y divide-border-2 overflow-hidden rounded-xl border-2 border-border">
           {list.map((entry) => {
             const published = !!entry.published_at;
             return (

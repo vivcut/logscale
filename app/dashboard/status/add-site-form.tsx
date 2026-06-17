@@ -28,7 +28,7 @@ export function AddSiteForm() {
     <form
       ref={formRef}
       action={formAction}
-      className="rounded-xl border border-border bg-card p-5"
+      className="rounded-xl border-2 border-border-2 bg-card p-5"
     >
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-sm font-semibold">Add a service</h3>

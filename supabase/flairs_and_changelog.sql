@@ -17,7 +17,7 @@
 -- base flairs every board starts with.
 alter table public.boards
   add column if not exists flairs text[]
-    not null default array['feedback', 'bug']::text[];
+    not null default array['general']::text[];
 
 -- 2. Post flair ---------------------------------------------------------------
 -- Every newly created post must carry a flair (enforced in the app layer).

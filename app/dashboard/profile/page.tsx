@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { ProfileForm } from "./profile-form";
+import { SignOutButton } from "../sign-out-button";
 
 export const metadata = {
   title: "Profile",
@@ -33,6 +34,8 @@ export default async function ProfilePage() {
           Manage your name and profile picture.
         </p>
       </div>
+
+      <SignOutButton />
 
       <ProfileForm
         initialName={displayName}

@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { MessageSquare, MessageSquareQuote } from "lucide-react";
 
 /** Minimal shape returned by POST /api/posts. */
 export type CreatedPost = {
@@ -273,18 +274,19 @@ export function PostForm({
   }
 
   return (
-    <div className="rounded-xl border border-border bg-card p-5">
+    <div className="rounded-xl border-2 border-border-2 bg-card p-5">
+      
       <div className="mb-4 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <MessageSquarePlus className="size-4 text-muted-foreground" />
-          <h2 className="text-sm font-semibold">Add post</h2>
+          <MessageSquareQuote className="size-6 text-muted-foreground" />
+          <h2 className="text-lg font-semibold">Add post</h2>
         </div>
         {onClose ? (
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="flex size-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+            className="flex size-7 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
           >
             <X className="size-4" />
           </button>
@@ -305,8 +307,8 @@ export function PostForm({
           />
 
           {title.trim().length >= 3 ? (
-            <div className="rounded-md border border-border bg-background/60">
-              <div className="flex items-center gap-2 border-b border-border px-3 py-2">
+            <div className="rounded-xl border-2 border-border-2 bg-background/60">
+              <div className="flex items-center gap-2 border-b-2 border-border-2 px-3 py-2">
                 {searching ? (
                   <Loader2 className="size-3 animate-spin text-muted-foreground" />
                 ) : (
@@ -355,7 +357,7 @@ export function PostForm({
                   "rounded-full px-2.5 py-1 font-mono text-[10px] lowercase transition-all",
                   flair === f
                     ? flairBadgeClass(f)
-                    : "ring-1 ring-inset ring-border text-muted-foreground hover:text-foreground"
+                    : "ring-1 ring-inset ring-border-2 bg-popover text-muted-foreground hover:text-foreground"
                 )}
               >
                 {f}
@@ -381,6 +383,7 @@ export function PostForm({
         <div className="flex flex-col gap-2">
           <Label className="text-muted-foreground">
             Attachments{" "}
+            {}
             <span className="text-muted-foreground/60">(optional)</span>
           </Label>
 
@@ -391,7 +394,7 @@ export function PostForm({
                 return (
                   <li
                     key={`${file.name}-${idx}`}
-                    className="flex items-center gap-2 rounded-md border border-border bg-background/60 px-2.5 py-1.5"
+                    className="flex items-center gap-2 rounded-xl border-2 border-border-2 bg-background/60 px-2.5 py-1.5"
                   >
                     {isImage ? (
                       <ImageIcon className="size-3.5 shrink-0 text-muted-foreground" />
@@ -430,7 +433,7 @@ export function PostForm({
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="inline-flex items-center justify-center gap-1.5 rounded-md border border-dashed border-border px-3 py-2 font-mono text-[11px] text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
+              className="inline-flex items-center justify-center gap-1.5 rounded-xl border-2 bg-popover border-dashed border-border-2 px-3 py-2 font-mono text-[11px] text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
             >
               <Paperclip className="size-3.5" />
               attach image or PDF
@@ -487,8 +490,8 @@ export function PostForm({
         ) : null}
 
         <Button type="submit" disabled={submitting || !title.trim()}>
-          {submitting ? <Loader2 className="animate-spin" /> : <Send />}
-          Submit feedback
+          {submitting ? <Loader2 className="animate-spin" /> : <Send weight="bold" />}
+          Submit
         </Button>
       </form>
     </div>

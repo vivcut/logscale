@@ -58,7 +58,7 @@ export function ShareLink({
           value={resolved}
           onFocus={(e) => e.currentTarget.select()}
 
-          className="h-9 min-w-0 flex-1 rounded-md border border-input bg-background px-3 font-mono text-xs text-muted-foreground outline-none focus:ring-2 focus:ring-ring"
+          className="h-9 min-w-0 flex-1 rounded-xl border-2 border-input bg-background px-3 font-mono text-xs text-muted-foreground outline-none focus:ring-2 focus:ring-ring"
         />
         <Button
           type="button"
@@ -154,16 +154,16 @@ function QrDialog({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+      className="fixed h-screen w-screen inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
       role="dialog"
       aria-modal="true"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-sm rounded-xl border border-border bg-card shadow-xl"
+        className="w-full max-w-sm rounded-xl border-2 border-border-2 bg-card shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b border-border px-4 py-3">
+        <div className="flex items-center justify-between border-b-2 border-border-2 px-4 py-3">
           <span className="truncate text-sm font-medium">
             {label ? `QR code · ${label}` : "QR code"}
           </span>
@@ -171,14 +171,14 @@ function QrDialog({
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="flex size-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+            className="flex size-7 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
           >
             <X className="size-4" />
           </button>
         </div>
 
         <div className="flex flex-col items-center gap-4 p-6">
-          <div className="flex aspect-square w-full max-w-[256px] items-center justify-center rounded-lg border border-border bg-white p-4">
+          <div className="flex aspect-square w-full max-w-[256px] items-center justify-center rounded-xl border-2 border-border-2 bg-white p-4">
             {error ? (
               <span className="text-center text-xs text-destructive">
                 Could not generate QR code.

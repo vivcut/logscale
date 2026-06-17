@@ -39,7 +39,7 @@ Deno.serve(async (_req) => {
   // 1. Initialize Supabase Admin client to bypass RLS for the background check.
   const supabaseAdmin = createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+    Deno.env.get("NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY") ?? ""
   );
 
   try {

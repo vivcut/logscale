@@ -59,9 +59,9 @@ export function RoadmapKanban({ posts }: { posts: RoadmapPost[] }) {
       {COLUMNS.map((col) => (
         <div
           key={col.key}
-          className="flex flex-col rounded-xl border border-border bg-card/40"
+          className="flex flex-col rounded-xl border-2 border-border-2 bg-card/40"
         >
-          <div className="flex items-center justify-between border-b border-border px-4 py-3">
+          <div className="flex items-center justify-between border-b-2 border-border-2 px-4 py-3">
             <div className="flex items-center gap-2">
               <span className={cn("size-2 rounded-full", col.accent)} />
               <span className="text-sm font-medium">{col.label}</span>
@@ -119,7 +119,7 @@ function RoadmapCard({
   }
 
   return (
-    <div className="rounded-lg border border-border bg-card p-3">
+    <div className="rounded-xl border-2 border-border-2 bg-card p-3">
       <div className="flex items-start justify-between gap-2">
         <h3 className="text-sm font-medium leading-snug">{post.title}</h3>
         <Badge
@@ -141,7 +141,7 @@ function RoadmapCard({
         <button
           onClick={() => setOpen((v) => !v)}
           disabled={pending}
-          className="flex w-full items-center justify-between rounded-md border border-border px-2.5 py-1.5 text-left font-mono text-xs text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
+          className="flex w-full items-center justify-between rounded-xl border-2 border-border-2 px-2.5 py-1.5 text-left font-mono text-xs text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
         >
           {pending ? (
             <Loader2 className="size-3 animate-spin" />
@@ -157,7 +157,7 @@ function RoadmapCard({
               className="fixed inset-0 z-10"
               onClick={() => setOpen(false)}
             />
-            <div className="absolute left-0 right-0 top-full z-20 mt-1 overflow-hidden rounded-md border border-border bg-popover p-1 shadow-xl shadow-black/40">
+            <div className="absolute left-0 right-0 top-full z-20 mt-1 overflow-hidden rounded-xl border-2 border-border-2 bg-popover p-1 shadow-xl shadow-black/40">
               {ALL_STATUSES.map((s) => (
                 <button
                   key={s.value}

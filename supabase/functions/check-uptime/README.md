@@ -34,14 +34,14 @@ supabase link --project-ref <PROJECT_REF>
 
 ## 4. Deploy the function
 
-From the repo root (`/Users/vivaan/LogScale`):
+From the repo root (`/Users/vivaan/Pitstop`):
 
 ```bash
 supabase functions deploy check-uptime --no-verify-jwt
 ```
 
 `--no-verify-jwt` lets the cron job call it without a user JWT. `SUPABASE_URL`
-and `SUPABASE_SERVICE_ROLE_KEY` are injected automatically into deployed
+and `NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY` are injected automatically into deployed
 functions, so no extra secrets are needed.
 
 ## 5. Schedule it every 2 minutes

@@ -42,7 +42,7 @@ export default async function StatusPage() {
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex size-9 items-center justify-center rounded-md border border-border bg-card">
+          <div className="flex size-9 items-center justify-center rounded-xl border-2 border-border-2 bg-card">
             <Activity className="size-4" />
           </div>
           <div>

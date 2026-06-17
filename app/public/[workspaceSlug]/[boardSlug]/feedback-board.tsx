@@ -187,10 +187,10 @@ export function FeedbackBoard({
               key={f.key}
               onClick={() => setFilter(f.key)}
               className={cn(
-                "rounded-full border px-3 py-1 font-mono text-[11px] transition-colors",
+                "rounded-full border-2 px-3 py-1 font-mono text-[11px] transition-colors",
                 filter === f.key
                   ? "border-foreground/30 bg-secondary text-foreground"
-                  : "border-border text-muted-foreground hover:text-foreground"
+                  : "border-border-2 text-muted-foreground hover:text-foreground"
               )}
             >
               {f.label}
@@ -202,7 +202,7 @@ export function FeedbackBoard({
           <p className="font-mono text-xs text-muted-foreground">
             {sortedPosts.length} {sortedPosts.length === 1 ? "post" : "posts"}
           </p>
-          <div className="flex items-center gap-1 rounded-md border border-border p-0.5">
+          <div className="flex items-center gap-1 rounded-xl border-2 border-border-2 p-0.5">
             {(["top", "new"] as Sort[]).map((s) => (
               <button
                 key={s}
@@ -221,7 +221,7 @@ export function FeedbackBoard({
         </div>
 
         {sortedPosts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-16 text-center">
+          <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border-2 py-16 text-center">
             <h3 className="text-sm font-medium">No feedback here</h3>
             <p className="mt-1 text-sm text-muted-foreground">
               {filter === "all"
@@ -230,7 +230,7 @@ export function FeedbackBoard({
             </p>
           </div>
         ) : (
-          <ul className="divide-y divide-border overflow-hidden rounded-xl border border-border">
+          <ul className="divide-y divide-border-2 overflow-hidden rounded-xl border-2 border-border">
             {sortedPosts.map((post) => (
               <li
                 key={post.id}
@@ -240,10 +240,10 @@ export function FeedbackBoard({
                   onClick={() => handleUpvote(post.id)}
                   disabled={pendingVotes[post.id]}
                   className={cn(
-                    "flex h-fit w-12 shrink-0 flex-col items-center gap-0.5 rounded-md border py-2 transition-colors",
+                    "flex h-fit w-12 shrink-0 flex-col items-center gap-0.5 rounded-xl border-2 py-2 transition-colors",
                     voted[post.id]
                       ? "border-foreground/40 bg-secondary text-foreground"
-                      : "border-border text-muted-foreground hover:border-foreground/30 hover:text-foreground"
+                      : "border-border-2 text-muted-foreground hover:border-foreground/30 hover:text-foreground"
                   )}
                 >
                   <ArrowUp className="size-4" />

@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
-  LogScale — polar.sh inspired theme
+  Pitstop — polar.sh inspired theme
   Deep, high-contrast dark UI: near-black backgrounds, crisp zinc-800 borders,
   muted zinc-400 secondary text, electric white primary, indigo accent ring.
 */
@@ -17,15 +17,15 @@
     Soft zinc canvas, crisp white cards, zinc-200 borders, zinc-500 muted text,
     near-black primary actions, and the same electric indigo focus ring.
   */
-  --background: oklch(0.985 0 0); /* ~ zinc-50 */
-  --foreground: oklch(0.18 0 0); /* near-black text */
-  --card: oklch(1 0 0); /* pure white panels */
+  --background: #f0ecea; /* ~ zinc-50 */
+  --foreground: oklch(29.925% 0.00288 16.668); /* near-black text */
+  --card: #faf6f5; /* pure white panels */
   --card-foreground: oklch(0.18 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.18 0 0);
 
   /* Primary — near-black actions on light */
-  --primary: oklch(0.205 0 0);
+  --primary: #698826;
   --primary-foreground: oklch(0.985 0 0);
 
   /* Secondary / muted / accent — subtle zinc layers */
@@ -40,7 +40,7 @@
   --destructive-foreground: oklch(0.985 0 0);
 
   /* Crisp borders ~ zinc-200, inputs slightly darker */
-  --border: oklch(0.9 0 0);
+  --border: oklch(92.049% 0.00859 44.386);
   --input: oklch(0.87 0 0);
 
   /* Electric indigo focus ring accent (matches dark) */
@@ -56,17 +56,17 @@
 
 .dark {
   /* Base canvas — ultra-dark, near #030303 */
-  --background: oklch(0.12 0 0);
+  --background: #1c1a19;
   --foreground: oklch(0.985 0 0);
 
   /* Surfaces — slightly raised dark zinc panels */
-  --card: oklch(0.16 0 0);
+  --card: #2a2826;
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.16 0 0);
+  --popover: #3c3936;
   --popover-foreground: oklch(0.985 0 0);
 
   /* Primary — crisp electric white actions on dark */
-  --primary: oklch(0.985 0 0);
+  --primary: #8caa4a;
   --primary-foreground: oklch(0.16 0 0);
 
   /* Secondary / muted / accent — subtle zinc layers */
@@ -85,7 +85,7 @@
   --input: oklch(0.3 0 0);
 
   /* Electric indigo focus ring accent */
-  --ring: oklch(0.55 0.21 277);
+  --ring: var(--color-primary);
 
   --chart-1: oklch(0.55 0.21 277);
   --chart-2: oklch(0.696 0.17 162.48);
@@ -131,7 +131,7 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border-2 outline-ring/50;
   }
   body {
     @apply bg-background text-foreground antialiased;

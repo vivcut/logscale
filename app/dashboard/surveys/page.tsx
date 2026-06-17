@@ -9,7 +9,7 @@ import { PlanBanner } from "@/components/plan-banner";
 
 
 export const metadata = {
-  title: "Surveys — LogScale",
+  title: "Surveys — Pitstop",
 };
 
 export default async function SurveysPage() {
@@ -18,7 +18,7 @@ export default async function SurveysPage() {
   if (!workspace) {
     return (
       <div className="mx-auto w-full max-w-4xl px-6 py-10">
-        <div className="rounded-xl border border-dashed border-border p-10 text-center">
+        <div className="rounded-xl border-2 border-dashed border-border-2 p-10 text-center">
           <h1 className="text-sm font-medium">No active workspace</h1>
         </div>
       </div>
@@ -53,7 +53,7 @@ export default async function SurveysPage() {
       {/* Header with workspace identity */}
       <div className="mb-8 flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-md border border-border bg-secondary text-sm font-medium">
+          <div className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-border-2 bg-secondary text-sm font-medium">
             {workspace.logo_url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -79,7 +79,7 @@ export default async function SurveysPage() {
       <PlanBanner page="surveys" />
 
       {/* Create */}
-      <div className="mb-8 rounded-xl border border-border bg-card p-4">
+      <div className="mb-8 rounded-xl border-2 border-border-2 bg-card p-4">
 
         <p className="mb-3 text-sm text-muted-foreground">
           Build a form with custom questions, publish it, and share the public
@@ -90,7 +90,7 @@ export default async function SurveysPage() {
 
       {/* List */}
       {list.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-16 text-center">
+        <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border-2 py-16 text-center">
           <ClipboardList className="mb-3 size-5 text-muted-foreground" />
           <h3 className="text-sm font-medium">No surveys yet</h3>
           <p className="mt-1 max-w-sm text-sm text-muted-foreground">
@@ -98,7 +98,7 @@ export default async function SurveysPage() {
           </p>
         </div>
       ) : (
-        <ul className="divide-y divide-border overflow-hidden rounded-xl border border-border">
+        <ul className="divide-y divide-border-2 overflow-hidden rounded-xl border-2 border-border">
           {list.map((s) => {
             const n = counts.get(s.id) ?? 0;
             return (

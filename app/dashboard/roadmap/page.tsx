@@ -7,7 +7,7 @@ import { ShareLink } from "@/components/share-link";
 
 
 export const metadata = {
-  title: "Roadmap — LogScale",
+  title: "Roadmap — Pitstop",
 };
 
 export default async function RoadmapPage() {
@@ -16,7 +16,7 @@ export default async function RoadmapPage() {
   if (!workspace) {
     return (
       <div className="mx-auto w-full max-w-6xl px-6 py-10">
-        <div className="rounded-xl border border-dashed border-border p-10 text-center">
+        <div className="rounded-xl border-2 border-dashed border-border-2 p-10 text-center">
           <h1 className="text-sm font-medium">No active workspace</h1>
         </div>
       </div>
@@ -28,8 +28,8 @@ export default async function RoadmapPage() {
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-10">
       <div className="mb-8">
-        <p className="font-mono text-xs text-muted-foreground">/roadmap</p>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight">Roadmap</h1>
+        {/* <p className="font-mono text-xs text-muted-foreground">/roadmap</p> */}
+        <h1 className="mt-1 text-4xl font-semibold tracking-tight">Roadmap</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Drag feedback through the pipeline. Status changes are saved instantly
           and reflected on your public roadmap.
@@ -41,7 +41,7 @@ export default async function RoadmapPage() {
           public roadmap link
         </p>
         <ShareLink
-          url={`/public/${workspace.slug}/roadmap`}
+          url={`/public/${workspace.slug}?type=roadmap`}
           label={`${workspace.name} roadmap`}
         />
       </div>

@@ -1,19 +1,14 @@
 import Link from "next/link";
 import {
-  Activity,
   ArrowRight,
-  ClipboardList,
   GitBranch,
-  Mail,
   MessageSquare,
   Sparkles,
 } from "@/components/icons";
 
-
 import { createClient } from "@/lib/supabase/server";
 import { getActiveWorkspace } from "@/lib/workspace";
 import { PlanBanner } from "@/components/plan-banner";
-
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -32,33 +27,16 @@ export default async function DashboardPage() {
   const firstName = (profile?.name ?? "there").split(" ")[0];
 
   // ---- Per-app summary stats (concise) ----
-  // Boards / Roadmap (both derive from posts)
   let boardCount = 0;
   let postCount = 0;
   let planned = 0;
   let inProgress = 0;
   let shipped = 0;
-  // Changelog
   let changelogCount = 0;
   let lastChangelog: string | null = null;
-  // Surveys
-  let surveyCount = 0;
-  let publishedSurveys = 0;
-  let surveyResponses = 0;
-  // Status
-  let siteCount = 0;
-  let sitesUp = 0;
-  // Contact
-  let contactSubmissions = 0;
 
   if (workspace) {
-    const [
-      boardsRes,
-      changelogRes,
-      surveysRes,
-      sitesRes,
-      contactRes,
-    ] = await Promise.all([
+    const [boardsRes, changelogRes] = await Promise.all([
       supabase
         .from("boards")
         .select("id")
@@ -68,18 +46,6 @@ export default async function DashboardPage() {
         .select("id, published_at, created_at")
         .eq("workspace_id", workspace.id)
         .order("created_at", { ascending: false }),
-      supabase
-        .from("surveys")
-        .select("id, is_published")
-        .eq("workspace_id", workspace.id),
-      supabase
-        .from("monitored_sites")
-        .select("id, status")
-        .eq("workspace_id", workspace.id),
-      supabase
-        .from("contact_submissions")
-        .select("id", { count: "exact", head: true })
-        .eq("workspace_id", workspace.id),
     ]);
 
     const boardIds = (boardsRes.data ?? []).map((b) => b.id);
@@ -100,26 +66,6 @@ export default async function DashboardPage() {
     const changelogs = changelogRes.data ?? [];
     changelogCount = changelogs.length;
     lastChangelog = changelogs[0]?.created_at ?? null;
-
-    const surveys = surveysRes.data ?? [];
-    surveyCount = surveys.length;
-    publishedSurveys = surveys.filter((s) => s.is_published).length;
-    if (surveys.length > 0) {
-      const { count } = await supabase
-        .from("survey_responses")
-        .select("id", { count: "exact", head: true })
-        .in(
-          "survey_id",
-          surveys.map((s) => s.id)
-        );
-      surveyResponses = count ?? 0;
-    }
-
-    const sites = sitesRes.data ?? [];
-    siteCount = sites.length;
-    sitesUp = sites.filter((s) => s.status === "UP").length;
-
-    contactSubmissions = contactRes.count ?? 0;
   }
 
   function fmtDate(iso: string | null): string {
@@ -130,105 +76,57 @@ export default async function DashboardPage() {
     });
   }
 
-  // Concise app cards — each links to the full surface.
   const apps = [
     {
       href: "/dashboard/boards",
       label: "Boards",
       icon: MessageSquare,
-      stats: [
-        { k: "boards", v: boardCount },
-        { k: "posts", v: postCount },
-      ],
+      contents: `${boardCount} boards, ${postCount} posts`,
     },
     {
       href: "/dashboard/roadmap",
       label: "Roadmap",
       icon: GitBranch,
-      stats: [
-        { k: "planned", v: planned },
-        { k: "in progress", v: inProgress },
-        { k: "shipped", v: shipped },
-      ],
+      contents: `${planned} planned, ${inProgress} in progress, ${shipped} shipped`,
     },
     {
       href: "/dashboard/changelog",
       label: "Changelog",
       icon: Sparkles,
-      stats: [
-        { k: "entries", v: changelogCount },
-        { k: "latest", v: fmtDate(lastChangelog) },
-      ],
-    },
-    {
-      href: "/dashboard/surveys",
-      label: "Surveys",
-      icon: ClipboardList,
-      stats: [
-        { k: "published", v: `${publishedSurveys}/${surveyCount}` },
-        { k: "responses", v: surveyResponses },
-      ],
-    },
-    {
-      href: "/dashboard/status",
-      label: "Status",
-      icon: Activity,
-      stats: [
-        { k: "sites up", v: `${sitesUp}/${siteCount}` },
-      ],
-    },
-    {
-      href: "/dashboard/contact-page",
-      label: "Contact",
-      icon: Mail,
-      stats: [{ k: "submissions", v: contactSubmissions }],
+      contents: `${changelogCount} entries (Latest: ${fmtDate(lastChangelog)})`,
     },
   ];
 
   return (
     <div className="mx-auto w-full max-w-5xl px-6 py-10">
       <div className="mb-8">
-        <p className="font-mono text-xs text-muted-foreground">/overview</p>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight">
+        {/* <p className="font-mono text-xs text-muted-foreground">/overview</p> */}
+        <h1 className="mt-1 text-4xl font-[600] tracking-[0.15em">
           Welcome back, {firstName}
         </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          A quick snapshot of every surface in your workspace.
+        <p className="mt-3 text-xl text-muted-foreground">
+          A quick snapshot of your workspace.
         </p>
       </div>
 
       <PlanBanner page="overview" />
 
-      <div className="grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
-
+      {/* Row-by-row list layout */}
+      <div className="mt-6 divide-y divide-border-2 rounded-xl border-2 border-border-2 bg-card overflow-hidden">
         {apps.map((app) => (
           <Link
             key={app.href}
             href={app.href}
-            className="group flex flex-col gap-4 bg-card p-5 transition-colors hover:bg-secondary/40"
+            className="group flex items-center justify-between px-6 py-6 transition-colors hover:bg-secondary/40"
           >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="flex size-8 items-center justify-center rounded-md border border-border bg-secondary">
-                  <app.icon className="size-4" />
-                </div>
-                <span className="text-sm font-medium">{app.label}</span>
+            <div className="flex items-center gap-3 text-xl">
+              <app.icon weight="bold" className="size-6 text-muted-foreground group-hover:text-foreground transition-colors" />
+              <div>
+                <span className="font-semibold text-foreground">{app.label}:</span>{" "}
+                <span className="text-muted-foreground tabular-nums">{app.contents}</span>
               </div>
-              <ArrowRight className="size-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
             </div>
-
-            <div className="flex flex-wrap gap-x-6 gap-y-2">
-              {app.stats.map((s) => (
-                <div key={s.k}>
-                  <p className="text-xl font-semibold tabular-nums tracking-tight">
-                    {s.v}
-                  </p>
-                  <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                    {s.k}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <ArrowRight className="size-6 text-muted-foreground opacity-0 transition-all transform -translate-x-2 group-hover:translate-x-0 group-hover:opacity-100 group-hover:text-primary" />
           </Link>
         ))}
       </div>

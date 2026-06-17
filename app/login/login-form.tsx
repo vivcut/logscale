@@ -58,7 +58,7 @@ export function LoginForm() {
   if (status === "sent") {
     return (
       <div className="flex flex-col items-center gap-3 py-6 text-center">
-        <div className="flex size-11 items-center justify-center rounded-full border border-border bg-secondary">
+        <div className="flex size-11 items-center justify-center rounded-full border-2 border-border-2 bg-secondary">
           <Mail className="size-5" />
         </div>
         <div className="space-y-1">

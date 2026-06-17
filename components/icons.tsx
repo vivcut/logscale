@@ -68,5 +68,7 @@ export {
   Users,
   Warning,
   X,
+  List as Menu,
+  Avocado
 } from "@phosphor-icons/react/dist/ssr";
 

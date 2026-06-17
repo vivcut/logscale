@@ -7,6 +7,7 @@ import {
   Settings2,
   Sparkles,
   Clock,
+  Eye,
 } from "@/components/icons";
 
 
@@ -32,7 +33,7 @@ import { PlanBanner } from "@/components/plan-banner";
 
 
 export const metadata = {
-  title: "Boards — LogScale",
+  title: "Boards — Pitstop",
 };
 
 type Board = {
@@ -50,7 +51,7 @@ export default async function BoardsPage() {
   if (!workspace) {
     return (
       <div className="mx-auto w-full max-w-5xl px-6 py-10">
-        <div className="rounded-xl border border-dashed border-border p-10 text-center">
+        <div className="rounded-xl border-2 border-dashed border-border-2 p-10 text-center">
           <h1 className="text-sm font-medium">No active workspace</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Create a workspace to start managing feedback boards.
@@ -142,21 +143,21 @@ export default async function BoardsPage() {
   }
 
   const stats = [
-    { label: "waiting for review", value: waitingReview, icon: Clock },
-    { label: "planning", value: planning, icon: MessageSquare },
-    { label: "in_progress", value: inProgress, icon: GitBranch },
-    { label: "shipped", value: shipped, icon: Sparkles },
+    { label: "Waiting for review", value: waitingReview, icon: Clock },
+    { label: "Planning", value: planning, icon: MessageSquare },
+    { label: "In Progress", value: inProgress, icon: GitBranch },
+    { label: "Shipped", value: shipped, icon: Sparkles },
   ];
 
   return (
     <div className="mx-auto w-full max-w-5xl px-6 py-10">
       <div className="mb-8 flex items-start justify-between gap-4">
         <div>
-          <p className="font-mono text-xs text-muted-foreground">/boards</p>
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight">
+          {/* <p className="font-mono text-xs text-muted-foreground">/boards</p> */}
+          <h1 className="mt-1 text-4xl font-semibold">
             Feedback boards
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="mt-3 text-md font-semibold text-muted-foreground">
             Organize feature requests into focused boards for{" "}
             <span className="font-mono text-foreground">{workspace.name}</span>.
           </p>
@@ -168,8 +169,8 @@ export default async function BoardsPage() {
 
       {list.length === 0 ? (
 
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-16 text-center">
-          <div className="flex size-10 items-center justify-center rounded-md border border-border bg-secondary">
+        <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border-2 py-16 text-center">
+          <div className="flex size-10 items-center justify-center rounded-xl border-2 border-border-2 bg-secondary">
             <MessageSquare className="size-5 text-muted-foreground" />
           </div>
           <h2 className="mt-4 text-sm font-medium">No boards yet</h2>
@@ -181,16 +182,16 @@ export default async function BoardsPage() {
       ) : (
         <>
           {/* ---- Post stats across all boards ---- */}
-          <div className="mb-8 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border lg:grid-cols-4">
+          <div className="mb-8 grid grid-cols-2 gap-[2px] overflow-hidden rounded-xl bg-background lg:grid-cols-4">
             {stats.map((s) => (
               <div key={s.label} className="bg-card p-5">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs text-muted-foreground">
+                  <span className="text-md  text-muted-foreground">
                     {s.label}
                   </span>
-                  <s.icon className="size-4 text-muted-foreground" />
+                  <s.icon weight="bold" className="size-5 text-muted-foreground" />
                 </div>
-                <p className="mt-3 text-3xl font-semibold tabular-nums tracking-tight">
+                <p className="mt-3 text-5xl font-semibold tabular-nums tracking-tight">
                   {s.value}
                 </p>
               </div>
@@ -210,74 +211,76 @@ export default async function BoardsPage() {
 
 
           {/* ---- Board cards ---- */}
-          <h2 className="mb-3 font-mono text-xs uppercase tracking-wider text-muted-foreground">
+          <h2 className="mb-3 text-md uppercase tracking-wider text-muted-foreground">
             your boards
           </h2>
-          <div className="grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
-            {list.map((board) => (
-              <div
-                key={board.id}
-                className="group flex flex-col gap-3 bg-card p-5 transition-colors hover:bg-secondary/40"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex size-9 items-center justify-center rounded-md border border-border bg-secondary text-foreground">
-                    <MessageSquare className="size-4" />
-                  </div>
-                  {board.is_private ? (
-                    <Badge
-                      variant="outline"
-                      className="gap-1 font-mono text-muted-foreground"
-                    >
-                      <Lock className="size-3" />
-                      private
-                    </Badge>
-                  ) : (
-                    <Badge
-                      variant="secondary"
-                      className="font-mono text-muted-foreground"
-                    >
-                      public
-                    </Badge>
-                  )}
-                </div>
+          
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  {list.map((board) => (
+    <div
+      key={board.id}
+      className="group flex flex-col gap-3 rounded-xl bg-card p-5 transition-colors hover:bg-popover"
+    >
+      <div className="flex items-start justify-between gap-2">
+        {/* <div className="flex size-9 items-center justify-center rounded-xl border-2 border-border-2 bg-popover text-foreground"> */}
+          <MessageSquare weight="fill" className="size-8" />
+        {/* </div> */}
+        {board.is_private ? (
+          <Badge
+            variant="default"
+            className="font-mono text-background"
+          >
+            <Lock weight="fill" className="size-4" />
+            Private
+          </Badge>
+        ) : (
+          <Badge
+            variant="default"
+            className="font-mono text-background"
+          >
+            <Eye weight="fill" className="size-4" />
+            Public
+          </Badge>
+        )}
+      </div>
 
-                <Link
-                  href={`/dashboard/boards/${board.slug}`}
-                  className="flex-1"
-                >
-                  <h3 className="text-sm font-semibold transition-colors group-hover:text-foreground">
-                    {board.name}
-                  </h3>
-                  <p className="mt-0.5 font-mono text-xs text-muted-foreground">
-                    /board/{board.slug}
-                  </p>
-                  {board.description ? (
-                    <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
-                      {board.description}
-                    </p>
-                  ) : null}
-                </Link>
+      <Link
+        href={`/dashboard/boards/${board.slug}`}
+        className="flex-1"
+      >
+        <h3 className="text-2xl font-semibold transition-colors group-hover:text-foreground">
+          {board.name}
+        </h3>
+        <p className="mt-0.5 font-mono text-xs text-muted-foreground">
+          {/* /board/{board.slug} */}
+        </p>
+        {board.description ? (
+          <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+            {board.description}
+          </p>
+        ) : null}
+      </Link>
 
-                <div className="flex items-center justify-between gap-3 border-t border-border pt-3">
-                  <Link
-                    href={`/dashboard/boards/${board.slug}`}
-                    className="inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    <Settings2 className="size-3" />
-                    manage
-                  </Link>
-                  <Link
-                    href={`/public/${workspace.slug}/${board.slug}`}
-                    target="_blank"
-                    className="inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    <ExternalLink className="size-3" />
-                    public
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
+      <div className="flex items-center justify-between gap-3 pt-3">
+        <Link
+          href={`/dashboard/boards/${board.slug}`}
+          className="inline-flex items-center gap-2 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <Settings2 weight="bold" className="size-4" />
+          Edit
+        </Link>
+        <Link
+          href={`/public/${workspace.slug}/${board.slug}`}
+          target="_blank"
+          className="inline-flex items-center gap-2 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <ExternalLink weight="bold" className="size-4" />
+          Public
+        </Link>
+      </div>
+    </div>
+  ))}
+</div>
 
           {/* ---- Recent feedback (with board + timeframe filters) ---- */}
           {recent.length > 0 ? (

@@ -53,10 +53,10 @@ export function WorkspaceSwitcher({
     return (
       <Link
         href="/onboarding?new=1"
-        className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+        className="flex w-full items-center gap-2 rounded-xl px-2 py-1.5 text-left text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
       >
-        <span className="flex size-6 items-center justify-center rounded border border-dashed border-border">
-          <Plus className="size-3.5" />
+        <span className="flex size-6 items-center justify-center rounded border-2 border-dashed border-border">
+          <Plus weight="bold" className="size-3.5" />
         </span>
         Create workspace
       </Link>
@@ -68,7 +68,7 @@ export function WorkspaceSwitcher({
     <div className="relative w-full">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-secondary"
+        className="flex w-full items-center gap-2 rounded-xl px-0 pr-2 cursor-pointer py-1.5 text-left transition-colors group"
       >
         <span className="flex size-6 shrink-0 items-center justify-center overflow-hidden rounded bg-primary text-[10px] font-bold text-primary-foreground">
           {active?.logo_url ? (
@@ -82,7 +82,7 @@ export function WorkspaceSwitcher({
             active?.name.charAt(0).toUpperCase()
           )}
         </span>
-        <span className="min-w-0 flex-1 truncate text-sm font-medium">
+        <span className="min-w-0 flex-1 truncate text-sm font-semibold group-hover:text-primary">
           {active?.name}
           {active?.shared ? (
             <span className="ml-1 font-mono text-[10px] font-normal text-muted-foreground">
@@ -90,7 +90,7 @@ export function WorkspaceSwitcher({
             </span>
           ) : null}
         </span>
-        <ChevronsUpDown className="size-3.5 shrink-0 text-muted-foreground" />
+        <ChevronsUpDown weight="fill" className="size-4 shrink-0 text-muted-foreground group-hover:text-primary" />
 
       </button>
 
@@ -100,13 +100,13 @@ export function WorkspaceSwitcher({
             className="fixed inset-0 z-10"
             onClick={() => setOpen(false)}
           />
-          <div className="absolute left-0 right-0 top-full z-20 mt-1 overflow-hidden rounded-md border border-border bg-popover p-1 shadow-xl shadow-black/40">
+          <div className="absolute left-0 right-0 top-full z-20 mt-1 overflow-hidden rounded-xl border-2 border-border-2 bg-popover p-1 shadow-xl shadow-black/40">
             {workspaces.map((w) => (
               <button
                 key={w.id}
                 onClick={() => handleSwitch(w.id)}
                 disabled={pending}
-                className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm transition-colors hover:bg-secondary disabled:opacity-60"
+                className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm transition-colors hover:bg-white/10 disabled:opacity-60"
               >
 
                 <span className="flex size-5 shrink-0 items-center justify-center rounded bg-secondary text-[9px] font-bold">
@@ -133,10 +133,10 @@ export function WorkspaceSwitcher({
             <Link
               href="/onboarding?new=1"
               onClick={() => setOpen(false)}
-              className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"
             >
-              <span className="flex size-5 items-center justify-center rounded border border-dashed border-border">
-                <Plus className="size-3" />
+              <span className="flex size-5 items-center bg-primary justify-center rounded">
+                <Plus className="size-4 text-white" />
               </span>
               New workspace
             </Link>

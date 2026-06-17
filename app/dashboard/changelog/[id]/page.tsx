@@ -8,7 +8,7 @@ import { ChangelogEditor } from "../changelog-editor";
 import { DeleteChangelogButton } from "./delete-button";
 
 export const metadata = {
-  title: "Edit release — LogScale",
+  title: "Edit release — Pitstop",
 };
 
 export default async function EditChangelogPage({
@@ -22,7 +22,7 @@ export default async function EditChangelogPage({
   if (!workspace) {
     return (
       <div className="mx-auto w-full max-w-3xl px-6 py-10">
-        <div className="rounded-xl border border-dashed border-border p-10 text-center">
+        <div className="rounded-xl border-2 border-dashed border-border-2 p-10 text-center">
           <h1 className="text-sm font-medium">No active workspace</h1>
         </div>
       </div>

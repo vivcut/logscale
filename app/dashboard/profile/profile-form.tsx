@@ -82,14 +82,14 @@ export function ProfileForm({
   return (
     <div className="space-y-8">
       {/* Avatar */}
-      <section className="rounded-xl border border-border bg-card p-6">
+      <section className="rounded-xl border-2 border-border-2 bg-card p-6">
         <h2 className="text-sm font-semibold">Profile picture</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Shown across your dashboard and on team-authored posts.
         </p>
 
         <div className="mt-4 flex items-center gap-4">
-          <div className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-secondary text-lg font-bold">
+          <div className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-border-2 bg-secondary text-lg font-bold">
             {avatarUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -152,7 +152,7 @@ export function ProfileForm({
       </section>
 
       {/* Name + email */}
-      <section className="rounded-xl border border-border bg-card p-6">
+      <section className="rounded-xl border-2 border-border-2 bg-card p-6">
         <h2 className="text-sm font-semibold">Account details</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Update how your name appears across the app.

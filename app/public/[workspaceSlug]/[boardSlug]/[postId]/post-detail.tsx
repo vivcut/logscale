@@ -271,10 +271,10 @@ export function PostDetail({
             onClick={handleUpvote}
             disabled={voting}
             className={cn(
-              "flex h-fit w-14 shrink-0 flex-col items-center gap-0.5 rounded-md border py-2.5 transition-colors",
+              "flex h-fit w-14 shrink-0 flex-col items-center gap-0.5 rounded-xl border-2 py-2.5 transition-colors",
               voted
                 ? "border-foreground/40 bg-secondary text-foreground"
-                : "border-border text-muted-foreground hover:border-foreground/30 hover:text-foreground"
+                : "border-border-2 text-muted-foreground hover:border-foreground/30 hover:text-foreground"
             )}
           >
             <ArrowUp className="size-4" />
@@ -352,7 +352,7 @@ export function PostDetail({
                       href={a.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block overflow-hidden rounded-lg border border-border"
+                      className="block overflow-hidden rounded-xl border-2 border-border"
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
@@ -372,7 +372,7 @@ export function PostDetail({
                         href={a.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 transition-colors hover:border-foreground/30 hover:bg-secondary/40"
+                        className="inline-flex items-center gap-2 rounded-xl border-2 border-border-2 bg-card px-3 py-2 transition-colors hover:border-foreground/30 hover:bg-secondary/40"
                       >
                         <FilePdf className="size-5 shrink-0 text-red-400" />
                         <span className="flex flex-col">
@@ -391,7 +391,7 @@ export function PostDetail({
 
             {/* Owner-only inline controls */}
             {canManage ? (
-              <div className="mt-4 flex items-center gap-2 rounded-lg border border-indigo-500/30 bg-indigo-500/5 px-3 py-2">
+              <div className="mt-4 flex items-center gap-2 rounded-xl border-2 border-indigo-500/30 bg-indigo-500/5 px-3 py-2">
                 <span className="font-mono text-[10px] uppercase tracking-wider text-indigo-300">
                   team
                 </span>
@@ -495,11 +495,11 @@ export function PostDetail({
 
       {/* Sidebar — status timeline */}
       <aside className="lg:sticky lg:top-8 lg:self-start">
-        <div className="rounded-xl border border-border bg-card p-5">
+        <div className="rounded-xl border-2 border-border-2 bg-card p-5">
           <h2 className="mb-4 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
             Activity
           </h2>
-          <ol className="relative space-y-4 border-l border-border pl-4">
+          <ol className="relative space-y-4 border-l border-border-2 pl-4">
             {events.length === 0 ? (
               /* Fallback when no events exist yet: show the post's creation as
                  the first activity entry so the timeline is never empty. */
@@ -567,14 +567,14 @@ function StatusDropdown({
         type="button"
         disabled={disabled}
         onClick={() => setOpen((o) => !o)}
-        className="inline-flex items-center gap-1.5 rounded-md border border-border bg-secondary/40 px-2.5 py-1 text-xs transition-colors hover:bg-secondary disabled:opacity-60"
+        className="inline-flex items-center gap-1.5 rounded-xl border-2 border-border-2 bg-secondary/40 px-2.5 py-1 text-xs transition-colors hover:bg-secondary disabled:opacity-60"
       >
         <span className={cn("size-1.5 rounded-full", current.dot)} />
         {current.label}
         <ChevronDown className="size-3 text-muted-foreground" />
       </button>
       {open ? (
-        <div className="absolute left-0 top-full z-50 mt-1 w-44 overflow-hidden rounded-md border border-border bg-popover p-1 shadow-xl">
+        <div className="absolute left-0 top-full z-50 mt-1 w-44 overflow-hidden rounded-xl border-2 border-border-2 bg-popover p-1 shadow-xl">
           {STATUSES.map((s) => (
             <button
               key={s.key}
@@ -613,12 +613,12 @@ function CommentRow({
   return (
     <div
       className={cn(
-        "group rounded-lg border px-3.5 py-2.5",
+        "group rounded-xl border-2 px-3.5 py-2.5",
         comment.is_pinned
           ? "border-emerald-500/50 bg-emerald-500/10"
           : comment.is_official
           ? "border-indigo-500/40 bg-indigo-500/5"
-          : "border-border bg-card"
+          : "border-border-2 bg-card"
       )}
     >
       <div className="mb-1 flex items-center gap-1.5">
@@ -796,7 +796,7 @@ function CommentForm({
             : "Add your thoughts…"
         }
         rows={compact ? 2 : 3}
-        className="w-full resize-none rounded-md border border-border bg-card px-3 py-2 text-xs outline-none placeholder:text-muted-foreground focus:border-ring"
+        className="w-full resize-none rounded-xl border-2 border-border-2 bg-card px-3 py-2 text-xs outline-none placeholder:text-muted-foreground focus:border-ring"
       />
       {/* Anonymous visitors must leave contact info; the team is identified
           by their session and skips this entirely. */}
@@ -806,14 +806,14 @@ function CommentForm({
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Name"
-            className="h-8 rounded-md border border-border bg-card px-2.5 text-xs outline-none placeholder:text-muted-foreground focus:border-ring"
+            className="h-8 rounded-xl border-2 border-border-2 bg-card px-2.5 text-xs outline-none placeholder:text-muted-foreground focus:border-ring"
           />
           <input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
             placeholder="Email (private)"
-            className="h-8 rounded-md border border-border bg-card px-2.5 text-xs outline-none placeholder:text-muted-foreground focus:border-ring"
+            className="h-8 rounded-xl border-2 border-border-2 bg-card px-2.5 text-xs outline-none placeholder:text-muted-foreground focus:border-ring"
           />
         </div>
       )}
@@ -824,7 +824,7 @@ function CommentForm({
         <button
           type="submit"
           disabled={submitting || !content.trim()}
-          className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity disabled:opacity-50"
         >
           {submitting ? (
             <Loader2 className="size-3.5 animate-spin" />

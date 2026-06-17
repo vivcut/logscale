@@ -4,8 +4,8 @@ import type { Metadata } from "next";
 import { LoginForm } from "./login-form";
 
 export const metadata: Metadata = {
-  title: "Sign in — LogScale",
-  description: "Sign in to your LogScale workspace.",
+  title: "Sign in — Pitstop",
+  description: "Sign in to your Pitstop workspace.",
 };
 
 export default function LoginPage() {
@@ -27,12 +27,12 @@ export default function LoginPage() {
             <span className="font-mono text-xs font-bold">↑</span>
           </div>
           <span className="font-mono text-sm font-semibold tracking-tight">
-            LogScale
+            Pitstop
           </span>
         </Link>
 
         {/* Card */}
-        <div className="rounded-xl border border-border bg-card p-6 shadow-2xl shadow-black/40">
+        <div className="rounded-xl border-2 border-border-2 bg-card p-6 shadow-2xl shadow-black/40">
           <div className="mb-6 space-y-1.5 text-center">
             <h1 className="text-xl font-semibold tracking-tight">
               Welcome back

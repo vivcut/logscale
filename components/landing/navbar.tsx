@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { ArrowRight, X } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Moon, Circle } from "@phosphor-icons/react";
+import { Moon, Circle, AvocadoIcon } from "@phosphor-icons/react";
 
 const NAV_LINKS = [
   { label: "Features", href: "#features" },
@@ -18,7 +18,7 @@ const NAV_LINKS = [
 ];
 
 /**
- * Landing navbar — sticky, frosted, and reacts to scroll (gains a border +
+ * Landing navbar — sticky, frosted, and reacts to scroll (gains a border-2 +
  * stronger blur once the hero scrolls away). Includes an animated mobile sheet.
  * Both CTAs route to /login, the single entry point for sign-in / sign-up.
  */
@@ -46,16 +46,17 @@ export function Navbar() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
         scrolled
-          ? "border-border bg-background/70 backdrop-blur-xl"
+          ? "border-border-2 bg-background/70 backdrop-blur-xl"
           : " border-transparent bg-transparent"
       )}
     >
       <div className="mx-auto flex h-20 max-w-8xl items-center justify-between px-20">
         <Link href="/" className="flex items-center gap-2">
           {/* <Circle className="size-8" weight="fill" /> */}
-          <span className="text-2xl ml-1 font-medium tracking-tight">
-            LogScale
-          </span>
+          <div className={"flex items-center gap-1 w-full px-3 justify-center"}>
+          <AvocadoIcon weight="fill" className="size-6 text-primary" />
+          <h1 className={`text-2xl font-bold`}>Pitstop</h1>
+        </div>
         </Link>
 
         <nav className="hidden items-center gap-7 text-sm text-muted-foreground md:flex">
@@ -87,7 +88,7 @@ export function Navbar() {
           type="button"
           aria-label="Toggle menu"
           onClick={() => setOpen((v) => !v)}
-          className="flex size-9 items-center justify-center rounded-md border border-border text-foreground md:hidden"
+          className="flex size-9 items-center justify-center rounded-xl border-2 border-border-2 text-foreground md:hidden"
         >
           {open ? (
             <X className="size-4" />
@@ -108,7 +109,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className="border-b border-border bg-background/95 backdrop-blur-xl md:hidden"
+            className="border-b-2 border-border-2 bg-background/95 backdrop-blur-xl md:hidden"
           >
             <nav className="mx-auto flex max-w-6xl flex-col px-6 py-4">
               {NAV_LINKS.map((l) => (
@@ -116,7 +117,7 @@ export function Navbar() {
                   key={l.href}
                   href={l.href}
                   onClick={() => setOpen(false)}
-                  className="border-b border-border/60 py-3 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="border-b-2 border-border/60 py-3 text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
                   {l.label}
                 </a>

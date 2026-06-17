@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
 
+
 // Importing Phosphor Icons
 import { 
   ChatTeardropText, 
@@ -17,6 +18,7 @@ import {
 
 import { ArrowUp } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { Cardo } from "next/font/google";
 
 // --- STATS CONFIGURATION ---
 const STATS = [
@@ -24,6 +26,11 @@ const STATS = [
   { value: "2 min", label: "to live workspace" },
   { value: "99.9%", label: "uptime" },
 ];
+
+const serif = Cardo({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+});
 
 const PREVIEW_ROWS = [
   { status: "completed", title: "Anonymous voting", votes: 511 },
@@ -50,24 +57,7 @@ const features = [
       iconColor: 'text-cyan-400',
       label: 'Public Changelogs',
     },
-    {
-      id: 'surveys',
-      icon: ClipboardText,
-      iconColor: 'text-emerald-400',
-      label: 'User Surveys',
-    },
-    {
-      id: 'status-1',
-      icon: Pulse,
-      iconColor: 'text-amber-400',
-      label: 'Status Pages',
-    },
-    {
-      id: 'contact-pages', // Notice the unique id for the duplicated item
-      icon: Phone,
-      iconColor: 'text-amber-400',
-      label: 'Contact Pages',
-    },
+   
   ];
 
 const STATUS_DOT: Record<string, string> = {
@@ -105,7 +95,7 @@ export function Hero() {
             fill
             priority
             quality={100}
-            className="not-dark:hidden" 
+            className="not-dark:hidden opacity-80" 
           />
         </div>
         {/* Soft edge fading mask so the image blends smoothly into the dark viewport */}
@@ -118,20 +108,23 @@ export function Hero() {
         className="pointer-events-none absolute inset-0 -z-20 [background:radial-gradient(60%_50%_at_50%_0%,oklch(1_0_0/0.03)_0%,transparent_70%)]"
       />
 
+      <img className="absolute h-30 right-23 opacity-35 not-md:hidden top-20 -rotate-15 z-200" src="/arrow.png"/>
+
       <div className="mx-auto flex max-w-6xl flex-col items-center px-6 text-center w-full z-10">
         <motion.h1
           {...fade(0.08)}
-          className="mt-7 max-w-4xl text-balance text-5xl font-medium leading-[1.05] not-dark:!text-black tracking-tight text-white md:text-[88px] dark:drop-shadow-md"
+          className="mt-7 max-w-4xl text-balance font-medium leading-[1.05] not-dark:!text-black tracking-tight text-white md:text-[80px] text-5xl dark:drop-shadow-md"
         >
-          Let your users know 
-          <br />
-          what&apos;s going on
+          <h1 className={serif.className}><b className="font-[700] text-5xl  italic md:text-[80px]">Right now<img className="absolute h-40 right-23 opacity-100 not-md:hidden -translate-x-2 not-dark:!hidden translate-y-1" src="/squiggly.png"/> </b>  a user is requesting a feature.</h1>
+          {/* <br /> */}
+          <p className="!text-3xl tracking-normal mt-12 opacity-80">Collect feedback. Ship it. Without breaking the bank.</p>
+     
         </motion.h1>
 
         {/* Modular Feature Layout: Stacked into two discrete rows (Top 3, Bottom 2) */}
         <motion.div
       {...fade(0.14)} // Ensure fade() is defined or imported in your file
-      className="mt-14 flex flex-col items-center gap-3 w-full max-w-3xl"
+      className="mt-14 flex flex-col items-center gap-3 w-full max-w-2xl"
     >
       {/* Unified Grid: 1 column on mobile, 3 columns on small screens and up */}
       <div className="grid w-full grid-cols-1 sm:grid-cols-3 gap-3">
@@ -140,7 +133,7 @@ export function Hero() {
           return (
             <div
               key={item.id}
-              className="flex items-center justify-center gap-2.5 rounded-xl p-6 bg-border not-dark:!bg-black/5 transition-colors hover:border-white/20"
+              className="flex items-center justify-center gap-2.5 py-3 rounded-xl bg-border-2 not-dark:!bg-black/5 transition-colors hover:border-white/20"
             >
               <IconComponent
                 size={24}
@@ -156,13 +149,7 @@ export function Hero() {
       </div>
     </motion.div>
 
-        <motion.p
-          {...fade(0.20)}
-          className="mt-16 max-w-xl text-balance text-3xl font-medium"
-        
-        >
-          For developers and the next startups
-        </motion.p>
+      
 
         <motion.div
           {...fade(0.26)}
@@ -170,7 +157,7 @@ export function Hero() {
         >
           <Button size="lg" asChild className="shadow-black/40">
             <Link href="/login">
-              Start for free
+              Start free
             </Link>
           </Button>
           <Button size="lg" variant="outline" asChild className="">
@@ -186,10 +173,10 @@ export function Hero() {
           {STATS.map((s) => (
             <div
               key={s.label}
-              className="flex flex-col items-center gap-1 bg-black/50 not-dark:bg-black/5 backdrop-blur-md px-3 py-5 rounded-xl border-2 border-white/10"
+              className="flex flex-col items-center gap-1 bg-black/50 not-dark:bg-black/5 backdrop-blur-md px-3 py-5 rounded-2xl border-white/10"
             >
               <span className="text-xl font-semibold tracking-tight text-white not-dark:text-black md:text-3xl">
-                {s.value}
+                {s.value} 
               </span>
               <span className="text-center font-semibold text-xs text-white/60 not-dark:text-black/60">
                 {s.label}

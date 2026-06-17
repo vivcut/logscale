@@ -109,11 +109,11 @@ export function CommandPalette({ workspaceSlug }: { workspaceSlug: string }) {
       {/* Trigger button */}
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+        className="inline-flex items-center gap-2 rounded-xl border-2 border-border-2 bg-card px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
       >
         <Search className="size-3.5" />
         <span className="hidden sm:inline">Search…</span>
-        <kbd className="ml-1 hidden rounded border border-border bg-secondary px-1.5 py-0.5 font-mono text-[10px] sm:inline">
+        <kbd className="ml-1 hidden rounded border-2 border-border-2 bg-secondary px-1.5 py-0.5 font-mono text-[10px] sm:inline">
           ⌘K
         </kbd>
       </button>
@@ -124,9 +124,9 @@ export function CommandPalette({ workspaceSlug }: { workspaceSlug: string }) {
             className="absolute inset-0 bg-black/70 backdrop-blur-sm"
             onClick={() => setOpen(false)}
           />
-          <div className="relative w-full max-w-xl overflow-hidden rounded-xl border border-border bg-popover shadow-2xl">
+          <div className="relative w-full max-w-xl overflow-hidden rounded-xl border-2 border-border-2 bg-popover shadow-2xl">
             {/* search input */}
-            <div className="flex items-center gap-3 border-b border-border px-4">
+            <div className="flex items-center gap-3 border-b-2 border-border-2 px-4">
               {loading ? (
                 <Loader2 className="size-4 shrink-0 animate-spin text-muted-foreground" />
               ) : (
@@ -140,7 +140,7 @@ export function CommandPalette({ workspaceSlug }: { workspaceSlug: string }) {
                 placeholder="Search feedback and changelogs…"
                 className="h-12 w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
               />
-              <kbd className="rounded border border-border bg-secondary px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+              <kbd className="rounded border-2 border-border-2 bg-secondary px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
                 esc
               </kbd>
             </div>
@@ -159,11 +159,11 @@ export function CommandPalette({ workspaceSlug }: { workspaceSlug: string }) {
                         onMouseEnter={() => setActive(i)}
                         onClick={() => select(r)}
                         className={cn(
-                          "flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left transition-colors",
+                          "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors",
                           active === i ? "bg-secondary" : "hover:bg-secondary/50"
                         )}
                       >
-                        <span className="flex size-7 shrink-0 items-center justify-center rounded-md border border-border bg-card text-muted-foreground">
+                        <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border-2 border-border-2 bg-card text-muted-foreground">
                           {r.type === "post" ? (
                             <MessageSquare className="size-3.5" />
                           ) : (
@@ -181,7 +181,7 @@ export function CommandPalette({ workspaceSlug }: { workspaceSlug: string }) {
                           ) : null}
                         </span>
                         {r.type === "post" ? (
-                          <span className="shrink-0 rounded-full border border-border px-2 py-0.5 font-mono text-[10px] text-muted-foreground">
+                          <span className="shrink-0 rounded-full border-2 border-border-2 px-2 py-0.5 font-mono text-[10px] text-muted-foreground">
                             {STATUS_LABELS[r.status] ?? r.status}
                           </span>
                         ) : (
@@ -200,15 +200,15 @@ export function CommandPalette({ workspaceSlug }: { workspaceSlug: string }) {
             </div>
 
             {/* footer */}
-            <div className="flex items-center gap-3 border-t border-border px-4 py-2 font-mono text-[10px] text-muted-foreground">
+            <div className="flex items-center gap-3 border-t-2 border-border-2 px-4 py-2 font-mono text-[10px] text-muted-foreground">
               <span className="flex items-center gap-1">
-                <kbd className="rounded border border-border bg-secondary px-1">
+                <kbd className="rounded border-2 border-border-2 bg-secondary px-1">
                   ↑↓
                 </kbd>
                 navigate
               </span>
               <span className="flex items-center gap-1">
-                <kbd className="rounded border border-border bg-secondary px-1">
+                <kbd className="rounded border-2 border-border-2 bg-secondary px-1">
                   ↵
                 </kbd>
                 open

@@ -67,9 +67,9 @@ export function CheckoutButtons() {
 
 const FEATURES = [
   "Unlimited boards & posts",
-  "Public roadmap & changelog",
-  "Surveys, status & contact pages",
-  "In-app feedback widget",
+  "Add images in changelogs and board posts",
+  "Custom flairs in board posts",
+  "Remove watermark",
 ];
 
 function PlanCard({
@@ -94,14 +94,14 @@ function PlanCard({
   return (
     <div
       className={
-        "flex flex-col rounded-xl border bg-card p-6 " +
+        "flex flex-col rounded-xl border-2 bg-card p-6 " +
         (highlight ? "border-primary shadow-sm" : "border-border")
       }
     >
       <div className="mb-1 flex items-center gap-2">
-        <h3 className="text-sm font-semibold">{title}</h3>
+        <h3 className="text-xl font-semibold">{title}</h3>
         {highlight ? (
-          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
             Best value
           </span>
         ) : null}
@@ -115,11 +115,16 @@ function PlanCard({
       <ul className="mb-6 space-y-2">
         {FEATURES.map((f) => (
           <li key={f} className="flex items-center gap-2 text-sm">
-            <Check className="size-4 shrink-0 text-primary" />
+            <Check weight="bold" className="size-4 shrink-0 text-primary" />
             <span className="text-muted-foreground">{f}</span>
           </li>
         ))}
       </ul>
+
+      {/* Localized Free Trial Banner */}
+      <div className="mb-3 rounded-lg border-2 border-border-2 bg-secondary px-3 py-3 text-center text-md font-semibold text-foreground">
+        14-day free trial included
+      </div>
 
       <Button
         className="mt-auto w-full"
@@ -133,7 +138,7 @@ function PlanCard({
             Redirecting…
           </>
         ) : (
-          "Subscribe"
+          "Start free trial"
         )}
       </Button>
     </div>

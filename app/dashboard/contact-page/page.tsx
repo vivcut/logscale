@@ -10,7 +10,7 @@ import { PlanBanner } from "@/components/plan-banner";
 
 
 export const metadata = {
-  title: "Contact Page — LogScale",
+  title: "Contact Page — Pitstop",
 };
 
 export default async function ContactPageSettings() {
@@ -85,7 +85,7 @@ export default async function ContactPageSettings() {
             publicUrl={publicUrl}
           />
         ) : (
-          <p className="rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
+          <p className="rounded-xl border-2 border-dashed border-border-2 p-6 text-center text-sm text-muted-foreground">
             Only workspace owners and admins can edit the contact page.
           </p>
         )}
@@ -104,7 +104,7 @@ export default async function ContactPageSettings() {
         </div>
 
         {submissions.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-16 text-center">
+          <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border-2 py-16 text-center">
             <Inbox className="mb-3 size-5 text-muted-foreground" />
             <h3 className="text-sm font-medium">No messages yet</h3>
             <p className="mt-1 max-w-sm text-sm text-muted-foreground">
@@ -116,9 +116,9 @@ export default async function ContactPageSettings() {
             {submissions.map((s) => (
               <div
                 key={s.id}
-                className="rounded-xl border border-border bg-card p-5"
+                className="rounded-xl border-2 border-border-2 bg-card p-5"
               >
-                <div className="mb-3 flex flex-wrap items-center justify-between gap-2 border-b border-border pb-3">
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-2 border-b-2 border-border-2 pb-3">
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs text-muted-foreground">
                     {s.email ? (
                       <span className="inline-flex items-center gap-1.5 text-foreground">

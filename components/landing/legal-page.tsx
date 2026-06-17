@@ -36,7 +36,7 @@ export function LegalPage({
         />
 
         <article className="mx-auto w-full max-w-3xl px-6 pb-28 pt-36">
-          <header className="border-b border-border pb-8">
+          <header className="border-b-2 border-border-2 pb-8">
             <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
               legal
             </span>

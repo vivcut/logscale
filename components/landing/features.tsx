@@ -15,6 +15,13 @@ import {
 import { Reveal, Stagger, StaggerItem } from "./reveal";
 import { cn } from "@/lib/utils";
 import { Check } from "@phosphor-icons/react";
+import { Cardo } from "next/font/google";
+
+
+const serif = Cardo({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+});
 
 declare global {
   interface Window {
@@ -68,45 +75,7 @@ const FEATURES = [
       "A timeline your users actually want to read",
     ],
   },
-  {
-    id: "surveys",
-    icon: BarChart3,
-    tag: "surveys",
-    title: "Surveys & Forms",
-    blurb:
-      "Ask the right questions with hosted forms, then analyze responses at a glance.",
-    points: [
-      "Multiple question types with conditional logic",
-      "Shareable hosted forms — no embed required",
-      "Response analytics built in",
-    ],
-  },
-  {
-    id: "status",
-    icon: Activity,
-    tag: "status",
-    title: "Status & Uptime",
-    blurb:
-      "A public status page with automated uptime checks and incident timelines.",
-    points: [
-      "Automated monitoring with scheduled checks",
-      "Incident history with clear, honest updates",
-      "Build trust with a page that's always live",
-    ],
-  },
-  {
-    id: "contact-page",
-    icon: Activity,
-    tag: "contact-pages",
-    title: "Create a contact page",
-    blurb:
-      "A public status and embeddable page to collect feedback and build trust with your users",
-    points: [
-      "Customize how it looks",
-      "Responses go straight to your workspace",
-      // "Build trust with a page that's always live",
-    ],
-  },
+
   
   {
     id: "widget",
@@ -114,7 +83,7 @@ const FEATURES = [
     tag: "widget",
     title: "Embeddable Widget",
     blurb:
-      "Drop a single snippet to use LogScale pages inside your product.",
+      "Drop a single snippet to use Pitstop pages inside your product.",
     points: [
       "One-line embed script — works anywhere",
       "Themed to match your brand",
@@ -130,11 +99,11 @@ export function Features() {
         <span className="font-mono font-bold text-xs uppercase tracking-wider text-muted-foreground">
           everything you need
         </span>
-        <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight md:text-6xl">
-          One workspace. The whole loop.
+        <h2 className="mt-3 text-balance text-3xl tracking-tight md:text-7xl">
+          <span className={serif.className}>One workspace. The whole loop.</span>
         </h2>
         <p className="mt-6 text-balance text-muted-foreground">
-          Stop stitching together five tools. LogScale covers the full journey
+          Stop stitching together five tools. Pitstop covers the full journey
           from collecting feedback, shipping updates, and keeping users in the loop.
         </p>
       </Reveal>
@@ -147,9 +116,9 @@ export function Features() {
               href={`#${f.id}`}
               // whileHover={{ y: -4 }}
               // transition={{ type: "spring", stiffness: 300, damping: 22 }}
-              className="group flex h-full flex-col gap-3 !rounded-xl bg-border not-dark:bg-transparent p-6 not-dark:border-2 transition-colors hover:bg-white/15"
+              className="group flex h-full flex-col gap-3 !rounded-xl bg-border-2 not-dark:bg-transparent p-6 not-dark:border-2 transition-colors hover:bg-white/15"
             >
-              {/* <div className="flex size-10 items-center bg-black/10 justify-center rounded-lg border-border text-foreground transition-colors group-hover:border-foreground/30"> */}
+              {/* <div className="flex size-10 items-center bg-black/10 justify-center rounded-xl border-border-2 text-foreground transition-colors group-hover:border-foreground/30"> */}
                 <f.icon weight="fill" className="size-8 text-black dark:text-white" />
               {/* </div> */}
               <span className="font-mono text-xs text-muted-foreground">
@@ -188,16 +157,17 @@ function FeatureDetail({
       {/* Copy */}
       <Reveal className={cn(flipped && "md:order-2")}>
         <div className="flex items-center gap-2">
-          {/* <span className="flex size-8 items-center justify-center rounded-md border border-border bg-secondary"> */}
-            <Icon className="size-6" />
+          {/* <span className="flex size-8 items-center justify-center rounded-xl border-2 border-border-2 bg-secondary"> */}
+            <Icon weight="fill" className="size-10" />
           {/* </span> */}
           <br/>
-          <span className="font-mono text-md font-semibold translate-y-0.5 uppercase tracking-wider text-muted-foreground">
-            /{feature.tag}
-          </span>
+          {feature.tag !== "widget" && <span className="font-mono text-xl font-semibold translate-y-0.5 uppercase tracking-wider text-muted-foreground">
+            /ACME/{feature.tag}
+          </span>}
         </div>
-        <h3 className="mt-5 text-balance text-2xl font-semibold tracking-tight md:text-5xl">
-          {feature.title}
+        <h3 className="mt-5 text-balance text-2xl tracking-tight md:text-5xl">
+          <span className={serif.className}>{feature.title}</span>
+          
         </h3>
         <p className="mt-4 text-balance text-muted-foreground">
           {feature.blurb}
@@ -205,7 +175,7 @@ function FeatureDetail({
         <ul className="mt-6 flex flex-col gap-3">
           {feature.points.map((p) => (
             <li key={p} className="flex items-start gap-3 text-sm">
-              {/* <span className="mt-1 flex size-4 shrink-0 items-center justify-center rounded-full border border-border text-[10px] text-muted-foreground"> */}
+              {/* <span className="mt-1 flex size-4 shrink-0 items-center justify-center rounded-full border-2 border-border-2 text-[10px] text-muted-foreground"> */}
                 <Check className="size-5" />
               {/* </span> */}
               <span className="text-muted-foreground">{p}</span>
@@ -253,7 +223,7 @@ function FeatureVisual({ id }: { id: string }) {
             src={previewSrc}
             title="Widget preview"
             
-            className=" h-[600px] w-full pointer-events-none rounded-lg bg-background select-none disabled"
+            className=" h-[600px] w-full pointer-events-none rounded-xl bg-background select-none disabled"
           />
         
      
@@ -275,7 +245,7 @@ function FeatureVisual({ id }: { id: string }) {
             src={previewSrc}
             title="Widget preview"
             
-            className=" h-[600px] w-full pointer-events-none rounded-lg bg-background select-none disabled"
+            className=" h-[600px] w-full pointer-events-none rounded-xl bg-background select-none disabled"
           />
         
      
@@ -297,7 +267,7 @@ function FeatureVisual({ id }: { id: string }) {
             src={previewSrc}
             title="Widget preview"
             
-            className=" h-[600px] w-full pointer-events-none rounded-lg bg-background select-none disabled"
+            className=" h-[600px] w-full pointer-events-none rounded-xl bg-background select-none disabled"
           />
         
      
@@ -319,7 +289,7 @@ function FeatureVisual({ id }: { id: string }) {
             src={previewSrc}
             title="Widget preview"
             
-            className=" h-[600px] w-full pointer-events-none rounded-lg bg-background select-none disabled"
+            className=" h-[600px] w-full pointer-events-none rounded-xl bg-background select-none disabled"
           />
         
      
@@ -341,7 +311,7 @@ function FeatureVisual({ id }: { id: string }) {
             src={previewSrc}
             title="Widget preview"
             
-            className=" h-[600px] w-full pointer-events-none rounded-lg bg-background select-none disabled"
+            className=" h-[600px] w-full pointer-events-none rounded-xl bg-background select-none disabled"
           />
         
      
@@ -363,7 +333,7 @@ function FeatureVisual({ id }: { id: string }) {
             src={previewSrc}
             title="Widget preview"
             
-            className=" h-[600px] w-full pointer-events-none rounded-lg bg-background select-none disabled"
+            className=" h-[600px] w-full pointer-events-none rounded-xl bg-background select-none disabled"
           />
         
      
@@ -375,15 +345,15 @@ function FeatureVisual({ id }: { id: string }) {
   return (
     <div className="relative grid h-full place-items-center p-5">
       {glow}
-      <div className="w-full max-w-xs rounded-xl border border-border bg-background/70 shadow-xl">
-        <div className="flex items-center gap-2 border-b border-border px-3 py-2">
+      <div className="w-full max-w-xs rounded-xl border-2 border-border-2 bg-background/70 shadow-xl">
+        <div className="flex items-center gap-2 border-b-2 border-border-2 px-3 py-2">
           <Users className="size-3.5" />
           <span className="text-xs font-medium">Embedded page</span>
         </div>
         <div className="space-y-2 p-3">
-          <div className="h-8 rounded-md border border-border bg-secondary/50" />
-          <div className="h-16 rounded-md border border-border bg-secondary/50" />
-          <div className="flex h-8 items-center justify-center rounded-md bg-foreground text-xs font-medium text-background">
+          <div className="h-8 rounded-xl border-2 border-border-2 bg-secondary/50" />
+          <div className="h-16 rounded-xl border-2 border-border-2 bg-secondary/50" />
+          <div className="flex h-8 items-center justify-center rounded-xl bg-foreground text-xs font-medium text-background">
             Submit
           </div>
         </div>

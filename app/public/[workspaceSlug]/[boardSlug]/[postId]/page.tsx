@@ -104,9 +104,9 @@ export default async function PublicPostPage({
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-border">
-        <div className="mx-auto flex max-w-5xl items-center gap-3 px-6 py-5">
-          <div className="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-md bg-primary text-sm font-bold text-primary-foreground">
+      <header className="border-b-2 border-popover/50">
+        <div className="mx-auto flex max-w-7xl items-center gap-3 px-6 py-5">
+          <div className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-primary text-sm font-bold text-primary-foreground">
             {workspace.logo_url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -130,7 +130,7 @@ export default async function PublicPostPage({
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-6 py-8">
+      <main className="mx-auto max-w-7xl px-6 py-8">
         <Link
           href={`/public/${workspace.slug}/${board.slug}`}
           className="mb-6 inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"

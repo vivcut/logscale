@@ -29,7 +29,7 @@ export function FormRunner({
   // Success screen once submitted.
   if (state.ok) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-xl border border-border bg-card py-16 text-center">
+      <div className="flex flex-col items-center justify-center rounded-xl border-2 border-border-2 bg-card py-16 text-center">
         <BadgeCheck className="mb-3 size-8 text-emerald-400" />
         <h2 className="text-lg font-semibold">Thanks for your response!</h2>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -44,7 +44,7 @@ export function FormRunner({
       <input type="hidden" name="survey_id" value={surveyId} />
 
       {/* Email field */}
-      <div className="space-y-2 rounded-xl border border-border bg-card p-5">
+      <div className="space-y-2 rounded-xl border-2 border-border-2 bg-card p-5">
         <label htmlFor="email" className="block text-sm font-medium">
           Email{" "}
           {requireEmail ? (
@@ -68,7 +68,7 @@ export function FormRunner({
       {questions.map((q, idx) => (
         <fieldset
           key={q.id}
-          className="space-y-3 rounded-xl border border-border bg-card p-5"
+          className="space-y-3 rounded-xl border-2 border-border-2 bg-card p-5"
         >
           <legend className="text-sm font-medium">
             <span className="mr-1.5 font-mono text-xs text-muted-foreground">
@@ -89,7 +89,7 @@ export function FormRunner({
               name={`q_${q.id}`}
               rows={4}
               required={q.is_required}
-              className="w-full resize-y rounded-md border border-border bg-background px-3.5 py-2.5 text-sm leading-relaxed outline-none transition-colors placeholder:text-muted-foreground focus:border-ring"
+              className="w-full resize-y rounded-xl border-2 border-border-2 bg-background px-3.5 py-2.5 text-sm leading-relaxed outline-none transition-colors placeholder:text-muted-foreground focus:border-ring"
             />
           ) : null}
 
@@ -98,7 +98,7 @@ export function FormRunner({
               {q.options.map((opt, oi) => (
                 <label
                   key={oi}
-                  className="flex cursor-pointer items-center gap-2.5 rounded-md border border-border bg-background px-3.5 py-2.5 text-sm transition-colors hover:border-ring"
+                  className="flex cursor-pointer items-center gap-2.5 rounded-xl border-2 border-border-2 bg-background px-3.5 py-2.5 text-sm transition-colors hover:border-ring"
                 >
                   <input
                     type="radio"
@@ -118,7 +118,7 @@ export function FormRunner({
               {q.options.map((opt, oi) => (
                 <label
                   key={oi}
-                  className="flex cursor-pointer items-center gap-2.5 rounded-md border border-border bg-background px-3.5 py-2.5 text-sm transition-colors hover:border-ring"
+                  className="flex cursor-pointer items-center gap-2.5 rounded-xl border-2 border-border-2 bg-background px-3.5 py-2.5 text-sm transition-colors hover:border-ring"
                 >
                   <input
                     type="checkbox"

@@ -55,7 +55,7 @@ export function ContactEditor({
       <input type="hidden" name="enabled" value={String(enabled)} />
 
       {/* Live state bar */}
-      <div className="space-y-3 rounded-xl border border-border bg-card p-4">
+      <div className="space-y-3 rounded-xl border-2 border-border-2 bg-card p-4">
         <div className="flex items-center gap-2">
           <span
             className={cn(
@@ -72,7 +72,7 @@ export function ContactEditor({
 
 
       {/* Text settings */}
-      <div className="space-y-4 rounded-xl border border-border bg-card p-5">
+      <div className="space-y-4 rounded-xl border-2 border-border-2 bg-card p-5">
         <div className="flex flex-col gap-2">
           <Label htmlFor="title" className="text-muted-foreground">
             Title text
@@ -102,7 +102,7 @@ export function ContactEditor({
       </div>
 
       {/* Field requirements */}
-      <div className="space-y-3 rounded-xl border border-border bg-card p-5">
+      <div className="space-y-3 rounded-xl border-2 border-border-2 bg-card p-5">
         <p className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
           contact fields
         </p>
@@ -134,7 +134,7 @@ export function ContactEditor({
       </p>
 
       {/* Save bar */}
-      <div className="flex items-center justify-end gap-3 border-t border-border pt-4">
+      <div className="flex items-center justify-end gap-3 border-t-2 border-border-2 pt-4">
         {state.error ? (
           <p className="font-mono text-xs text-destructive">{state.error}</p>
         ) : state.ok ? (
@@ -161,7 +161,7 @@ function ToggleRow({
   onChange: (v: boolean) => void;
 }) {
   return (
-    <label className="flex cursor-pointer items-center justify-between gap-4 rounded-md border border-border bg-background px-3.5 py-3">
+    <label className="flex cursor-pointer items-center justify-between gap-4 rounded-xl border-2 border-border-2 bg-background px-3.5 py-3">
       <span className="min-w-0">
         <span className="block text-sm">{label}</span>
         <span className="block font-mono text-xs text-muted-foreground">

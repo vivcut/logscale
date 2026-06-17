@@ -147,7 +147,7 @@ export function SurveyEditor({
   return (
     <div className="space-y-6">
       {/* Publish bar */}
-      <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex flex-col gap-3 rounded-xl border-2 border-border-2 bg-card p-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <span
@@ -216,7 +216,7 @@ export function SurveyEditor({
         />
 
         {/* Meta */}
-        <div className="space-y-4 rounded-xl border border-border bg-card p-5">
+        <div className="space-y-4 rounded-xl border-2 border-border-2 bg-card p-5">
           <div className="flex flex-col gap-2">
             <Label htmlFor="title" className="text-muted-foreground">
               Form title
@@ -244,12 +244,12 @@ export function SurveyEditor({
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Tell respondents what this form is about…"
               rows={2}
-              className="w-full resize-y rounded-md border border-border bg-background px-3.5 py-2.5 text-sm leading-relaxed outline-none transition-colors placeholder:text-muted-foreground focus:border-ring"
+              className="w-full resize-y rounded-xl border-2 border-border-2 bg-background px-3.5 py-2.5 text-sm leading-relaxed outline-none transition-colors placeholder:text-muted-foreground focus:border-ring"
             />
           </div>
 
           {/* Require email toggle */}
-          <label className="flex cursor-pointer items-center justify-between rounded-md border border-border bg-background px-3.5 py-3">
+          <label className="flex cursor-pointer items-center justify-between rounded-xl border-2 border-border-2 bg-background px-3.5 py-3">
             <span className="text-sm">
               Require email address
               <span className="ml-2 font-mono text-xs text-muted-foreground">
@@ -268,7 +268,7 @@ export function SurveyEditor({
         {/* Questions */}
         <div className="space-y-3">
           {items.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-border py-10 text-center">
+            <div className="rounded-xl border-2 border-dashed border-border-2 py-10 text-center">
               <p className="text-sm text-muted-foreground">
                 No questions yet. Add one below.
               </p>
@@ -279,7 +279,7 @@ export function SurveyEditor({
               return (
                 <div
                   key={it.key}
-                  className="rounded-xl border border-border bg-card p-4"
+                  className="rounded-xl border-2 border-border-2 bg-card p-4"
                 >
                   <div className="mb-3 flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
@@ -392,7 +392,7 @@ export function SurveyEditor({
           )}
 
           {/* Add-question palette */}
-          <div className="flex flex-wrap items-center gap-2 rounded-xl border border-dashed border-border p-3">
+          <div className="flex flex-wrap items-center gap-2 rounded-xl border-2 border-dashed border-border-2 p-3">
             <span className="mr-1 font-mono text-xs text-muted-foreground">
               add question:
             </span>
@@ -403,7 +403,7 @@ export function SurveyEditor({
                   key={t}
                   type="button"
                   onClick={() => addQuestion(t)}
-                  className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                  className="inline-flex items-center gap-1.5 rounded-xl border-2 border-border-2 px-2.5 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
                 >
                   <Icon className="size-3.5" />
                   {QUESTION_TYPE_LABELS[t]}
@@ -414,7 +414,7 @@ export function SurveyEditor({
         </div>
 
         {/* Save bar */}
-        <div className="flex items-center justify-end gap-3 border-t border-border pt-4">
+        <div className="flex items-center justify-end gap-3 border-t-2 border-border-2 pt-4">
           {saveState.error ? (
             <p className="font-mono text-xs text-destructive">
               {saveState.error}
