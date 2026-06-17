@@ -5,7 +5,7 @@ import { SignOutButton } from "../dashboard/sign-out-button";
 import { OnboardingForm } from "./onboarding-form";
 
 export const metadata = {
- title: "Create your workspace — Pitstop",
+ title: "Create your workspace — Pittstop",
 };
 
 export default async function OnboardingPage({
@@ -54,7 +54,7 @@ export default async function OnboardingPage({
       <span className="font-mono text-xs font-bold">↑</span>
      </div>
      <span className="font-mono text-sm font-semibold tracking-tight">
-      Pitstop
+      Pittstop
      </span>
     </div>
 

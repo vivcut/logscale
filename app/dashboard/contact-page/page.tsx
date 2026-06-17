@@ -10,7 +10,7 @@ import { PlanBanner } from "@/components/plan-banner";
 
 
 export const metadata = {
- title: "Contact Page — Pitstop",
+ title: "Contact Page — Pittstop",
 };
 
 export default async function ContactPageSettings() {

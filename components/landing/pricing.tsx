@@ -47,7 +47,7 @@ export function Pricing() {
     "Image uploads in posts & changelog",
     "Team members & multiple editors",
     "Custom contact page copy",
-    "No “Built with Pitstop” watermark",
+    "No “Built with Pittstop” watermark",
    ],
    cta: "Upgrade to Startup",
   },

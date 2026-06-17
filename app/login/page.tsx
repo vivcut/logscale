@@ -6,8 +6,8 @@ import { Avocado } from "@/components/icons";
 import { LoginForm } from "./login-form";
 
 export const metadata: Metadata = {
- title: "Sign in — Pitstop",
- description: "Sign in to your Pitstop workspace.",
+ title: "Sign in — Pittstop",
+ description: "Sign in to your Pittstop workspace.",
 };
 
 export default function LoginPage() {
@@ -27,7 +27,7 @@ export default function LoginPage() {
     >
      <div className={"flex items-center gap-1 justify-center"}>
      <Avocado weight="fill" className="size-6 text-primary" />
-     <h1 className={`text-2xl font-bold`}>Pitstop</h1>
+     <h1 className={`text-2xl font-bold`}>Pittstop</h1>
     </div>
     </Link>
 

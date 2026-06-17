@@ -5,7 +5,7 @@ import { getActiveWorkspace } from "@/lib/workspace";
 import { ChangelogEditor } from "../changelog-editor";
 
 export const metadata = {
-  title: "New release — Pitstop",
+  title: "New release — Pittstop",
 };
 
 export default async function NewChangelogPage() {

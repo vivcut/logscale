@@ -16,22 +16,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
- title: "Pitstop — Let your users know what's going on",
+ title: "Pittstop — Let your users know what's going on",
  description:
   "The high-performance platform for startups and indie developers. Feedback boards, kanban roadmaps, public changelogs, and more.",
  
  // 1. The base URL for all your relative metadata paths
- metadataBase: new URL("https://Pitstop.com"), // <-- Change to your actual domain
+ metadataBase: new URL("https://Pittstop.com"), // <-- Change to your actual domain
  
  // 2. Standard SEO Keywords
  keywords: ["feedback board", "kanban roadmap", "public changelog", "product management tool", "startup tools"],
  
  // 3. Open Graph (How it looks on Facebook, LinkedIn, Discord)
  openGraph: {
-  title: "Pitstop — Let your users know what's going on",
+  title: "Pittstop — Let your users know what's going on",
   description: "The high-performance platform for startups and indie developers. Feedback boards, kanban roadmaps, public changelogs, and more.",
-  url: "https://Pitstop.com", // <-- Change to your actual domain
-  siteName: "Pitstop",
+  url: "https://Pittstop.com", // <-- Change to your actual domain
+  siteName: "Pittstop",
   locale: "en_US",
   type: "website",
   images: [
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     url: "/og-image.png", // Path to your OG image file (usually 1200x630px) in public folder
     width: 1200,
     height: 630,
-    alt: "Pitstop Platform Preview",
+    alt: "Pittstop Platform Preview",
    },
   ],
  },
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
  // 4. Twitter Cards (How it looks on X/Twitter)
  twitter: {
   card: "summary_large_image",
-  title: "Pitstop — Let your users know what's going on",
+  title: "Pittstop — Let your users know what's going on",
   description: "The high-performance platform for startups and indie developers.",
   creator: "@your_twitter_handle", // <-- Change to your Twitter handle
   images: ["/og-image.png"], // Reuse the same image

@@ -8,7 +8,7 @@ import { ChangelogEditor } from "../changelog-editor";
 import { DeleteChangelogButton } from "./delete-button";
 
 export const metadata = {
-  title: "Edit release — Pitstop",
+  title: "Edit release — Pittstop",
 };
 
 export default async function EditChangelogPage({

@@ -11,11 +11,11 @@ import { Cardo } from "next/font/google";
 
 
 export const metadata: Metadata = {
- title: "Pitstop — Ship what your users actually want",
+ title: "Pittstop — Ship what your users actually want",
  description:
   "The high-performance feedback platform for startups and indie developers. Feedback boards, kanban roadmaps, public changelogs, surveys, and status pages in one sleek workspace.",
  openGraph: {
-  title: "Pitstop — Ship what your users actually want",
+  title: "Pittstop — Ship what your users actually want",
   description:
    "Feedback boards, kanban roadmaps, changelogs, surveys, and status pages in one sleek workspace built for startups and indie developers.",
   type: "website",

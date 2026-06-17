@@ -55,7 +55,7 @@ export function Navbar() {
      {/* <Circle className="size-8" weight="fill" /> */}
      <div className={"flex items-center gap-1 w-full px-3 justify-center"}>
      <AvocadoIcon weight="fill" className="size-6 text-primary" />
-     <h1 className={`text-2xl font-bold`}>Pitstop</h1>
+     <h1 className={`text-2xl font-bold`}>Pittstop</h1>
     </div>
     </Link>
 

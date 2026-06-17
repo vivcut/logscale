@@ -83,7 +83,7 @@ const FEATURES = [
   tag: "widget",
   title: "Embeddable Widget",
   blurb:
-   "Drop a single snippet to use Pitstop pages inside your product.",
+   "Drop a single snippet to use Pittstop pages inside your product.",
   points: [
    "One-line embed script — works anywhere",
    "Themed to match your brand",
@@ -103,7 +103,7 @@ export function Features() {
      <span className={serif.className}>One workspace. The whole loop.</span>
     </h2>
     <p className="mt-6 text-balance text-muted-foreground">
-     Stop stitching together five tools. Pitstop covers the full journey
+     Stop stitching together five tools. Pittstop covers the full journey
      from collecting feedback, shipping updates, and keeping users in the loop.
     </p>
    </Reveal>

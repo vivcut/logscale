@@ -38,7 +38,7 @@ import {
 
 
 export const metadata = {
- title: "Settings — Pitstop",
+ title: "Settings — Pittstop",
 };
 
 export default async function SettingsPage() {

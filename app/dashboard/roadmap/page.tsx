@@ -7,7 +7,7 @@ import { ShareLink } from "@/components/share-link";
 
 
 export const metadata = {
- title: "Roadmap — Pitstop",
+ title: "Roadmap — Pittstop",
 };
 
 export default async function RoadmapPage() {

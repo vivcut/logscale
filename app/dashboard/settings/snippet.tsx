@@ -35,7 +35,7 @@ export function EmbedSnippet({
 
  const iframeSnippet = `<iframe 
  src="${previewUrl}" 
- title="Pitstop Widget" 
+ title="Pittstop Widget" 
  width="100%" 
  height="600px" 
  style="border: none; border-radius: 8px;"

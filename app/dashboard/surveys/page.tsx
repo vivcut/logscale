@@ -9,7 +9,7 @@ import { PlanBanner } from "@/components/plan-banner";
 
 
 export const metadata = {
- title: "Surveys — Pitstop",
+ title: "Surveys — Pittstop",
 };
 
 export default async function SurveysPage() {

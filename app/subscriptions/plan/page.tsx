@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 
 
 export const metadata = {
- title: "Plan — Pitstop",
+ title: "Plan — Pittstop",
 };
 
 export default async function PlanPage({
@@ -81,7 +81,7 @@ export default async function PlanPage({
      <div>
       <p className="text-base font-semibold">You have Startup plan</p>
       <p className="mt-0.5 text-sm text-muted-foreground">
-       Thanks for subscribing. Everything in Pitstop is unlocked for
+       Thanks for subscribing. Everything in Pittstop is unlocked for
        this workspace.
       </p>
       <div className="mt-4">

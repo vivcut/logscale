@@ -29,7 +29,7 @@ export const PLAN_LIMITS = {
  allowStatusPaths: false, // base origin URLs only on Hobby
  allowTeamMembers: false,
  allowContactCustomCopy: false, // can't change title / placeholder on Hobby
- showWatermark: true, // "Built with Pitstop" on public pages + widget
+ showWatermark: true, // "Built with Pittstop" on public pages + widget
 } as const;
 
 /**

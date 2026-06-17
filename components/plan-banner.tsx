@@ -27,7 +27,7 @@ const COPY: Record<PlanPage, { limited: string[]; unlocked: string[] }> = {
    "No custom board flairs",
    "No image uploads on changelog",
    "No extra team members",
-   "“Built with Pitstop” watermark on public pages",
+   "“Built with Pittstop” watermark on public pages",
   ],
   unlocked: [
    "Unlimited boards, surveys & questions",
@@ -41,7 +41,7 @@ const COPY: Record<PlanPage, { limited: string[]; unlocked: string[] }> = {
   limited: [
    "You can only create 1 board",
    "No custom board flairs",
-   "“Built with Pitstop” watermark on public pages",
+   "“Built with Pittstop” watermark on public pages",
   ],
   unlocked: [
    "Unlimited boards",
@@ -50,13 +50,13 @@ const COPY: Record<PlanPage, { limited: string[]; unlocked: string[] }> = {
   ],
  },
  roadmap: {
-  limited: ["“Built with Pitstop” watermark on your public roadmap"],
+  limited: ["“Built with Pittstop” watermark on your public roadmap"],
   unlocked: ["No watermark on your public roadmap"],
  },
  changelog: {
   limited: [
    "No image uploads in changelog entries",
-   "“Built with Pitstop” watermark on your public changelog",
+   "“Built with Pittstop” watermark on your public changelog",
   ],
   unlocked: ["Image uploads in changelog entries", "No watermark"],
  },
@@ -64,7 +64,7 @@ const COPY: Record<PlanPage, { limited: string[]; unlocked: string[] }> = {
   limited: [
    "Only 1 survey",
    "Max 3 questions per survey",
-   "“Built with Pitstop” watermark on public forms",
+   "“Built with Pittstop” watermark on public forms",
   ],
   unlocked: ["Unlimited surveys", "Unlimited questions", "No watermark"],
  },
@@ -72,7 +72,7 @@ const COPY: Record<PlanPage, { limited: string[]; unlocked: string[] }> = {
   limited: [
    "Only 2 monitored links",
    "Base URLs only (no specific paths or directories)",
-   "“Built with Pitstop” watermark on your public status page",
+   "“Built with Pittstop” watermark on your public status page",
   ],
   unlocked: [
    "Unlimited monitored links",
@@ -83,14 +83,14 @@ const COPY: Record<PlanPage, { limited: string[]; unlocked: string[] }> = {
  contact: {
   limited: [
    "Can’t change the title text or message placeholder",
-   "“Built with Pitstop” watermark on your public contact page",
+   "“Built with Pittstop” watermark on your public contact page",
   ],
   unlocked: ["Fully customizable title & placeholder", "No watermark"],
  },
  settings: {
   limited: [
    "Can’t add extra team members / editors",
-   "“Built with Pitstop” watermark on public pages & widget",
+   "“Built with Pittstop” watermark on public pages & widget",
   ],
   unlocked: ["Unlimited team members", "No watermark"],
  },

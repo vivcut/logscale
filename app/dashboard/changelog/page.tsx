@@ -11,7 +11,7 @@ import { ShareLink } from "@/components/share-link";
 
 
 export const metadata = {
- title: "Changelog — Pitstop",
+ title: "Changelog — Pittstop",
 };
 
 export default async function ChangelogPage() {

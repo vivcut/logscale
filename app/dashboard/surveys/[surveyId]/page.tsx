@@ -10,7 +10,7 @@ import { SurveyEditor } from "./survey-editor";
 import { DeleteSurveyButton } from "./delete-button";
 
 export const metadata = {
- title: "Edit survey — Pitstop",
+ title: "Edit survey — Pittstop",
 };
 
 export default async function SurveyEditorPage({

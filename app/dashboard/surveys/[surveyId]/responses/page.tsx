@@ -12,7 +12,7 @@ import {
 } from "@/lib/surveys";
 
 export const metadata = {
- title: "Responses — Pitstop",
+ title: "Responses — Pittstop",
 };
 
 export default async function ResponsesPage({

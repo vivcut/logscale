@@ -46,7 +46,7 @@ export function Footer() {
       <Link href="/" className="flex items-center gap-2">
        <div className={"flex items-center gap-1 w-full px-3 justify-center"}>
      <Avocado weight="fill" className="size-6 text-primary" />
-     <h1 className={`text-2xl font-bold `}>Pitstop</h1>
+     <h1 className={`text-2xl font-bold `}>Pittstop</h1>
     </div>
       </Link>
       <p className="max-w-xs text-sm text-muted-foreground">
@@ -77,7 +77,7 @@ export function Footer() {
     </div>
 
     <div className="mt-14 flex flex-col items-center justify-between gap-3  border-t-2 border-border pt-8 text-xs text-muted-foreground md:flex-row">
-     <span className="font-mono">© 2026 Pitstop. All rights reserved.</span>
+     <span className="font-mono">© 2026 Pittstop. All rights reserved.</span>
      <span className="font-mono">built with next.js · supabase · shadcn/ui</span>
     </div>
    </div>

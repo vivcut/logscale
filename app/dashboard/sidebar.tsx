@@ -145,7 +145,7 @@ export function DashboardSidebar({
 
     <div className={"flex items-center gap-1 w-full px-3 justify-center"}>
      <AvocadoIcon weight="fill" className="size-6 text-primary" />
-     <h1 className={`text-2xl font-bold ${isCollapsedLayout ? "hidden" : "block"}`}>Pitstop</h1>
+     <h1 className={`text-2xl font-bold ${isCollapsedLayout ? "hidden" : "block"}`}>Pittstop</h1>
     </div>
 
     {/* Plan badge */}
@@ -254,7 +254,7 @@ export function DashboardSidebar({
    <header className="fixed top-0 left-0 right-0 z-40 flex h-14 items-center justify-between bg-card px-6 md:hidden">
     <div className={"flex items-center gap-1 justify-center"}>
      <AvocadoIcon weight="fill" className="size-6 text-primary" />
-     <h1 className={`text-2xl font-bold`}>Pitstop</h1>
+     <h1 className={`text-2xl font-bold`}>Pittstop</h1>
     </div>
     <button
      onClick={() => setMobileOpen(true)}
