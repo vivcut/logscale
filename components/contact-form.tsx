@@ -11,7 +11,7 @@ import {
  type ContactSubmitState,
 } from "@/app/dashboard/contact-page/actions";
 
-const initialState: ContactSubmitState = { ok: false };
+const initialState: any = { ok: false };
 
 /**
  * The public contact form. Shared by the standalone public page and the
@@ -23,12 +23,7 @@ export function ContactForm({
  placeholder,
  emailRequired,
  smsRequired,
-}: {
- workspaceId: string;
- placeholder: string;
- emailRequired: boolean;
- smsRequired: boolean;
-}) {
+}: any) {
  const [state, formAction, pending] = useActionState(
   submitContact,
   initialState

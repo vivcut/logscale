@@ -23,7 +23,7 @@ interface ContactData {
   };
 }
 
-export function ContactTabContent({ workspaceSlug }: ContactTabContentProps) {
+export function ContactTabContent({ workspaceSlug }: any) {
   const [contactData, setContactData] = useState<ContactData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
