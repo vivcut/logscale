@@ -373,7 +373,7 @@ export function ThemeToggle({ collapsed }: { collapsed: boolean }) {
    className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-muted-foreground  border-2 border-border dark:border-popover transition-colors hover:bg-popover hover:text-foreground"
   >
    <div className="flex items-center gap-3">
-    <Icon weight="bold" className="size-5 shrink-0" />
+    <Icon className="size-5 shrink-0" />
    </div>
    <span className="text-xs text-muted-foreground/70">
     {current.label}
