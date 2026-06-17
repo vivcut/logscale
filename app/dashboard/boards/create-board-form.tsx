@@ -51,7 +51,7 @@ export function CreateBoardForm() {
   }
 
   return (
-    <div className="w-full rounded-xl border-2 border-border-2 bg-card p-5">
+    <div className="w-full rounded-xl  border-2 border-border  bg-card p-5">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-sm font-semibold">Create a board</h3>
         <span className="font-mono text-xs text-muted-foreground">
@@ -112,7 +112,7 @@ export function CreateBoardForm() {
           />
         </div>
 
-        <label className="flex items-start gap-3 rounded-xl border-2 border-border-2 p-3">
+        <label className="flex items-start gap-3 rounded-xl  border-2 border-border  p-3">
           <input
             type="checkbox"
             name="is_private"

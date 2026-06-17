@@ -8,79 +8,79 @@ import { DashboardSidebar } from "./sidebar";
 import { PageTransition } from "./page-transition";
 
 export default async function DashboardLayout({
-  children,
+ children,
 }: {
-  children: React.ReactNode;
+ children: React.ReactNode;
 }) {
-  const supabase = await createClient();
+ const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+ const {
+  data: { user },
+ } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/login");
-  }
+ if (!user) {
+  redirect("/login");
+ }
 
-  await claimPendingInvites(user.id, user.email ?? "");
+ await claimPendingInvites(user.id, user.email ?? "");
 
-  const { data: memberships } = await supabase
-    .from("workspace_members")
-    .select("role, workspaces ( id, name, slug, logo_url )")
-    .eq("profile_id", user.id);
+ const { data: memberships } = await supabase
+  .from("workspace_members")
+  .select("role, workspaces ( id, name, slug, logo_url )")
+  .eq("profile_id", user.id);
 
-  type WorkspaceRow = {
-    id: string;
-    name: string;
-    slug: string;
-    logo_url: string | null;
-  };
+ type WorkspaceRow = {
+  id: string;
+  name: string;
+  slug: string;
+  logo_url: string | null;
+ };
 
-  const workspaces = (memberships ?? [])
-    .map((m) => {
-      const ws = m.workspaces as unknown as WorkspaceRow;
-      return ws ? { ...ws, shared: m.role !== "owner" } : null;
-    })
-    .filter(Boolean) as (WorkspaceRow & { shared: boolean })[];
+ const workspaces = (memberships ?? [])
+  .map((m) => {
+   const ws = m.workspaces as unknown as WorkspaceRow;
+   return ws ? { ...ws, shared: m.role !== "owner" } : null;
+  })
+  .filter(Boolean) as (WorkspaceRow & { shared: boolean })[];
 
-  if (workspaces.length === 0) {
-    redirect("/onboarding");
-  }
+ if (workspaces.length === 0) {
+  redirect("/onboarding");
+ }
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("name, email, avatar_url")
-    .eq("id", user.id)
-    .single();
+ const { data: profile } = await supabase
+  .from("profiles")
+  .select("name, email, avatar_url")
+  .eq("id", user.id)
+  .single();
 
-  const displayName = profile?.name ?? user.email ?? "Account";
-  const displayEmail = profile?.email ?? user.email ?? "";
+ const displayName = profile?.name ?? user.email ?? "Account";
+ const displayEmail = profile?.email ?? user.email ?? "";
 
-  const activeWorkspace = await getActiveWorkspace();
-  const subscription = activeWorkspace
-    ? await getWorkspaceSubscription(activeWorkspace.id)
-    : null;
-  const isStartup = hasStartupPlan(subscription);
+ const activeWorkspace = await getActiveWorkspace();
+ const subscription = activeWorkspace
+  ? await getWorkspaceSubscription(activeWorkspace.id)
+  : null;
+ const isStartup = hasStartupPlan(subscription);
 
-  return (
-    <div className="flex h-screen overflow-hidden">
-      {/* Sidebar handles both desktop layout and mobile modal tracking natively */}
-      <DashboardSidebar
-        workspaces={workspaces}
-        activeWorkspaceId={activeWorkspace?.id ?? null}
-        displayName={displayName}
-        displayEmail={displayEmail}
-        avatarUrl={profile?.avatar_url ?? null}
-        isStartup={isStartup}
-      />
+ return (
+  <div className="flex h-screen overflow-hidden">
+   {/* Sidebar handles both desktop layout and mobile modal tracking natively */}
+   <DashboardSidebar
+    workspaces={workspaces}
+    activeWorkspaceId={activeWorkspace?.id ?? null}
+    displayName={displayName}
+    displayEmail={displayEmail}
+    avatarUrl={profile?.avatar_url ?? null}
+    isStartup={isStartup}
+   />
 
-      {/* Main content */}
-      <div className="flex min-w-0 flex-1 flex-col">
-        <main className="flex-1 overflow-y-auto">
-          
-          <PageTransition>{children}</PageTransition>
-        </main>
-      </div>
-    </div>
-  );
+   {/* Main content */}
+   <div className="flex min-w-0 flex-1 flex-col">
+    <main className="flex-1 overflow-y-auto">
+     
+     <PageTransition>{children}</PageTransition>
+    </main>
+   </div>
+  </div>
+ );
 }

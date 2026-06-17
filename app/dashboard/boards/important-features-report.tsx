@@ -43,8 +43,8 @@ export function ImportantFeaturesReport() {
 
   if (loading) {
     return (
-      <div className="mb-8 overflow-hidden rounded-xl border-2 border-border-2 bg-card">
-        <div className="flex items-center gap-2 border-b-2 border-border-2 px-4 py-2.5">
+      <div className="mb-8 overflow-hidden rounded-xl  border-2 border-border  bg-card">
+        <div className="flex items-center gap-2 border-b-2  px-4 py-2.5">
           <Sparkles className="size-3.5 text-chart-1 animate-pulse" />
           <h2 className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
             loading top features...
@@ -61,9 +61,9 @@ export function ImportantFeaturesReport() {
   if (posts.length === 0) return null;
 
   return (
-    <div className="mb-8 overflow-hidden rounded-xl border-2 border-border-2 bg-card">
+    <div className="mb-8 overflow-hidden rounded-xl  border-2 border-border  bg-card">
       {/* Header Panel */}
-      <div className="flex items-center gap-2 border-b-2 border-border-2 p-4">
+      <div className="flex items-center gap-2 border-b-2  p-4">
         <Trophy weight="fill" className="size-6 text-primary" />
         <h2 className="text-md tracking-wider text-muted-foreground">
           Most important features
@@ -80,10 +80,10 @@ export function ImportantFeaturesReport() {
             <Link
               key={post.id}
               href={`/public/${workspaceSlug}/${post.boardSlug}/${post.id}`}
-              className="flex items-start gap-4 p-3 rounded-lg bg-secondary/30 border-2 border-border-2 hover:bg-secondary/60 hover:border-border-hover transition-all group"
+              className="flex items-start gap-4 p-3 rounded-lg bg-secondary/30  border-2 border-border  hover:bg-secondary/60 hover:border-border-hover transition-all group"
             >
               {/* Rank Counter Ring */}
-              <div className="shrink-0 flex items-center justify-center size-6 rounded-full bg-primary/10 text-primary border-2 border-primary/20 font-mono text-xs font-bold">
+              <div className="shrink-0 flex items-center justify-center size-6 rounded-full bg-primary/10 text-primary  border-2 border-border border-primary/20 font-mono text-xs font-bold">
                 {i + 1}
               </div>
 

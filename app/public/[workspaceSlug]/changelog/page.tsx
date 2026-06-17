@@ -3,20 +3,20 @@ import { redirect } from "next/navigation";
 type PageParams = { workspaceSlug: string };
 
 export async function generateMetadata({
-  params,
+ params,
 }: {
-  params: Promise<PageParams>;
+ params: Promise<PageParams>;
 }) {
-  const { workspaceSlug } = await params;
-  return { title: `${workspaceSlug} — Changelog` };
+ const { workspaceSlug } = await params;
+ return { title: `${workspaceSlug} — Changelog` };
 }
 
 export default async function PublicChangelogPage({
-  params,
+ params,
 }: {
-  params: Promise<PageParams>;
+ params: Promise<PageParams>;
 }) {
-  const { workspaceSlug } = await params;
-  // Redirect to unified dashboard with changelog tab selected
-  redirect(`/public/${workspaceSlug}?tab=changelog`);
+ const { workspaceSlug } = await params;
+ // Redirect to unified dashboard with changelog tab selected
+ redirect(`/public/${workspaceSlug}?tab=changelog`);
 }

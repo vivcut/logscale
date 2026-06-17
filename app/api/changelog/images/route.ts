@@ -4,8 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getActiveWorkspace } from "@/lib/workspace";
 import {
-  getWorkspaceSubscription,
-  hasStartupPlan,
+ getWorkspaceSubscription,
+ hasStartupPlan,
 } from "@/lib/subscription";
 
 
@@ -24,78 +24,78 @@ const MAX_BYTES = 5 * 1024 * 1024; // 5MB
 const ALLOWED = ["image/png", "image/jpeg", "image/webp", "image/gif"];
 
 export async function POST(request: NextRequest) {
-  // Auth: only members of an active workspace may upload.
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
-  }
-  const workspace = await getActiveWorkspace().catch(() => null);
-  if (!workspace) {
-    return NextResponse.json({ error: "No workspace." }, { status: 403 });
-  }
+ // Auth: only members of an active workspace may upload.
+ const supabase = await createClient();
+ const {
+  data: { user },
+ } = await supabase.auth.getUser();
+ if (!user) {
+  return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+ }
+ const workspace = await getActiveWorkspace().catch(() => null);
+ if (!workspace) {
+  return NextResponse.json({ error: "No workspace." }, { status: 403 });
+ }
 
-  // Image uploads in changelog entries are a Startup plan feature.
-  const subscription = await getWorkspaceSubscription(workspace.id);
-  if (!hasStartupPlan(subscription)) {
-    return NextResponse.json(
-      {
-        error:
-          "Image uploads are a Startup plan feature. Upgrade to embed images in changelog entries.",
-      },
-      { status: 403 }
-    );
-  }
+ // Image uploads in changelog entries are a Startup plan feature.
+ const subscription = await getWorkspaceSubscription(workspace.id);
+ if (!hasStartupPlan(subscription)) {
+  return NextResponse.json(
+   {
+    error:
+     "Image uploads are a Startup plan feature. Upgrade to embed images in changelog entries.",
+   },
+   { status: 403 }
+  );
+ }
 
 
-  let form: FormData;
-  try {
-    form = await request.formData();
-  } catch {
-    return NextResponse.json(
-      { error: "Expected multipart/form-data." },
-      { status: 400 }
-    );
-  }
+ let form: FormData;
+ try {
+  form = await request.formData();
+ } catch {
+  return NextResponse.json(
+   { error: "Expected multipart/form-data." },
+   { status: 400 }
+  );
+ }
 
-  const file = form.get("file");
-  if (!(file instanceof File) || file.size === 0) {
-    return NextResponse.json({ error: "No file provided." }, { status: 400 });
-  }
-  if (!ALLOWED.includes(file.type)) {
-    return NextResponse.json(
-      { error: "Only PNG, JPG, WEBP or GIF images are allowed." },
-      { status: 400 }
-    );
-  }
-  if (file.size > MAX_BYTES) {
-    return NextResponse.json(
-      { error: "Image must be under 5MB." },
-      { status: 400 }
-    );
-  }
+ const file = form.get("file");
+ if (!(file instanceof File) || file.size === 0) {
+  return NextResponse.json({ error: "No file provided." }, { status: 400 });
+ }
+ if (!ALLOWED.includes(file.type)) {
+  return NextResponse.json(
+   { error: "Only PNG, JPG, WEBP or GIF images are allowed." },
+   { status: 400 }
+  );
+ }
+ if (file.size > MAX_BYTES) {
+  return NextResponse.json(
+   { error: "Image must be under 5MB." },
+   { status: 400 }
+  );
+ }
 
-  const admin = createAdminClient();
-  await admin.storage.createBucket(BUCKET, { public: true }).catch(() => {});
+ const admin = createAdminClient();
+ await admin.storage.createBucket(BUCKET, { public: true }).catch(() => {});
 
-  const ext = file.name.split(".").pop()?.toLowerCase() || "png";
-  const path = `${workspace.id}/${Date.now()}-${Math.random()
-    .toString(36)
-    .slice(2, 8)}.${ext}`;
+ const ext = file.name.split(".").pop()?.toLowerCase() || "png";
+ const path = `${workspace.id}/${Date.now()}-${Math.random()
+  .toString(36)
+  .slice(2, 8)}.${ext}`;
 
-  const { error: uploadError } = await admin.storage
-    .from(BUCKET)
-    .upload(path, file, { contentType: file.type, upsert: false });
+ const { error: uploadError } = await admin.storage
+  .from(BUCKET)
+  .upload(path, file, { contentType: file.type, upsert: false });
 
-  if (uploadError) {
-    return NextResponse.json({ error: uploadError.message }, { status: 500 });
-  }
+ if (uploadError) {
+  return NextResponse.json({ error: uploadError.message }, { status: 500 });
+ }
 
-  const {
-    data: { publicUrl },
-  } = admin.storage.from(BUCKET).getPublicUrl(path);
+ const {
+  data: { publicUrl },
+ } = admin.storage.from(BUCKET).getPublicUrl(path);
 
-  return NextResponse.json({ url: publicUrl }, { status: 201 });
+ return NextResponse.json({ url: publicUrl }, { status: 201 });
 }

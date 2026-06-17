@@ -7,19 +7,19 @@
 -- to ON so existing workspaces keep their current behaviour.
 --
 -- (A `changelog_enabled` column already exists from flairs_and_changelog.sql;
---  this migration adds the remaining surfaces.)
+-- this migration adds the remaining surfaces.)
 --
 -- Run in the Supabase SQL Editor. Safe to re-run.
 -- =============================================================================
 
 alter table public.workspaces
-  add column if not exists boards_enabled boolean not null default true;
+ add column if not exists boards_enabled boolean not null default true;
 
 alter table public.workspaces
-  add column if not exists roadmap_enabled boolean not null default true;
+ add column if not exists roadmap_enabled boolean not null default true;
 
 alter table public.workspaces
-  add column if not exists surveys_enabled boolean not null default true;
+ add column if not exists surveys_enabled boolean not null default true;
 
 alter table public.workspaces
-  add column if not exists status_enabled boolean not null default true;
+ add column if not exists status_enabled boolean not null default true;

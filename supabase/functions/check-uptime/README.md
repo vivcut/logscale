@@ -54,17 +54,17 @@ create extension if not exists pg_cron;
 create extension if not exists pg_net;
 
 select cron.schedule(
-  'check-uptime-every-2-min',
-  '*/2 * * * *',
-  $$
-    select net.http_post(
-      url     := 'https://<PROJECT_REF>.supabase.co/functions/v1/check-uptime',
-      headers := jsonb_build_object(
-        'Content-Type', 'application/json',
-        'Authorization', 'Bearer ' || '<SERVICE_ROLE_KEY>'
-      )
-    );
-  $$
+ 'check-uptime-every-2-min',
+ '*/2 * * * *',
+ $$
+  select net.http_post(
+   url   := 'https://<PROJECT_REF>.supabase.co/functions/v1/check-uptime',
+   headers := jsonb_build_object(
+    'Content-Type', 'application/json',
+    'Authorization', 'Bearer ' || '<SERVICE_ROLE_KEY>'
+   )
+  );
+ $$
 );
 ```
 
@@ -81,7 +81,7 @@ select cron.unschedule('check-uptime-every-2-min');
 
 ```bash
 curl -X POST 'https://<PROJECT_REF>.supabase.co/functions/v1/check-uptime' \
-  -H "Authorization: Bearer <SERVICE_ROLE_KEY>"
+ -H "Authorization: Bearer <SERVICE_ROLE_KEY>"
 ```
 
 - Reload `/dashboard/status` — the **Status** and **Last checked** columns update.

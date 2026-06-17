@@ -14,28 +14,28 @@ const initialState: SurveyActionState = { ok: false };
  * server action redirects straight into the editor.
  */
 export function CreateSurveyForm() {
-  const [state, formAction, pending] = useActionState(
-    createSurvey,
-    initialState
-  );
+ const [state, formAction, pending] = useActionState(
+  createSurvey,
+  initialState
+ );
 
-  return (
-    <form action={formAction} className="flex flex-col gap-2 sm:flex-row">
-      <Input
-        name="title"
-        placeholder="New form title (e.g. Product feedback survey)"
-        required
-        className="sm:flex-1"
-      />
-      <Button type="submit" disabled={pending}>
-        {pending ? <Loader2 className="animate-spin" /> : <Plus />}
-        Create form
-      </Button>
-      {state.error ? (
-        <p className="font-mono text-xs text-destructive sm:self-center">
-          {state.error}
-        </p>
-      ) : null}
-    </form>
-  );
+ return (
+  <form action={formAction} className="flex flex-col gap-2 sm:flex-row">
+   <Input
+    name="title"
+    placeholder="New form title (e.g. Product feedback survey)"
+    required
+    className="sm:flex-1"
+   />
+   <Button type="submit" disabled={pending}>
+    {pending ? <Loader2 className="animate-spin" /> : <Plus />}
+    Create form
+   </Button>
+   {state.error ? (
+    <p className="font-mono text-xs text-destructive sm:self-center">
+     {state.error}
+    </p>
+   ) : null}
+  </form>
+ );
 }

@@ -93,9 +93,9 @@ export function ImplementSections({
         {sections.map((section) => (
           <div
             key={section.key}
-            className="overflow-hidden rounded-xl border-2 border-border-2 bg-card"
+            className="overflow-hidden rounded-xl  border-2 border-border  bg-card"
           >
-            <div className="flex items-center gap-2 border-b-2 border-border-2 px-4 py-2.5">
+            <div className="flex items-center gap-2 border-b-2  px-4 py-2.5">
               <span className={cn("size-1.5 rounded-full", section.dot)} />
               <h3 className="text-sm font-medium">{section.label}</h3>
               <span className="ml-auto font-mono text-[10px] text-muted-foreground">
@@ -114,7 +114,7 @@ export function ImplementSections({
                   return (
                     <li key={item.id} className="px-4 py-3">
                       <div className="flex items-start gap-2.5">
-                        <span className="flex w-9 shrink-0 flex-col items-center rounded-xl border-2 border-border-2 py-1 text-muted-foreground">
+                        <span className="flex w-9 shrink-0 flex-col items-center rounded-xl  border-2 border-border  py-1 text-muted-foreground">
                           <ArrowUp className="size-3" />
                           <span className="font-mono text-[11px] tabular-nums">
                             {item.upvotes_count}

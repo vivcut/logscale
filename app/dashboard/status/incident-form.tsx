@@ -75,7 +75,7 @@ export function IncidentForm({ siteId }: { siteId: string }) {
   return (
     <form
       action={formAction}
-      className="w-full rounded-xl border-2 border-border-2 bg-background/60 p-3"
+      className="w-full rounded-xl  border-2 border-border  bg-background/60 p-3"
     >
       <input type="hidden" name="site_id" value={siteId} />
       <input type="hidden" name="tag" value={tag} />
@@ -102,7 +102,7 @@ export function IncidentForm({ siteId }: { siteId: string }) {
             type="button"
             onClick={() => setTag(t.id)}
             className={cn(
-              "rounded-full border-2 px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wide transition-opacity",
+              "rounded-full  border-2 border-border px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wide transition-opacity",
               t.cls,
               tag === t.id ? "opacity-100 ring-1 ring-inset" : "opacity-50"
             )}

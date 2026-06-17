@@ -89,10 +89,10 @@ export function EditorsManager({
       ) : null}
 
       {/* Members + pending invites */}
-      <ul className="divide-y divide-border-2 overflow-hidden rounded-xl border-2 border-border">
+      <ul className="divide-y divide- border-2 border-border overflow-hidden rounded-xl  border-2 border-border border-border">
         {members.map((m) => (
           <li key={m.profile_id} className="flex items-center gap-3 p-3">
-            <div className="flex size-8 shrink-0 items-center justify-center rounded-full border-2 border-border-2 bg-secondary text-xs font-medium">
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-full  border-2 border-border  bg-secondary text-xs font-medium">
               {(m.name ?? m.email).charAt(0).toUpperCase()}
             </div>
             <div className="min-w-0 flex-1">
@@ -103,7 +103,7 @@ export function EditorsManager({
                 {m.email}
               </p>
             </div>
-            <span className="shrink-0 rounded border-2 border-border-2 px-1.5 py-0.5 font-mono text-[9px] text-muted-foreground">
+            <span className="shrink-0 rounded  border-2 border-border  px-1.5 py-0.5 font-mono text-[9px] text-muted-foreground">
               {m.role}
             </span>
             {canManage && m.role !== "owner" ? (
@@ -128,7 +128,7 @@ export function EditorsManager({
             key={inv.id}
             className="flex items-center gap-3 bg-secondary/20 p-3"
           >
-            <div className="flex size-8 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-border-2 text-muted-foreground">
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-full  border-2 border-border border-dashed  text-muted-foreground">
               <Plus className="size-3.5" />
             </div>
             <div className="min-w-0 flex-1">
@@ -136,7 +136,7 @@ export function EditorsManager({
                 {inv.email}
               </p>
             </div>
-            <span className="shrink-0 rounded border-2 border-border-2 px-1.5 py-0.5 font-mono text-[9px] text-muted-foreground">
+            <span className="shrink-0 rounded  border-2 border-border  px-1.5 py-0.5 font-mono text-[9px] text-muted-foreground">
               pending
             </span>
             {canManage ? (

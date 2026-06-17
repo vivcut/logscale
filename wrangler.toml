@@ -4,7 +4,7 @@
 # Worker was deployed WITHOUT the Workers AI binding, so `env.AI` was undefined.
 # This binding wires `env.AI` to the Workers AI runtime. Redeploy after adding:
 #
-#   wrangler deploy
+#  wrangler deploy
 #
 name = "summer-cherry-c965"
 main = "worker.js"

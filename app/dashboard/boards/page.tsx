@@ -51,7 +51,7 @@ export default async function BoardsPage() {
   if (!workspace) {
     return (
       <div className="mx-auto w-full max-w-5xl px-6 py-10">
-        <div className="rounded-xl border-2 border-dashed border-border-2 p-10 text-center">
+        <div className="rounded-xl  border-2 border-border border-dashed  p-10 text-center">
           <h1 className="text-sm font-medium">No active workspace</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Create a workspace to start managing feedback boards.
@@ -169,8 +169,8 @@ export default async function BoardsPage() {
 
       {list.length === 0 ? (
 
-        <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border-2 py-16 text-center">
-          <div className="flex size-10 items-center justify-center rounded-xl border-2 border-border-2 bg-secondary">
+        <div className="flex flex-col items-center justify-center rounded-xl  border-2 border-border border-dashed  py-16 text-center">
+          <div className="flex size-10 items-center justify-center rounded-xl  border-2 border-border  bg-secondary">
             <MessageSquare className="size-5 text-muted-foreground" />
           </div>
           <h2 className="mt-4 text-sm font-medium">No boards yet</h2>
@@ -222,7 +222,7 @@ export default async function BoardsPage() {
       className="group flex flex-col gap-3 rounded-xl bg-card p-5 transition-colors hover:bg-popover"
     >
       <div className="flex items-start justify-between gap-2">
-        {/* <div className="flex size-9 items-center justify-center rounded-xl border-2 border-border-2 bg-popover text-foreground"> */}
+        {/* <div className="flex size-9 items-center justify-center rounded-xl  border-2 border-border  bg-popover text-foreground"> */}
           <MessageSquare weight="fill" className="size-8" />
         {/* </div> */}
         {board.is_private ? (

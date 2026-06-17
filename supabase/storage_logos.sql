@@ -9,8 +9,8 @@ on conflict (id) do nothing;
 -- Anyone can read logos (they're shown on public feedback/changelog pages).
 drop policy if exists "Public read workspace logos" on storage.objects;
 create policy "Public read workspace logos"
-  on storage.objects for select
-  using (bucket_id = 'workspace-logos');
+ on storage.objects for select
+ using (bucket_id = 'workspace-logos');
 
 -- Writes happen through the service-role client (server action), which bypasses
 -- RLS, so no INSERT/UPDATE policy is required for the bucket.

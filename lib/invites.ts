@@ -9,34 +9,34 @@ import { createAdminClient } from "@/lib/supabase/admin";
  * otherwise hide the invite from them).
  */
 export async function claimPendingInvites(userId: string, email: string) {
-  if (!email) return;
-  const admin = createAdminClient();
-  const normalized = email.trim().toLowerCase();
+ if (!email) return;
+ const admin = createAdminClient();
+ const normalized = email.trim().toLowerCase();
 
-  const { data: invites } = await admin
-    .from("workspace_invites")
-    .select("id, workspace_id, role")
-    .ilike("email", normalized);
+ const { data: invites } = await admin
+  .from("workspace_invites")
+  .select("id, workspace_id, role")
+  .ilike("email", normalized);
 
-  if (!invites || invites.length === 0) return;
+ if (!invites || invites.length === 0) return;
 
-  for (const inv of invites) {
-    await admin.from("workspace_members").upsert(
-      {
-        workspace_id: inv.workspace_id,
-        profile_id: userId,
-        role: inv.role ?? "admin",
-      },
-      { onConflict: "workspace_id,profile_id" }
-    );
-  }
+ for (const inv of invites) {
+  await admin.from("workspace_members").upsert(
+   {
+    workspace_id: inv.workspace_id,
+    profile_id: userId,
+    role: inv.role ?? "admin",
+   },
+   { onConflict: "workspace_id,profile_id" }
+  );
+ }
 
-  // Remove the claimed invites.
-  await admin
-    .from("workspace_invites")
-    .delete()
-    .in(
-      "id",
-      invites.map((i) => i.id)
-    );
+ // Remove the claimed invites.
+ await admin
+  .from("workspace_invites")
+  .delete()
+  .in(
+   "id",
+   invites.map((i) => i.id)
+  );
 }

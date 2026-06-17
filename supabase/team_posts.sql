@@ -4,4 +4,4 @@
 -- mirroring the existing `comments.is_official` behaviour.
 
 alter table public.posts
-  add column if not exists is_official boolean default false not null;
+ add column if not exists is_official boolean default false not null;

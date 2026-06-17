@@ -10,10 +10,10 @@ import { usePathname } from "next/navigation";
  * the CSS fade-in (see .animate-fade-in in globals.css) replays each time.
  */
 export function PageTransition({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  return (
-    <div key={pathname} className="animate-fade-in duration-500">
-      {children}
-    </div>
-  );
+ const pathname = usePathname();
+ return (
+  <div key={pathname} className="animate-fade-in duration-500">
+   {children}
+  </div>
+ );
 }
