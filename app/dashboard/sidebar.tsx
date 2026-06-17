@@ -201,7 +201,7 @@ export function DashboardSidebar({
          : "text-muted-foreground hover:bg-popover hover:text-foreground"
        )}
       >
-       <item.icon weight="bold" className="size-5 shrink-0" />
+       <item.icon className="size-5 shrink-0" />
        {!isCollapsedLayout ? item.label : null}
       </Link>
      ))}
