@@ -163,8 +163,8 @@ export function DashboardSidebar({
        "flex items-center rounded-md !py-3 transition-colors",
        isCollapsedLayout ? "justify-center px-2 py-2" : "gap-2 px-3 py-2",
        isStartup
-        ? "bg-popover"
-        : " bg-zinc-800 text-white"
+        ? "bg-popover text-black"
+        : " bg-zinc-800 text-white!"
       )}
      >
       {isStartup ? (
@@ -174,8 +174,8 @@ export function DashboardSidebar({
       )}
       {!isCollapsedLayout ? (
        <span className="flex min-w-0 flex-1 items-center justify-between gap-2">
-        <span className="truncate !text-black">
-         {isStartup ? "Startup plan" : "Hobby plan"}
+        <span className="truncate">
+         {isStartup ? "Startup plan" : <span className="text-white">Hobby plan</span>}
         </span>
         {!isStartup ? (
          <span className="shrink-0 font-[700] text-[11px] uppercase tracking-wider text-primary">
