@@ -22,9 +22,9 @@ const FAQS = [
    "Under 2 minutes. Sign up, name your workspace, and your feedback board is live. You can share the public link immediately or embed it in your product with a single line of code.",
  },
  {
-  question: "Can my users submit feedback without creating an account?",
+  question: "How do users view my apps Pittstop page?",
   answer:
-   "Absolutely. Pittstop uses anonymous fingerprinted voting and commenting. Your users never hit a login wall — they can vote, comment, and submit feedback instantly.",
+   "You get your own personal website link which can be embed within your own app or website. Users can view completely anonymous and will need to log in to contribute.",
  },
  {
   question: "How is Pittstop different from Canny or UserVoice?",
@@ -34,7 +34,7 @@ const FAQS = [
  {
   question: "Can I embed Pittstop in my own product?",
   answer:
-   "Yes! Drop a single script tag into your app and Pittstop renders natively inside your product. You can embed boards, roadmaps, changelogs, surveys, or the full workspace. It themes to match your brand automatically.",
+   "Yes! Drop a single script tag into your app and Pittstop renders natively inside your product. You can embed the full workspace. It themes to match your brand automatically.",
  },
  {
   question: "Do you support custom domains?",
@@ -47,9 +47,9 @@ const FAQS = [
    "Yes — on the Startup plan you can invite unlimited team members as editors. They can manage boards, update post statuses, write changelog entries, and respond to feedback.",
  },
  {
-  question: "What happens if I exceed the free plan limits?",
+  question: "What happens if I exceed the free plan's total user limits?",
   answer:
-   "We'll let you know when you're approaching limits. Your existing data is never deleted — you just won't be able to create new boards or surveys until you upgrade or remove existing ones.",
+   "Your public page will be frozen until you upgrade to the next plan. ",
  },
 ];
 
@@ -62,7 +62,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
     onClick={() => setOpen(!open)}
     className="flex w-full items-center justify-between py-5 text-left transition-colors hover:text-primary"
    >
-    <span className="text-sm font-semibold pr-4 md:text-base">{question}</span>
+    <span className="text-sm pr-4 md:text-2xl">{question}</span>
     <svg
      className={cn(
       "size-5 shrink-0 text-muted-foreground transition-transform duration-200",
@@ -82,7 +82,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
      open ? "max-h-96 pb-5" : "max-h-0"
     )}
    >
-    <p className="text-sm leading-relaxed text-muted-foreground">{answer}</p>
+    <p className="text-lg leading-relaxed text-muted-foreground">{answer}</p>
    </div>
   </div>
  );
@@ -93,10 +93,10 @@ export function FAQ() {
   <section id="faq" className="relative mx-auto w-full max-w-3xl px-6 py-28">
    <Reveal className="mx-auto max-w-2xl text-center">
     <span className="font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground">
-     faq
+     useful answers
     </span>
     <h2 className="mt-3 text-balance text-3xl tracking-tight md:text-5xl">
-     <span className={serif.className}>Frequently asked questions</span>
+     <span>Frequently asked questions</span>
     </h2>
     <p className="mt-4 text-balance text-muted-foreground">
      Everything you need to know about Pittstop. Can&apos;t find what you&apos;re

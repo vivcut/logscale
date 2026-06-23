@@ -56,13 +56,31 @@ export function Hero() {
      },
     };
 
- return (
-  <section className="relative isolate min-h-screen w-full overflow-hidden flex flex-col items-center justify-start pb-24 pt-32 md:pt-40">
-   {/* Decorative subtle top glow */}
-   <div
-    aria-hidden
-    className="pointer-events-none absolute inset-0 -z-20 [background:radial-gradient(60%_50%_at_50%_0%,oklch(1_0_0/0.03)_0%,transparent_70%)]"
-   />
+  return (
+   <section className="relative isolate min-h-screen w-full overflow-hidden flex flex-col items-center justify-start pb-24 pt-32 md:pt-40">
+    {/* Decorative subtle top glow */}
+    <div
+     aria-hidden
+     className="pointer-events-none absolute inset-0 -z-20 [background:radial-gradient(60%_50%_at_50%_0%,oklch(1_0_0/0.03)_0%,transparent_70%)]"
+    />
+
+    {/* Hero background image — fades in from below, covers full screen */}
+    <motion.div
+     aria-hidden
+     initial={{ opacity: 0, y: 80 }}
+     animate={{ opacity: 1, y: 0 }}
+     transition={{ duration: 1.2, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+     className="pointer-events-none absolute inset-0 -z-10"
+    >
+     {/* eslint-disable-next-line @next/next/no-img-element */}
+     <img
+      src="/image3-2.png"
+      alt=""
+      className="h-full w-full object-cover object-top"
+     />
+     {/* Fade-out gradient at the top to blend with background */}
+     <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-background to-transparent" />
+    </motion.div>
 
    <div className="mx-auto mt-16 flex max-w-6xl flex-col items-center px-6 text-center w-full z-10">
     {/* Social proof badge */}
@@ -94,9 +112,9 @@ export function Hero() {
        return (
         <div
          key={item.id}
-         className="flex items-center justify-center gap-2.5 py-3 rounded-xl border-2 border-border bg-black/5 transition-colors hover:border-primary/30"
+         className="flex items-center justify-center gap-2.5 py-3 rounded-md border border-black/10 transition-colors hover:border-primary/30"
         >
-         <IconComponent size={24} className="shrink-0" weight="fill" />
+         <IconComponent size={24} className="shrink-0 text-black"  />
          <span className="text-lg font-medium tracking-tight text-black">
           {item.label}
          </span>
@@ -111,10 +129,10 @@ export function Hero() {
      {...fade(0.24)}
      className="mt-12 flex flex-col gap-3 sm:flex-row"
     >
-     <Button size="lg" asChild className="shadow-black/40 text-base px-8">
+     <Button size="lg" asChild className="shadow-black/40 text-base text-lg h-16 px-8">
       <Link href="/login">Start free — no credit card</Link>
      </Button>
-     <Button size="lg" variant="outline" asChild className="text-base px-8">
+     <Button size="lg" variant="secondary" asChild className="text-base text-lg h-16 px-8">
       <Link href="#demo">See live demo</Link>
      </Button>
     </motion.div>
@@ -127,12 +145,12 @@ export function Hero() {
      {STATS.map((s) => (
       <div
        key={s.label}
-       className="flex flex-col items-center gap-1 bg-black/5 backdrop-blur-md px-3 py-5 rounded-2xl border border-border"
+       className="flex flex-col items-center gap-1 backdrop-blur-md px-3 py-5 rounded-2xl"
       >
-       <span className="text-xl font-semibold tracking-tight text-black md:text-3xl">
+       <span className="text-xl tracking-tight md:text-3xl">
         {s.value}
        </span>
-       <span className="text-center font-semibold text-xs text-black/60">
+       <span className="text-center text-md text-black/60">
         {s.label}
        </span>
       </div>

@@ -52,7 +52,7 @@ export default async function BoardsPage() {
   if (!workspace) {
     return (
       <div className="mx-auto w-full max-w-5xl px-6 py-10">
-        <div className="rounded-xl  border-2 border-border border-dashed  p-10 text-center">
+        <div className="rounded-md  border border-border border-dashed  p-10 text-center">
           <h1 className="text-sm font-medium">No active workspace</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Create a workspace to start managing feedback boards.
@@ -170,8 +170,8 @@ export default async function BoardsPage() {
 
       {list.length === 0 ? (
 
-        <div className="flex flex-col items-center justify-center rounded-xl  border-2 border-border border-dashed  py-16 text-center">
-          <div className="flex size-10 items-center justify-center rounded-xl  border-2 border-border  bg-secondary">
+        <div className="flex flex-col items-center justify-center rounded-md  border border-border border-dashed  py-16 text-center">
+          <div className="flex size-10 items-center justify-center rounded-md  border border-border  bg-secondary">
             <MessageSquare className="size-5 text-muted-foreground" />
           </div>
           <h2 className="mt-4 text-sm font-medium">No boards yet</h2>
@@ -183,7 +183,7 @@ export default async function BoardsPage() {
       ) : (
         <>
           {/* ---- Post stats across all boards ---- */}
-          <div className="mb-8 grid grid-cols-2 gap-[2px] overflow-hidden rounded-xl bg-background lg:grid-cols-4">
+          <div className="mb-8 grid grid-cols-2 gap-[2px] overflow-hidden rounded-md bg-background lg:grid-cols-4">
             {stats.map((s) => (
               <div key={s.label} className="bg-card p-5">
                 <div className="flex items-center justify-between">
@@ -220,10 +220,10 @@ export default async function BoardsPage() {
   {list.map((board) => (
     <div
       key={board.id}
-      className="group flex flex-col gap-3 rounded-xl bg-card p-5 transition-colors hover:bg-popover"
+      className="group flex flex-col gap-3 rounded-md bg-card p-5 transition-colors hover:bg-popover"
     >
       <div className="flex items-start justify-between gap-2">
-        {/* <div className="flex size-9 items-center justify-center rounded-xl  border-2 border-border  bg-popover text-foreground"> */}
+        {/* <div className="flex size-9 items-center justify-center rounded-md  border border-border  bg-popover text-foreground"> */}
           <MessageSquare weight="fill" className="size-8" />
         {/* </div> */}
         {board.is_private ? (

@@ -15,7 +15,7 @@ export function CTA() {
  return (
   <section className="relative mx-auto w-full max-w-6xl px-6 pb-28">
    <Reveal>
-    <div className="relative overflow-hidden rounded-3xl  border-2 border-border bg-card px-6 py-20 text-center md:py-28">
+    <div className="relative overflow-hidden rounded-3xl  border border-border bg-card px-6 py-20 text-center md:py-28">
      {/* Glow */}
      <div
       aria-hidden
@@ -28,10 +28,10 @@ export function CTA() {
      />
 
      <div className="relative">
-      <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
-       ready for liftoff
+      <span className="font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground">
+       ready for liftoff?
       </span>
-      <h2 className="mx-auto mt-4 max-w-2xl text-balance text-3xl font-semibold tracking-tight md:text-5xl">
+      <h2 className="mx-auto mt-4 max-w-2xl text-balance text-3xl tracking-tight md:text-5xl">
        Put your users in the loop
       </h2>
       <p className="mx-auto mt-5 max-w-lg text-balance text-muted-foreground">
@@ -45,9 +45,9 @@ export function CTA() {
          <ArrowRight />
         </Link>
        </Button>
-       <Button size="lg" variant="outline" asChild>
+       {/* <Button size="lg" variant="outline" asChild>
         <Link href="/login">Sign in</Link>
-       </Button>
+       </Button> */}
       </div>
      </div>
     </div>

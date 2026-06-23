@@ -15,7 +15,7 @@ export default function RoadmapLoading() {
       {Array.from({ length: 3 }).map((_, i) => (
        <div
         key={i}
-        className="rounded-xl border-2 border-border bg-card p-4 space-y-2"
+        className="rounded-md border border-border bg-card p-4 space-y-2"
        >
         <Skeleton className="h-4 w-3/4" />
         <Skeleton className="h-3 w-full" />

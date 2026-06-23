@@ -56,11 +56,11 @@ export function Pricing() {
  return (
   <section id="pricing" className="relative mx-auto w-full max-w-6xl px-6 py-28">
    <Reveal className="mx-auto max-w-2xl text-center">
-    <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
+    <span className="font-mono font-bold text-xs uppercase tracking-wider text-muted-foreground">
      pricing
     </span>
-    <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight md:text-6xl">
-     <span className={serif.className}>
+    <h2 className="mt-3 text-balance text-3xl tracking-tight md:text-6xl">
+     <span>
       Free to start. Fair as you grow.
      </span>
      
@@ -72,7 +72,7 @@ export function Pricing() {
 
     {/* Billing Period Switcher */}
     <div className="mt-10 flex justify-center">
-     <div className="relative flex rounded-full  border-2 border-border bg-muted p-1">
+     <div className="relative flex rounded-full  border border-border bg-muted p-1">
       <button
        onClick={() => setBillingPeriod("monthly")}
        className={cn(
@@ -109,9 +109,9 @@ export function Pricing() {
        whileHover={{ y: -4 }}
        transition={{ type: "spring", stiffness: 300, damping: 22 }}
        className={cn(
-        "relative flex h-full flex-col rounded-2xl  border-2 border-border p-7",
+        "relative flex h-full flex-col rounded-2xl  border border-border p-7",
         plan.highlighted
-         ? "border-transparent bg-card [background:linear-gradient(var(--card),var(--card))_padding-box,linear-gradient(140deg,#8caa4a,transparent_60%)_border-box]"
+         ? "border-border bg-card "
          : " bg-card"
        )}
       >
@@ -121,21 +121,21 @@ export function Pricing() {
           aria-hidden
           className="pointer-events-none absolute inset-0 -z-10 rounded-2xl"
          />
-         <span className="absolute -top-3 left-7 rounded-full  border-2 border-border bg-foreground px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-background">
+         <span className="absolute -top-3 left-7 rounded-sm  border border-border bg-foreground px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-background">
           Most popular
          </span>
         </>
        ) : null}
 
-       <h3 className="text-lg font-semibold tracking-tight">
+       <h3 className="text-4xl tracking-tight">
         {plan.name}
        </h3>
-       <p className="mt-1 text-sm text-muted-foreground">
+       <p className="mt-5 text-sm text-muted-foreground">
         {plan.tagline}
        </p>
 
        <div className="mt-6 flex items-end gap-1.5">
-        <span className="text-4xl font-semibold tracking-tight">
+        <span className="text-5xl tracking-tight">
          {plan.price}
         </span>
         <span className="mb-1 font-mono text-xs text-muted-foreground transition-all">

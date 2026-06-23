@@ -40,7 +40,7 @@ export function PublicNavbar({
 
  return (
   <>
-  <header className="sticky top-0 z-40 border-b-2 border-border bg-background/80 backdrop-blur-xl">
+  <header className="sticky top-0 z-40 border-t border-border bg-background/80 backdrop-blur-xl">
    <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
     {/* Left: Logo + Name */}
     <Link
@@ -127,7 +127,7 @@ export function PublicNavbar({
 
   {/* Mobile bottom tab bar */}
   {navLinks.length > 0 && (
-   <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t-2 border-border bg-background/95 backdrop-blur-lg px-2 py-2.5 md:hidden">
+   <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-border bg-background/95 backdrop-blur-lg px-2 py-2.5 md:hidden">
     {navLinks.map((link) => {
      const isActive =
       link.label === "Feedback"
@@ -166,7 +166,7 @@ function SignInLink({ brandName }: { brandName?: string }) {
  return (
   <Link
    href={`/login?next=${encodeURIComponent(pathname)}${brandParam}`}
-   className="rounded-lg border-2 border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-secondary"
+   className="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-secondary"
   >
    Sign in / Sign up
   </Link>

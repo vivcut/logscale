@@ -58,7 +58,7 @@ export default async function OnboardingPage({
      </span>
     </div>
 
-    <div className="rounded-xl  border-2 border-border bg-card p-6 shadow-2xl shadow-black/40">
+    <div className="rounded-md  border border-border bg-card p-6 shadow-2xl shadow-black/40">
      <div className="mb-6 space-y-1.5">
       <p className="font-mono text-xs text-muted-foreground">
        /onboarding

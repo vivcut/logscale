@@ -52,7 +52,7 @@ export function OnboardingForm() {
     <Label htmlFor="slug" className="text-muted-foreground">
      Workspace URL
     </Label>
-    <div className="flex items-center gap-2 rounded-xl  border-2 border-border px-3 focus-within:border-ring">
+    <div className="flex items-center gap-2 rounded-md  border border-border px-3 focus-within:border-ring">
      <span className="font-mono text-xs text-muted-foreground">
       /public/
      </span>

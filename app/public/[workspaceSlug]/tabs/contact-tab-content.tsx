@@ -60,7 +60,7 @@ export function ContactTabContent({ workspaceSlug }: any) {
     <div className="mx-auto max-w-2xl">
       {/* Workspace identity header */}
       <div className="mb-8 flex items-center gap-3">
-        <div className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-xl  border-2 border-border  bg-secondary text-sm font-medium">
+        <div className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-md  border border-border  bg-secondary text-sm font-medium">
           {workspace.logo_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img

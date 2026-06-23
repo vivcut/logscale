@@ -19,7 +19,7 @@ export default async function ChangelogPage() {
  if (!workspace) {
   return (
    <div className="mx-auto w-full max-w-4xl px-6 py-10">
-    <div className="rounded-xl  border-2 border-border border-dashed p-10 text-center">
+    <div className="rounded-md  border border-border border-dashed p-10 text-center">
      <h1 className="text-sm font-medium">No active workspace</h1>
     </div>
    </div>
@@ -59,7 +59,7 @@ export default async function ChangelogPage() {
 
 
    {list.length === 0 ? (
-    <div className="flex flex-col items-center justify-center rounded-xl  border-2 border-border border-dashed py-16 text-center">
+    <div className="flex flex-col items-center justify-center rounded-md  border border-border border-dashed py-16 text-center">
      <Sparkles className="mb-3 size-5 text-muted-foreground" />
 
      <h3 className="text-sm font-medium">No releases yet</h3>
@@ -75,7 +75,7 @@ export default async function ChangelogPage() {
      </Link>
     </div>
    ) : (
-    <ul className="divide-y divide-border overflow-hidden rounded-xl border-2 border-border bg-card">
+    <ul className="divide-y divide-border overflow-hidden rounded-md border border-border bg-card">
      {list.map((entry) => {
       const published = !!entry.published_at;
       return (

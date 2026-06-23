@@ -116,9 +116,9 @@ export function Features() {
        href={`#${f.id}`}
        // whileHover={{ y: -4 }}
        // transition={{ type: "spring", stiffness: 300, damping: 22 }}
-       className="group flex h-full flex-col gap-3 !rounded-xl border-2 border-border bg-transparent p-6 transition-colors hover:bg-secondary"
+       className="group flex h-full flex-col gap-3 !rounded-md border border-border bg-transparent p-6 transition-colors hover:bg-secondary"
       >
-       {/* <div className="flex size-10 items-center bg-black/10 justify-center rounded-xl text-foreground transition-colors group-hover:border-foreground/30"> */}
+       {/* <div className="flex size-10 items-center bg-black/10 justify-center rounded-md text-foreground transition-colors group-hover:border-foreground/30"> */}
         <f.icon weight="fill" className="size-8 text-black" />
        {/* </div> */}
        <span className="font-mono text-xs text-muted-foreground">
@@ -157,7 +157,7 @@ function FeatureDetail({
    {/* Copy */}
    <Reveal className={cn(flipped && "md:order-2")}>
     <div className="flex items-center gap-2">
-     {/* <span className="flex size-8 items-center justify-center rounded-xl  border-2 border-border bg-secondary"> */}
+     {/* <span className="flex size-8 items-center justify-center rounded-md  border border-border bg-secondary"> */}
       <Icon weight="fill" className="size-10" />
      {/* </span> */}
      <br/>
@@ -175,7 +175,7 @@ function FeatureDetail({
     <ul className="mt-6 flex flex-col gap-3">
      {feature.points.map((p) => (
       <li key={p} className="flex items-start gap-3 text-sm">
-       {/* <span className="mt-1 flex size-4 shrink-0 items-center justify-center rounded-full  border-2 border-border text-[10px] text-muted-foreground"> */}
+       {/* <span className="mt-1 flex size-4 shrink-0 items-center justify-center rounded-full  border border-border text-[10px] text-muted-foreground"> */}
         <Check className="size-5" />
        {/* </span> */}
        <span className="text-muted-foreground">{p}</span>
@@ -188,7 +188,7 @@ function FeatureDetail({
    <Reveal
     delay={0.1}
     className={cn(
-     " border-2 border-border rounded-xl",
+     " border border-border rounded-md",
      flipped && "md:order-1"
     )}
    >
@@ -223,7 +223,7 @@ function FeatureVisual({ id }: { id: string }) {
       src={previewSrc}
       title="Widget preview"
       
-      className=" h-[600px] w-full pointer-events-none rounded-xl bg-background select-none disabled"
+      className=" h-[600px] w-full pointer-events-none rounded-md bg-background select-none disabled"
      />
     
    
@@ -245,7 +245,7 @@ function FeatureVisual({ id }: { id: string }) {
       src={previewSrc}
       title="Widget preview"
       
-      className=" h-[600px] w-full pointer-events-none rounded-xl bg-background select-none disabled"
+      className=" h-[600px] w-full pointer-events-none rounded-md bg-background select-none disabled"
      />
     
    
@@ -267,7 +267,7 @@ function FeatureVisual({ id }: { id: string }) {
       src={previewSrc}
       title="Widget preview"
       
-      className=" h-[600px] w-full pointer-events-none rounded-xl bg-background select-none disabled"
+      className=" h-[600px] w-full pointer-events-none rounded-md bg-background select-none disabled"
      />
     
    
@@ -289,7 +289,7 @@ function FeatureVisual({ id }: { id: string }) {
       src={previewSrc}
       title="Widget preview"
       
-      className=" h-[600px] w-full pointer-events-none rounded-xl bg-background select-none disabled"
+      className=" h-[600px] w-full pointer-events-none rounded-md bg-background select-none disabled"
      />
     
    
@@ -311,7 +311,7 @@ function FeatureVisual({ id }: { id: string }) {
       src={previewSrc}
       title="Widget preview"
       
-      className=" h-[600px] w-full pointer-events-none rounded-xl bg-background select-none disabled"
+      className=" h-[600px] w-full pointer-events-none rounded-md bg-background select-none disabled"
      />
     
    
@@ -333,7 +333,7 @@ function FeatureVisual({ id }: { id: string }) {
       src={previewSrc}
       title="Widget preview"
       
-      className=" h-[600px] w-full pointer-events-none rounded-xl bg-background select-none disabled"
+      className=" h-[600px] w-full pointer-events-none rounded-md bg-background select-none disabled"
      />
     
    
@@ -345,15 +345,15 @@ function FeatureVisual({ id }: { id: string }) {
  return (
   <div className="relative grid h-full place-items-center p-5">
    {glow}
-   <div className="w-full max-w-xs rounded-xl  border-2 border-border bg-background/70 shadow-xl">
-    <div className="flex items-center gap-2 border-b-2 px-3 py-2">
+   <div className="w-full max-w-xs rounded-md  border border-border bg-background/70 shadow-xl">
+    <div className="flex items-center gap-2 border-t px-3 py-2">
      <Users className="size-3.5" />
      <span className="text-xs font-medium">Embedded page</span>
     </div>
     <div className="space-y-2 p-3">
-     <div className="h-8 rounded-xl  border-2 border-border bg-secondary/50" />
-     <div className="h-16 rounded-xl  border-2 border-border bg-secondary/50" />
-     <div className="flex h-8 items-center justify-center rounded-xl bg-foreground text-xs font-medium text-background">
+     <div className="h-8 rounded-md  border border-border bg-secondary/50" />
+     <div className="h-16 rounded-md  border border-border bg-secondary/50" />
+     <div className="flex h-8 items-center justify-center rounded-md bg-foreground text-xs font-medium text-background">
       Submit
      </div>
     </div>

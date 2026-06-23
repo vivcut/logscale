@@ -211,7 +211,7 @@ export function PostForm({
  }
 
  return (
-  <div className="rounded-xl border-2 border-border bg-card p-5">
+  <div className="rounded-md border border-border bg-card p-5">
    <div className="mb-4 flex items-center justify-between gap-2">
     <div className="flex items-center gap-2">
      <MessageSquareQuote className="size-6 text-muted-foreground" />
@@ -222,7 +222,7 @@ export function PostForm({
       type="button"
       onClick={onClose}
       aria-label="Close"
-      className="flex size-7 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+      className="flex size-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
      >
       <X className="size-4" />
      </button>
@@ -243,8 +243,8 @@ export function PostForm({
      />
 
      {title.trim().length >= 3 ? (
-      <div className="rounded-xl border-2 border-border bg-background/60">
-       <div className="flex items-center gap-2 border-b-2 px-3 py-2">
+      <div className="rounded-md border border-border bg-background/60">
+       <div className="flex items-center gap-2 border-t px-3 py-2">
         {searching ? (
          <Loader2 className="size-3 animate-spin text-muted-foreground" />
         ) : (
@@ -297,7 +297,7 @@ export function PostForm({
          "rounded-full px-2.5 py-1 font-mono text-[10px] lowercase transition-all",
          flair === f
           ? flairBadgeClass(f)
-          : "ring-1 ring-inset ring- border-2 border-border bg-popover text-muted-foreground hover:text-foreground"
+          : "ring-1 ring-inset ring- border border-border bg-popover text-muted-foreground hover:text-foreground"
         )}
        >
         {f}
@@ -333,7 +333,7 @@ export function PostForm({
         return (
          <li
           key={`${file.name}-${idx}`}
-          className="flex items-center gap-2 rounded-xl border-2 border-border bg-background/60 px-2.5 py-1.5"
+          className="flex items-center gap-2 rounded-md border border-border bg-background/60 px-2.5 py-1.5"
          >
           {isImage ? (
            <ImageIcon className="size-3.5 shrink-0 text-muted-foreground" />
@@ -372,7 +372,7 @@ export function PostForm({
       <button
        type="button"
        onClick={() => fileInputRef.current?.click()}
-       className="inline-flex items-center justify-center gap-1.5 rounded-xl border-2 border-border bg-popover border-dashed px-3 py-2 font-mono text-[11px] text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
+       className="inline-flex items-center justify-center gap-1.5 rounded-md border border-border bg-popover border-dashed px-3 py-2 font-mono text-[11px] text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
       >
        <Paperclip className="size-3.5" />
        attach image or PDF

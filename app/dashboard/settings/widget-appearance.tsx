@@ -61,7 +61,7 @@ export function WidgetAppearance({
        disabled={!canManage || pending !== null}
        title={o.hint}
        className={cn(
-        "flex flex-col items-center gap-1.5 rounded-xl  border-2 border-border p-3 text-xs transition-colors",
+        "flex flex-col items-center gap-1.5 rounded-md  border border-border p-3 text-xs transition-colors",
         active
          ? "border-ring bg-secondary text-foreground"
          : " text-muted-foreground hover:bg-secondary/50 hover:text-foreground",

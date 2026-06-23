@@ -39,7 +39,7 @@ export function FrozenOverlay({ workspaceName }: { workspaceName: string }) {
      {/* Owner action */}
      <button
       onClick={() => setShowPopup(true)}
-      className="mt-4 flex items-center gap-2 rounded-xl border-2 border-border bg-card px-5 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+      className="mt-4 flex items-center gap-2 rounded-md border border-border bg-card px-5 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
      >
       <Info className="size-4" />
       <span>I own this workspace</span>
@@ -56,7 +56,7 @@ export function FrozenOverlay({ workspaceName }: { workspaceName: string }) {
       onClick={() => setShowPopup(false)}
      />
      {/* Dialog */}
-     <div className="relative z-10 w-full max-w-md rounded-2xl border-2 border-border bg-card p-6 shadow-xl">
+     <div className="relative z-10 w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-xl">
       <button
        onClick={() => setShowPopup(false)}
        className="absolute right-4 top-4 flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
@@ -67,7 +67,7 @@ export function FrozenOverlay({ workspaceName }: { workspaceName: string }) {
 
       <div className="flex flex-col gap-4">
        <div className="flex items-center gap-3">
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/10">
+        <div className="flex size-10 shrink-0 items-center justify-center rounded-md bg-amber-500/10">
          <Info className="size-5 text-amber-500" />
         </div>
         <h2 className="text-lg font-semibold text-foreground">
@@ -83,7 +83,7 @@ export function FrozenOverlay({ workspaceName }: { workspaceName: string }) {
 
        <a
         href="/subscriptions/plan"
-        className="mt-2 flex w-full items-center justify-center rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+        className="mt-2 flex w-full items-center justify-center rounded-md bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
        >
         Upgrade Plan
        </a>

@@ -149,7 +149,7 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
      />
 
      {/* CTA: Back to site */}
-     <div className="mt-16 rounded-xl border-2 border-border bg-card p-8 text-center">
+     <div className="mt-16 rounded-md border border-border bg-card p-8 text-center">
       <h3 className="text-xl font-semibold tracking-tight">
        Ready to collect feedback and ship faster?
       </h3>

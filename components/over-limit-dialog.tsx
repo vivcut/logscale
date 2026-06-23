@@ -34,7 +34,7 @@ export function OverLimitDialog({
 
  return (
   <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-   <div className="relative mx-4 w-full max-w-md rounded-2xl border-2 border-red-500/30 bg-card p-6 shadow-2xl animate-in zoom-in-95 duration-200">
+   <div className="relative mx-4 w-full max-w-md rounded-2xl border border-red-500/30 bg-card p-6 shadow-2xl animate-in zoom-in-95 duration-200">
     <button
      onClick={dismiss}
      className="absolute right-3 top-3 rounded-lg p-1 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
@@ -65,13 +65,13 @@ export function OverLimitDialog({
     <div className="flex items-center gap-3">
      <a
       href="/subscriptions/plan"
-      className="flex-1 rounded-xl bg-primary px-4 py-2.5 text-center text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+      className="flex-1 rounded-md bg-primary px-4 py-2.5 text-center text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
      >
       Upgrade Now
      </a>
      <button
       onClick={dismiss}
-      className="flex-1 rounded-xl border-2 border-border px-4 py-2.5 text-center text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+      className="flex-1 rounded-md border border-border px-4 py-2.5 text-center text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
      >
       Dismiss
      </button>

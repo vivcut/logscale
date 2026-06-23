@@ -27,7 +27,7 @@ export default async function PlanPage({
  if (!workspace) {
   return (
    <div className="mx-auto w-full max-w-3xl px-6 py-10">
-    <div className="rounded-xl  border-2 border-border border-dashed p-10 text-center">
+    <div className="rounded-md  border border-border border-dashed p-10 text-center">
      <h1 className="text-sm font-medium">No active workspace</h1>
     </div>
    </div>
@@ -63,18 +63,18 @@ export default async function PlanPage({
 
    {/* Stripe return banners */}
    {success ? (
-    <div className="mb-6 rounded-xl  border-2 border-border border-primary/30 bg-primary/5 px-4 py-3 text-sm text-foreground">
+    <div className="mb-6 rounded-md  border border-border border-primary/30 bg-primary/5 px-4 py-3 text-sm text-foreground">
      Payment received — your Startup plan is now active.
     </div>
    ) : null}
    {canceled ? (
-    <div className="mb-6 rounded-xl  border-2 border-border bg-red-400/20 px-4 py-3 text-sm text-red-400 font-semibold">
+    <div className="mb-6 rounded-md  border border-border bg-red-400/20 px-4 py-3 text-sm text-red-400 font-semibold">
      Checkout canceled. You haven&apos;t been charged.
     </div>
    ) : null}
 
    {hasPlan ? (
-    <div className="flex items-center gap-4 rounded-xl  border-2 border-border border-primary/40 bg-primary/5 p-6">
+    <div className="flex items-center gap-4 rounded-md  border border-border border-primary/40 bg-primary/5 p-6">
      <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
       <BadgeCheck className="size-6" />
      </div>

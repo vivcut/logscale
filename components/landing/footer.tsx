@@ -39,15 +39,15 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
  */
 export function Footer() {
  return (
-  <footer className="relative  border-t-2 border-border bg-background">
+  <footer className="relative bg-black">
    <div className="mx-auto max-w-6xl px-6 py-16">
     <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
      {/* Brand */}
      <div className="flex flex-col gap-4">
       <Link href="/" className="flex items-center gap-2">
-       <div className={"flex items-center gap-1 w-full px-3 justify-center"}>
-     <FlagBanner weight="fill" className="size-6 text-primary" />
-     <h1 className={`text-2xl font-bold `}>Pittstop</h1>
+       <div className={"flex items-center gap-1.5 w-full px-3 justify-center"}>
+     <FlagBanner weight="fill" className="size-9 text-primary" />
+     <h1 className={`text-4xl text-white `}>Pittstop</h1>
     </div>
       </Link>
       <p className="max-w-xs text-sm text-muted-foreground">
@@ -77,9 +77,9 @@ export function Footer() {
      ))}
     </div>
 
-    <div className="mt-14 flex flex-col items-center justify-between gap-3  border-t-2 border-border pt-8 text-xs text-muted-foreground md:flex-row">
+    <div className="mt-14 flex flex-col items-center justify-between gap-3  border-t border-zinc-800 pt-8 text-xs text-muted-foreground md:flex-row">
      <span className="font-mono">© 2026 Pittstop. All rights reserved.</span>
-     <span className="font-mono">built with next.js · supabase · shadcn/ui</span>
+     <span className="font-mono">support@pittstop.space</span>
     </div>
    </div>
   </footer>

@@ -138,7 +138,7 @@ export function BoardsFilterView({
   return (
     <div className="space-y-6">
       {/* Filter bar */}
-      <div className="space-y-4 rounded-xl border-2 border-border bg-card p-4">
+      <div className="space-y-4 rounded-md border border-border bg-card p-4">
         {/* Search + Sort row */}
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
@@ -247,14 +247,14 @@ export function BoardsFilterView({
           Loading posts...
         </div>
       ) : posts.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border py-16 text-center">
+        <div className="flex flex-col items-center justify-center rounded-md border border-dashed border-border py-16 text-center">
           <h3 className="text-sm font-medium">No posts found</h3>
           <p className="mt-1 text-sm text-muted-foreground">
             Try adjusting your filters.
           </p>
         </div>
       ) : (
-        <div className="space-y-0 divide-y divide-border overflow-hidden rounded-xl border-2 border-border">
+        <div className="space-y-0 divide-y divide-border overflow-hidden rounded-md border border-border">
           {posts.map((post) => {
             const board = Array.isArray(post.boards) ? post.boards[0] : post.boards;
             const postBoardSlug = boardSlug ?? board?.slug ?? "";

@@ -43,7 +43,7 @@ export default function BlogsPage() {
        <Link
         key={post.slug}
         href={`/blog/${post.slug}`}
-        className="group block rounded-xl border-2 border-border p-6 transition-all hover:border-primary/30 hover:shadow-lg"
+        className="group block rounded-md border border-border p-6 transition-all hover:border-primary/30 hover:shadow-lg"
        >
         <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
          <time dateTime={post.date}>

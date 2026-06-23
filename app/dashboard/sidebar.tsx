@@ -153,7 +153,7 @@ export function DashboardSidebar({
       href="/subscriptions/plan"
       title={isStartup ? "Startup plan" : "Hobby plan — upgrade"}
       className={cn(
-       "flex items-center rounded-xl !py-3  border-2 border-border text-sm font-semibold transition-colors",
+       "flex items-center rounded-xl !py-3  border border-border text-sm font-semibold transition-colors",
        isCollapsedLayout ? "justify-center px-2 py-2" : "gap-2 px-3 py-2",
        isStartup
         ? "bg-popover"
@@ -208,7 +208,7 @@ export function DashboardSidebar({
 
 
     {/* Account */}
-    <div className={cn(" border-t-2 border-border p-3", isCollapsedLayout && "px-2")}>
+    <div className={cn(" border-t border-border p-3", isCollapsedLayout && "px-2")}>
      <Link
       href="/dashboard/profile"
       title={isCollapsedLayout ? displayName : "Edit your profile"}
@@ -254,7 +254,7 @@ export function DashboardSidebar({
     <button
      onClick={() => setMobileOpen(true)}
      aria-label="Open menu"
-     className="flex size-11 items-center justify-center rounded-xl  border-2 border-border text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+     className="flex size-11 items-center justify-center rounded-xl  border border-border text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
     >
      <Menu weight="bold" className="size-7" />
     </button>

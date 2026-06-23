@@ -53,9 +53,9 @@ export function RoadmapBoard({
    {COLUMNS.map((col) => (
     <div
      key={col.key}
-     className="flex flex-col rounded-xl  border-2 border-border bg-card/40"
+     className="flex flex-col rounded-md  border border-border bg-card/40"
     >
-     <div className="flex items-center justify-between border-b-2 px-4 py-3">
+     <div className="flex items-center justify-between border-t px-4 py-3">
       <div className="flex items-center gap-2">
        <span className={cn("size-2 rounded-full", col.accent)} />
        <span className="text-sm font-medium">{col.label}</span>
@@ -78,7 +78,7 @@ export function RoadmapBoard({
          <Link
           key={post.id}
           href={`/public/${workspaceSlug}/${boardSlug}/${post.id}`}
-          className="block rounded-xl  border-2 border-border bg-card p-3 transition-all hover:bg-popover cursor-pointer text-card-foreground no-underline"
+          className="block rounded-md  border border-border bg-card p-3 transition-all hover:bg-popover cursor-pointer text-card-foreground no-underline"
          >
           <div className="flex items-start justify-between gap-2">
            <h3 className="text-sm font-medium leading-snug">

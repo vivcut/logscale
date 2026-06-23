@@ -56,16 +56,16 @@ export function EmbedSnippet({
  return (
   <div className="space-y-4">
    {/* Theme Selection Controller */}
-   <div className="flex items-center gap-3 rounded-xl  border-2 border-border bg-card px-4 py-3">
+   <div className="flex items-center gap-3 rounded-md  border border-border bg-card px-4 py-3">
     <span className="text-xs font-medium text-muted-foreground">Widget Theme:</span>
-    <div className="flex items-center gap-1 rounded-xl bg-background/60 p-0.5  border-2 border-border border-border/60">
+    <div className="flex items-center gap-1 rounded-md bg-background/60 p-0.5  border border-border border-border/60">
      {(["auto", "dark", "light"] as ThemeType[]).map((t) => (
       <button
        key={t}
        type="button"
        onClick={() => setTheme(t)}
        className={cn(
-        "rounded-xl px-3 py-1 text-xs font-medium capitalize transition-all",
+        "rounded-md px-3 py-1 text-xs font-medium capitalize transition-all",
         theme === t
          ? "bg-muted text-foreground shadow-sm"
          : "text-muted-foreground hover:text-foreground"
@@ -78,15 +78,15 @@ export function EmbedSnippet({
    </div>
 
    {/* Code Snippet Container */}
-   <div className="rounded-xl  border-2 border-border bg-card">
-    <div className="flex items-center justify-between border-b-2 px-4 py-2.5">
+   <div className="rounded-md  border border-border bg-card">
+    <div className="flex items-center justify-between border-t px-4 py-2.5">
      {/* Format Toggle Segment */}
-     <div className="flex items-center gap-1 rounded-xl bg-background/60 p-0.5  border-2 border-border border-border/60">
+     <div className="flex items-center gap-1 rounded-md bg-background/60 p-0.5  border border-border border-border/60">
       <button
        type="button"
        onClick={() => setEmbedType("script")}
        className={cn(
-        "rounded-xl px-2.5 py-1 text-xs font-medium transition-all",
+        "rounded-md px-2.5 py-1 text-xs font-medium transition-all",
         embedType === "script"
          ? "bg-muted text-foreground shadow-sm"
          : "text-muted-foreground hover:text-foreground"
@@ -98,7 +98,7 @@ export function EmbedSnippet({
        type="button"
        onClick={() => setEmbedType("iframe")}
        className={cn(
-        "rounded-xl px-2.5 py-1 text-xs font-medium transition-all",
+        "rounded-md px-2.5 py-1 text-xs font-medium transition-all",
         embedType === "iframe"
          ? "bg-muted text-foreground shadow-sm"
          : "text-muted-foreground hover:text-foreground"
@@ -121,8 +121,8 @@ export function EmbedSnippet({
    </div>
 
    {/* Live preview */}
-   <div className="rounded-xl  border-2 border-border bg-card">
-    <div className="flex items-center justify-between border-b-2 px-4 py-3">
+   <div className="rounded-md  border border-border bg-card">
+    <div className="flex items-center justify-between border-t px-4 py-3">
      <span className="font-mono text-xs text-muted-foreground">
       live preview · dashboard ({theme})
      </span>
@@ -140,7 +140,7 @@ export function EmbedSnippet({
      <iframe
       src={previewUrl}
       title="Widget preview"
-      className="h-[520px] w-full max-w-[380px] rounded-xl  border-2 border-border bg-background"
+      className="h-[520px] w-full max-w-[380px] rounded-md  border border-border bg-background"
      />
     </div>
    </div>

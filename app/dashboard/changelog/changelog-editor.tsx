@@ -155,7 +155,7 @@ export function ChangelogEditor({
 
      <div className="flex items-center gap-2">
       {/* Write / Preview toggle */}
-      <div className="flex items-center gap-1 rounded-xl  border-2 border-border p-0.5">
+      <div className="flex items-center gap-1 rounded-md  border border-border p-0.5">
        <button
         type="button"
         onClick={() => setMode("write")}
@@ -245,11 +245,11 @@ export function ChangelogEditor({
        "## ✨ New\n\n- Describe what shipped…\n\n## 🐛 Fixes\n\n- …"
       }
       rows={18}
-      className="w-full resize-y rounded-xl  border-2 border-border bg-card px-3.5 py-3 font-mono text-sm leading-relaxed outline-none transition-colors placeholder:text-muted-foreground focus:border-ring"
+      className="w-full resize-y rounded-md  border border-border bg-card px-3.5 py-3 font-mono text-sm leading-relaxed outline-none transition-colors placeholder:text-muted-foreground focus:border-ring"
       required
      />
     ) : (
-     <div className="min-h-[28rem] rounded-xl  border-2 border-border bg-card px-5 py-4">
+     <div className="min-h-[28rem] rounded-md  border border-border bg-card px-5 py-4">
       {content.trim() ? (
        <article
         className="prose-changelog"
@@ -269,7 +269,7 @@ export function ChangelogEditor({
    ) : null}
 
    {/* Actions */}
-   <div className="flex items-center justify-end gap-2  border-t-2 border-border pt-4">
+   <div className="flex items-center justify-end gap-2  border-t border-border pt-4">
     <Button
      type="submit"
      variant="outline"

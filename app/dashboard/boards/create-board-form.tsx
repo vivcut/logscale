@@ -117,7 +117,7 @@ export function CreateBoardForm() {
               />
             </div>
 
-            <label className="flex items-start gap-3 rounded-xl border-2 border-border p-3">
+            <label className="flex items-start gap-3 rounded-md border border-border p-3">
               <input
                 type="checkbox"
                 name="is_private"

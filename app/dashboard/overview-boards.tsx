@@ -108,7 +108,7 @@ export function OverviewBoards({
 
     <div className="flex items-center gap-2">
      {/* Total-posts pill scoped to the active timeframe */}
-     <span className="inline-flex items-center gap-1.5 rounded-xl  border-2 border-border bg-secondary/40 px-2.5 py-1 font-mono text-[11px] tabular-nums text-muted-foreground">
+     <span className="inline-flex items-center gap-1.5 rounded-md  border border-border bg-secondary/40 px-2.5 py-1 font-mono text-[11px] tabular-nums text-muted-foreground">
       <Inbox className="size-3" />
       {scoped.length} {scoped.length === 1 ? "post" : "posts"}
      </span>
@@ -120,7 +120,7 @@ export function OverviewBoards({
      <div className="relative">
       <button
        onClick={() => setMenuOpen((o) => !o)}
-       className="flex items-center gap-1.5 rounded-xl  border-2 border-border bg-secondary/40 px-2.5 py-1 text-xs transition-colors hover:bg-secondary"
+       className="flex items-center gap-1.5 rounded-md  border border-border bg-secondary/40 px-2.5 py-1 text-xs transition-colors hover:bg-secondary"
       >
        <MessageSquare className="size-3 text-muted-foreground" />
        {activeBoard ? activeBoard.name : "All boards"}
@@ -132,7 +132,7 @@ export function OverviewBoards({
          className="fixed inset-0 z-10"
          onClick={() => setMenuOpen(false)}
         />
-        <div className="absolute right-0 top-full z-20 mt-1 w-48 overflow-hidden rounded-xl  border-2 border-border bg-popover p-1 shadow-xl">
+        <div className="absolute right-0 top-full z-20 mt-1 w-48 overflow-hidden rounded-md  border border-border bg-popover p-1 shadow-xl">
          <button
           onClick={() => {
            setActiveId("all");
@@ -168,11 +168,11 @@ export function OverviewBoards({
    </div>
 
    {visible.length === 0 ? (
-    <div className="rounded-xl  border-2 border-border border-dashed px-4 py-10 text-center font-mono text-xs text-muted-foreground">
+    <div className="rounded-md  border border-border border-dashed px-4 py-10 text-center font-mono text-xs text-muted-foreground">
      no feedback in this range
     </div>
    ) : (
-    <ul className="divide-y divide-border overflow-hidden rounded-xl border-2 border-border bg-card">
+    <ul className="divide-y divide-border overflow-hidden rounded-md border border-border bg-card">
      {visible.map((p) => {
       const board = boardById[p.board_id];
       const href = board
@@ -184,7 +184,7 @@ export function OverviewBoards({
         className="group flex gap-4 bg-card p-4 transition-colors hover:bg-secondary/30"
        >
         {/* votes */}
-        <div className="flex h-fit w-12 shrink-0 flex-col items-center gap-0.5 rounded-xl  border-2 border-border py-2 text-muted-foreground">
+        <div className="flex h-fit w-12 shrink-0 flex-col items-center gap-0.5 rounded-md  border border-border py-2 text-muted-foreground">
          <ArrowUp className="size-4" />
          <span className="font-mono text-xs font-medium tabular-nums">
           {p.upvotes_count}
@@ -263,7 +263,7 @@ function TimeframeSelect({
    <button
     type="button"
     onClick={() => setOpen((o) => !o)}
-    className="flex items-center gap-1.5 rounded-xl  border-2 border-border bg-secondary/40 px-2.5 py-1 font-mono text-[11px] transition-colors hover:bg-secondary"
+    className="flex items-center gap-1.5 rounded-md  border border-border bg-secondary/40 px-2.5 py-1 font-mono text-[11px] transition-colors hover:bg-secondary"
    >
     {current.label}
     <ChevronDown className="size-3 text-muted-foreground" />
@@ -271,7 +271,7 @@ function TimeframeSelect({
    {open ? (
     <>
      <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-     <div className="absolute right-0 top-full z-20 mt-1 w-36 overflow-hidden rounded-xl  border-2 border-border bg-popover p-1 shadow-xl">
+     <div className="absolute right-0 top-full z-20 mt-1 w-36 overflow-hidden rounded-md  border border-border bg-popover p-1 shadow-xl">
       {TIMEFRAMES.map((t) => (
        <button
         key={t.key}

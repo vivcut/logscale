@@ -50,7 +50,7 @@ export function StatusTabContent({ workspaceId }: StatusTabContentProps) {
     <div>
       {/* Overall status banner */}
       <div
-        className={`mb-6 flex items-center gap-3 rounded-xl  border-2 border-border px-4 py-3.5 ${
+        className={`mb-6 flex items-center gap-3 rounded-md  border border-border px-4 py-3.5 ${
           anyDown
             ? "border-red-500/30 bg-red-500/10"
             : allUp

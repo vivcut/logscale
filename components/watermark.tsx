@@ -28,7 +28,7 @@ export async function Watermark({
     href="https://pittstop.space"
     target="_blank"
     rel="noreferrer"
-    className="items-center gap-3 flex rounded-full  border-2 border-border bg-card px-3 py-2.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+    className="items-center gap-3 flex rounded-full  border border-border bg-card px-3 py-2.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
    >
     {/* <span className="font-semibold text-lg w-40 !text-muted-foreground">Powered by{" "}</span>
      

@@ -11,7 +11,7 @@ export default function PostDetailLoading() {
     <div>
      <div className="flex gap-4">
       {/* Upvote skeleton */}
-      <Skeleton className="h-16 w-14 shrink-0 rounded-xl" />
+      <Skeleton className="h-16 w-14 shrink-0 rounded-md" />
 
       <div className="min-w-0 flex-1 space-y-3">
        {/* Status + meta */}
@@ -42,7 +42,7 @@ export default function PostDetailLoading() {
       {Array.from({ length: 3 }).map((_, i) => (
        <div
         key={i}
-        className="rounded-xl border-2 border-border bg-card px-3.5 py-2.5 space-y-2"
+        className="rounded-md border border-border bg-card px-3.5 py-2.5 space-y-2"
        >
         <div className="flex items-center gap-2">
          <Skeleton className="size-5 rounded-full" />
@@ -59,7 +59,7 @@ export default function PostDetailLoading() {
        {Array.from({ length: 2 }).map((_, i) => (
         <div
          key={i}
-         className="rounded-xl border-2 border-border bg-card px-3.5 py-2.5 space-y-2"
+         className="rounded-md border border-border bg-card px-3.5 py-2.5 space-y-2"
         >
          <div className="flex items-center gap-2">
           <Skeleton className="size-5 rounded-full" />
@@ -73,10 +73,10 @@ export default function PostDetailLoading() {
 
       {/* Comment form skeleton */}
       <div className="mt-4 space-y-2">
-       <Skeleton className="h-20 w-full rounded-xl" />
+       <Skeleton className="h-20 w-full rounded-md" />
        <div className="flex justify-between">
         <Skeleton className="h-7 w-16 rounded-lg" />
-        <Skeleton className="h-8 w-24 rounded-xl" />
+        <Skeleton className="h-8 w-24 rounded-md" />
        </div>
       </div>
      </div>
@@ -84,7 +84,7 @@ export default function PostDetailLoading() {
 
     {/* Sidebar — Activity timeline skeleton */}
     <aside className="lg:sticky lg:top-8 lg:self-start">
-     <div className="rounded-xl border-2 border-border bg-card p-5 space-y-4">
+     <div className="rounded-md border border-border bg-card p-5 space-y-4">
       <Skeleton className="h-3 w-16" />
       <div className="relative space-y-4 border-l pl-4">
        {Array.from({ length: 3 }).map((_, i) => (

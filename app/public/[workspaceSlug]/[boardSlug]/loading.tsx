@@ -9,7 +9,7 @@ export default function BoardLoading() {
      <Skeleton className="h-7 w-48" />
      <Skeleton className="h-3 w-64" />
     </div>
-    <Skeleton className="h-9 w-28 rounded-xl" />
+    <Skeleton className="h-9 w-28 rounded-md" />
    </div>
 
    {/* Filter bar skeleton */}
@@ -25,10 +25,10 @@ export default function BoardLoading() {
     {Array.from({ length: 5 }).map((_, i) => (
      <div
       key={i}
-      className="flex gap-4 rounded-xl border-2 border-border bg-card p-4"
+      className="flex gap-4 rounded-md border border-border bg-card p-4"
      >
       {/* Upvote button skeleton */}
-      <Skeleton className="h-14 w-14 shrink-0 rounded-xl" />
+      <Skeleton className="h-14 w-14 shrink-0 rounded-md" />
       {/* Content */}
       <div className="flex-1 space-y-2">
        <div className="flex items-center gap-2">

@@ -23,7 +23,7 @@ export function DemoSection() {
      live demo
     </span>
     <h2 className="mt-3 text-balance text-3xl tracking-tight md:text-5xl">
-     <span className={serif.className}>See Pittstop in action</span>
+     <span >See Pittstop in action</span>
     </h2>
     <p className="mt-4 text-balance text-muted-foreground">
      Explore a real workspace — browse feedback boards, check the roadmap, and
@@ -33,7 +33,7 @@ export function DemoSection() {
 
    <Reveal delay={0.1}>
     <Link href="https://www.pittstop.space/public/acme/general" target="_blank" className="group mt-10 block">
-     <div className="relative overflow-hidden rounded-2xl border-2 border-border shadow-2xl shadow-black/10 transition-all duration-300 group-hover:border-primary/40 group-hover:shadow-primary/10">
+     <div className="relative overflow-hidden rounded-2xl border border-border shadow-2xl shadow-black/10 transition-all duration-300 group-hover:border-primary/40 group-hover:shadow-primary/10">
       {/* Gradient overlay on hover */}
       <div className="pointer-events-none absolute inset-0 z-10 rounded-2xl bg-gradient-to-t from-black/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
       

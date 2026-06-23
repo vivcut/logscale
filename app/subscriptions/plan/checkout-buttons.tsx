@@ -94,7 +94,7 @@ function PlanCard({
  return (
   <div
    className={
-    "flex flex-col rounded-xl  border-2 border-border bg-card p-6 " +
+    "flex flex-col rounded-md  border border-border bg-card p-6 " +
     (highlight ? "border-primary shadow-sm" : "border-border")
    }
   >
@@ -122,7 +122,7 @@ function PlanCard({
    </ul>
 
    {/* Localized Free Trial Banner */}
-   <div className="mb-3 rounded-lg  border-2 border-border bg-secondary px-3 py-3 text-center text-md font-semibold text-foreground">
+   <div className="mb-3 rounded-lg  border border-border bg-secondary px-3 py-3 text-center text-md font-semibold text-foreground">
     14-day free trial included
    </div>
 

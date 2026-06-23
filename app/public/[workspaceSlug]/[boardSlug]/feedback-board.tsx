@@ -231,14 +231,14 @@ export function FeedbackBoard({
      </div>
 
      {sortedPosts.length === 0 ? (
-      <div className="flex flex-col items-center justify-center rounded-xl border-2 border-border border-dashed py-16 text-center">
+      <div className="flex flex-col items-center justify-center rounded-md border border-border border-dashed py-16 text-center">
        <h3 className="text-sm font-medium">No feedback yet</h3>
        <p className="mt-1 text-sm text-muted-foreground">
         Be the first to share a suggestion.
        </p>
       </div>
      ) : (
-      <div className="space-y-0 divide-y divide-border overflow-hidden rounded-xl border-2 border-border">
+      <div className="space-y-0 divide-y divide-border overflow-hidden rounded-md border border-border">
        {sortedPosts.map((post) => (
         <div
          key={post.id}
@@ -328,7 +328,7 @@ export function FeedbackBoard({
             </button>
             {/* Sign-in prompt tooltip */}
             {signInPrompt === post.id && (
-             <div className="absolute bottom-full right-0 mb-2 z-50 w-48 rounded-lg border-2 border-border bg-card p-3 shadow-xl animate-in fade-in slide-in-from-bottom-2 duration-200">
+             <div className="absolute bottom-full right-0 mb-2 z-50 w-48 rounded-lg border border-border bg-card p-3 shadow-xl animate-in fade-in slide-in-from-bottom-2 duration-200">
               <p className="text-xs text-muted-foreground mb-2">Sign in to upvote</p>
               <a
                href={getSignInUrl()}
@@ -362,7 +362,7 @@ export function FeedbackBoard({
 
     {/* Right sidebar */}
     <aside className="lg:sticky lg:top-8 lg:self-start space-y-4">
-     <div className="flex items-center gap-1 rounded-xl border-2 border-border bg-card p-1">
+     <div className="flex items-center gap-1 rounded-md border border-border bg-card p-1">
       {(["trending", "new"] as Sort[]).map((s) => (
        <button
         key={s}
@@ -394,7 +394,7 @@ export function FeedbackBoard({
      </Button>
 
      {boards && boards.length > 0 && (
-      <div className="rounded-xl border-2 border-border bg-card p-4">
+      <div className="rounded-md border border-border bg-card p-4">
        <h3 className="mb-3 text-sm font-semibold">Boards</h3>
        <ul className="space-y-2.5">
         {boards.map((b, i) => {

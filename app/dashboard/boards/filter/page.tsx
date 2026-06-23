@@ -12,7 +12,7 @@ export default async function AdminBoardsFilterPage() {
   if (!workspace) {
     return (
       <div className="mx-auto w-full max-w-5xl px-6 py-10">
-        <div className="rounded-xl border-2 border-border border-dashed p-10 text-center">
+        <div className="rounded-md border border-border border-dashed p-10 text-center">
           <h1 className="text-sm font-medium">No active workspace</h1>
         </div>
       </div>

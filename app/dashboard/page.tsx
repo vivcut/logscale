@@ -136,7 +136,7 @@ export default async function DashboardPage() {
     if (isStartup) {
      // Startup plan: just show the count, no limit
      return (
-      <div className="mt-6 rounded-xl border-2 border-border bg-card p-5">
+      <div className="mt-6 rounded-md border border-border bg-card p-5">
        <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
          <Users weight="bold" className="size-5 text-muted-foreground" />
@@ -158,7 +158,7 @@ export default async function DashboardPage() {
     const overLimit = userCount > limit;
     const pct = Math.min((userCount / limit) * 100, 100);
     return (
-     <div className={`mt-6 rounded-xl border-2 ${overLimit ? "border-red-500/50 bg-red-500/5" : "border-border bg-card"} p-5`}>
+     <div className={`mt-6 rounded-md border ${overLimit ? "border-red-500/50 bg-red-500/5" : "border-border bg-card"} p-5`}>
       <div className="flex items-center justify-between mb-3">
        <div className="flex items-center gap-2">
         <Users weight="bold" className="size-5 text-muted-foreground" />
@@ -195,7 +195,7 @@ export default async function DashboardPage() {
    })()}
 
    {/* Row-by-row list layout */}
-   <div className="mt-6 divide-y divide-border rounded-xl border-2 border-border bg-card overflow-hidden">
+   <div className="mt-6 divide-y divide-border rounded-md border border-border bg-card overflow-hidden">
     {apps.map((app) => (
      <Link
       key={app.href}

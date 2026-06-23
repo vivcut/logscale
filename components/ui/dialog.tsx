@@ -65,7 +65,7 @@ export function DialogContent({
   return (
     <div
       className={cn(
-        "rounded-xl border-2 border-border bg-card p-6 shadow-2xl",
+        "rounded-md border border-border bg-card p-6 shadow-2xl",
         className
       )}
       {...props}

@@ -46,12 +46,12 @@ export function Workflow() {
      {/* connecting line */}
      <div
       aria-hidden
-      className="pointer-events-none absolute left-0 right-0 top-7 hidden h-px bg-gradient-to-r from-transparent via- border-2 border-border to-transparent md:block"
+      className="pointer-events-none absolute left-0 right-0 top-7 hidden h-px bg-gradient-to-r from-transparent via- border border-border to-transparent md:block"
      />
      {STEPS.map((s) => (
       <StaggerItem key={s.n}>
-       <div className="relative flex flex-col gap-3 rounded-2xl  border-2 border-border bg-background p-6">
-        <span className="flex size-12 items-center justify-center rounded-full  border-2 border-border bg-card font-mono text-sm font-semibold">
+       <div className="relative flex flex-col gap-3 rounded-2xl  border border-border bg-background p-6">
+        <span className="flex size-12 items-center justify-center rounded-full  border border-border bg-card font-mono text-sm font-semibold">
          {s.n}
         </span>
         <h3 className="mt-2 text-lg font-semibold tracking-tight">

@@ -158,7 +158,7 @@ export async function PlanBanner({ page }: { page: PlanPage }) {
     </div>
     <Link
      href="/subscriptions/plan"
-     className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+     className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
     >
      Upgrade plan
      {/* <ArrowRight className="size-3.5" /> */}

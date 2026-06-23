@@ -60,7 +60,7 @@ export function PublicDashboard({
  if (enabledTabs.length === 0) {
   return (
    <div className="mx-auto w-full max-w-md px-6 py-12 text-center">
-    <div className="rounded-xl border-2 border-border border-dashed bg-secondary/20 p-8">
+    <div className="rounded-md border border-border border-dashed bg-secondary/20 p-8">
      <p className="text-sm font-medium text-foreground">
       This workspace is private
      </p>

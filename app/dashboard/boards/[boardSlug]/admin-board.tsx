@@ -312,7 +312,7 @@ export function AdminBoard({
    </div>
 
    {/* ---- Visibility: toggle + share link / private disclaimer ---- */}
-   <div className="mb-6 rounded-xl  border-2 border-border bg-card p-4">
+   <div className="mb-6 rounded-md  border border-border bg-card p-4">
     <div className="flex flex-wrap items-center justify-between gap-3">
      <div className="flex items-center gap-2">
       {boardPrivate ? (
@@ -351,7 +351,7 @@ export function AdminBoard({
 
 
    {/* ---- Metrics Bar ---- */}
-   <div className="mb-6 grid grid-cols-1 gap-px overflow-hidden rounded-xl border-2 border-border bg-border sm:grid-cols-2">
+   <div className="mb-6 grid grid-cols-1 gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-2">
     {/* Posts metric with a timeframe selector. */}
     <div className="bg-card p-4">
      <div className="flex items-center justify-between gap-2">
@@ -386,7 +386,7 @@ export function AdminBoard({
 
    {/* ---- Post flairs (custom flairs = Startup plan) ---- */}
    {canManage ? (
-    <div className="mb-6 rounded-xl  border-2 border-border bg-card p-4">
+    <div className="mb-6 rounded-md  border border-border bg-card p-4">
      <div className="flex flex-wrap items-start justify-between gap-3">
       <div>
        <p className="text-sm font-medium">Post flairs</p>
@@ -399,7 +399,7 @@ export function AdminBoard({
       {!canCustomizeFlairs ? (
        <Link
         href="/subscriptions/plan"
-        className="inline-flex shrink-0 items-center gap-1.5 rounded-xl  border-2 border-border border-primary/40 bg-primary/10 px-2.5 py-1.5 font-mono text-[11px] text-primary transition-colors hover:bg-primary/20"
+        className="inline-flex shrink-0 items-center gap-1.5 rounded-md  border border-border border-primary/40 bg-primary/10 px-2.5 py-1.5 font-mono text-[11px] text-primary transition-colors hover:bg-primary/20"
        >
         upgrade to Startup
        </Link>
@@ -451,7 +451,7 @@ export function AdminBoard({
         canCustomizeFlairs ? "add a flair…" : "upgrade to add flairs"
        }
        maxLength={24}
-       className="w-44 rounded-xl  border-2 border-border bg-background/60 px-2.5 py-1.5 font-mono text-xs outline-none transition-colors focus:border-foreground/30"
+       className="w-44 rounded-md  border border-border bg-background/60 px-2.5 py-1.5 font-mono text-xs outline-none transition-colors focus:border-foreground/30"
       />
       <Button
        size="sm"
@@ -479,7 +479,7 @@ export function AdminBoard({
    {/* ---- Admin Feedback List (same card UI as the public board) ---- */}
 
    {posts.length === 0 ? (
-    <div className="flex flex-col items-center justify-center rounded-xl  border-2 border-border border-dashed py-16 text-center">
+    <div className="flex flex-col items-center justify-center rounded-md  border border-border border-dashed py-16 text-center">
      <MessageSquare className="size-5 text-muted-foreground" />
      <h2 className="mt-3 text-sm font-medium">No feedback yet</h2>
      <p className="mt-1 text-sm text-muted-foreground">
@@ -487,7 +487,7 @@ export function AdminBoard({
      </p>
     </div>
    ) : (
-    <ul className="divide-y divide-border overflow-hidden rounded-xl border-2 border-border bg-card">
+    <ul className="divide-y divide-border overflow-hidden rounded-md border border-border bg-card">
      {posts.map((post) => {
       const isMergeTarget = mergingId && mergingId !== post.id;
       return (
@@ -503,7 +503,7 @@ export function AdminBoard({
        >
         {/* votes */}
         <div className="flex flex-col items-center gap-1">
-         <div className="flex h-fit w-12 flex-col items-center gap-0.5 rounded-xl  border-2 border-border py-2 text-muted-foreground">
+         <div className="flex h-fit w-12 flex-col items-center gap-0.5 rounded-md  border border-border py-2 text-muted-foreground">
           <ArrowUp className="size-4" />
           <span className="font-mono text-xs font-medium tabular-nums">
            {post.upvotes_count}
@@ -601,7 +601,7 @@ export function AdminBoard({
              setMergingId(mergingId === post.id ? null : post.id)
             }
             className={cn(
-             "rounded-xl  border-2 border-border p-1.5 text-muted-foreground transition-colors hover:text-foreground",
+             "rounded-md  border border-border p-1.5 text-muted-foreground transition-colors hover:text-foreground",
              mergingId === post.id &&
               "border-indigo-500/50 text-indigo-400"
             )}
@@ -611,7 +611,7 @@ export function AdminBoard({
            <button
             title="Delete"
             onClick={() => handleDelete(post)}
-            className="rounded-xl  border-2 border-border p-1.5 text-muted-foreground transition-colors hover:border-destructive/50 hover:text-destructive"
+            className="rounded-md  border border-border p-1.5 text-muted-foreground transition-colors hover:border-destructive/50 hover:text-destructive"
            >
             <Trash2 className="size-3.5" />
            </button>
@@ -625,7 +625,7 @@ export function AdminBoard({
    )}
 
    {mergingId ? (
-    <div className="mt-3 flex items-center justify-between rounded-xl  border-2 border-border border-indigo-500/40 bg-indigo-500/5 px-4 py-2.5 text-xs">
+    <div className="mt-3 flex items-center justify-between rounded-md  border border-border border-indigo-500/40 bg-indigo-500/5 px-4 py-2.5 text-xs">
      <span className="font-mono text-indigo-300">
       select a post above to merge into — upvotes will be combined
      </span>
@@ -668,13 +668,13 @@ function VisibilityToggle({
  onChange: (isPrivate: boolean) => void;
 }) {
  return (
-  <div className="inline-flex items-center rounded-xl  border-2 border-border bg-secondary/40 p-0.5">
+  <div className="inline-flex items-center rounded-md  border border-border bg-secondary/40 p-0.5">
    <button
     type="button"
     disabled={pending}
     onClick={() => onChange(false)}
     className={cn(
-     "inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60",
+     "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60",
      !isPrivate
       ? "bg-card text-foreground shadow-sm"
       : "text-muted-foreground hover:text-foreground"
@@ -692,7 +692,7 @@ function VisibilityToggle({
     disabled={pending}
     onClick={() => onChange(true)}
     className={cn(
-     "inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60",
+     "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60",
      isPrivate
       ? "bg-card text-foreground shadow-sm"
       : "text-muted-foreground hover:text-foreground"
@@ -762,7 +762,7 @@ function TimeframeSelect({
    <button
     type="button"
     onClick={() => setOpen((o) => !o)}
-    className="flex items-center gap-1.5 rounded-xl  border-2 border-border bg-secondary/40 px-2 py-1 font-mono text-[10px] transition-colors hover:bg-secondary"
+    className="flex items-center gap-1.5 rounded-md  border border-border bg-secondary/40 px-2 py-1 font-mono text-[10px] transition-colors hover:bg-secondary"
    >
     {current.label}
     <ChevronDown className="size-3 text-muted-foreground" />
@@ -770,7 +770,7 @@ function TimeframeSelect({
    {open ? (
     <>
      <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-     <div className="absolute right-0 top-full z-20 mt-1 w-36 overflow-hidden rounded-xl  border-2 border-border bg-popover p-1 shadow-xl">
+     <div className="absolute right-0 top-full z-20 mt-1 w-36 overflow-hidden rounded-md  border border-border bg-popover p-1 shadow-xl">
       {TIMEFRAMES.map((t) => (
        <button
         key={t.key}
@@ -859,7 +859,7 @@ function StatusDropdown({
     type="button"
     disabled={disabled}
     onClick={() => setOpen((o) => !o)}
-    className="inline-flex items-center justify-between gap-1.5 rounded-xl  border-2 border-border bg-secondary/40 px-2.5 py-1.5 text-xs transition-colors hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-60"
+    className="inline-flex items-center justify-between gap-1.5 rounded-md  border border-border bg-secondary/40 px-2.5 py-1.5 text-xs transition-colors hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-60"
    >
     <span className="flex items-center gap-1.5">
      <span className={cn("size-1.5 rounded-full", current.dot)} />
@@ -877,7 +877,7 @@ function StatusDropdown({
         left: coords.left,
         width: coords.width,
        }}
-       className="z-[60] overflow-hidden rounded-xl  border-2 border-border bg-popover p-1 shadow-xl"
+       className="z-[60] overflow-hidden rounded-md  border border-border bg-popover p-1 shadow-xl"
       >
        {STATUSES.map((s) => (
         <button

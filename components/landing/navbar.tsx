@@ -7,7 +7,8 @@ import { AnimatePresence, motion } from "motion/react";
 import { ArrowRight, X } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { FlagBannerIcon } from "@phosphor-icons/react";
+import { DotsThreeVerticalIcon, FlagBannerIcon, List, XIcon } from "@phosphor-icons/react";
+import { MenuSquare } from "lucide-react";
 
 const NAV_LINKS = [
  { label: "Features", href: "#features" },
@@ -18,7 +19,7 @@ const NAV_LINKS = [
 ];
 
 /**
- * Landing navbar — sticky, frosted, and reacts to scroll (gains a  border-2 border-border +
+ * Landing navbar — sticky, frosted, and reacts to scroll (gains a  border border-border +
  * stronger blur once the hero scrolls away). Includes an animated mobile sheet.
  * Both CTAs route to /login, the single entry point for sign-in / sign-up.
  */
@@ -77,7 +78,7 @@ export function Navbar() {
      </Button> */}
      <Button className="h-12 w-40 text-lg" size="sm" asChild>
       <Link href="/login">
-       Start
+       Dashboard
        {/* <ArrowRight /> */}
       </Link>
      </Button>
@@ -88,14 +89,14 @@ export function Navbar() {
      type="button"
      aria-label="Toggle menu"
      onClick={() => setOpen((v) => !v)}
-     className="flex size-9 items-center justify-center rounded-xl  border-2 border-border text-foreground md:hidden"
+     className="flex size-9 items-center justify-center rounded-md  border border-zinc-800 text-foreground md:hidden"
     >
      {open ? (
-      <X className="size-4" />
+      <XIcon className="size-5 text-white" />
      ) : (
-      <div className="flex flex-col gap-1">
-       <span className="block h-0.5 w-4 bg-foreground" />
-       <span className="block h-0.5 w-4 bg-foreground" />
+      <div className="flex flex-col gap-1 text-white">
+       <List className="size-5 text-white" />
+       
       </div>
      )}
     </button>
@@ -109,7 +110,7 @@ export function Navbar() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.2 }}
-      className="border-b-2 bg-background/95 backdrop-blur-xl md:hidden"
+      className="border-t bg-background/95 backdrop-blur-xl md:hidden"
      >
       <nav className="mx-auto flex max-w-6xl flex-col px-6 py-4">
        {NAV_LINKS.map((l) => (
@@ -117,7 +118,7 @@ export function Navbar() {
          key={l.href}
          href={l.href}
          onClick={() => setOpen(false)}
-         className="border-b-2 border-border/60 py-3 text-sm text-muted-foreground transition-colors hover:text-foreground"
+         className="border-t border-border/60 py-3 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
          {l.label}
         </a>

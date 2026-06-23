@@ -48,7 +48,7 @@ export default async function SettingsPage() {
 
   return (
    <div className="mx-auto w-full max-w-3xl px-6 py-10">
-    <div className="rounded-xl  border-2 border-border border-dashed p-10 text-center">
+    <div className="rounded-md  border border-border border-dashed p-10 text-center">
      <h1 className="text-sm font-medium">No active workspace</h1>
     </div>
    </div>
@@ -132,7 +132,7 @@ export default async function SettingsPage() {
 
 
     {/* Company logo */}
-    <div className="mt-2 rounded-b-xl  border-2 border-border border-t-0 bg-card rounded-t-xl p-4">
+    <div className="mt-2 rounded-b-xl  border border-border border-t-0 bg-card rounded-t-xl p-4">
      <p className="mb-3 font-mono text-xs text-muted-foreground">logo</p>
      <LogoUploader
       workspaceName={workspace.name}
@@ -150,7 +150,7 @@ export default async function SettingsPage() {
     </div>
     <Link
      href="/subscriptions/plan"
-     className="group flex items-center justify-between gap-4 rounded-xl  border-2 border-border bg-card p-4 transition-colors hover:border-foreground/20"
+     className="group flex items-center justify-between gap-4 rounded-md  border border-border bg-card p-4 transition-colors hover:border-foreground/20"
     >
      <div className="flex items-center gap-3">
       <div
@@ -217,7 +217,7 @@ export default async function SettingsPage() {
      on its public page and removes it from the widget — your data is
      preserved and reappears the moment you switch it back on.
     </p>
-    <div className="divide-y divide-border overflow-hidden rounded-xl border-2 border-border bg-card">
+    <div className="divide-y divide-border overflow-hidden rounded-md border border-border bg-card">
      <SurfaceToggle
       surface="boards"
       label="Boards"

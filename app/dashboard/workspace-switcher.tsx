@@ -53,9 +53,9 @@ export function WorkspaceSwitcher({
   return (
    <Link
     href="/onboarding?new=1"
-    className="flex w-full items-center gap-2 rounded-xl px-2 py-1.5 text-left text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+    className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
    >
-    <span className="flex size-6 items-center justify-center rounded  border-2 border-border border-dashed border-border">
+    <span className="flex size-6 items-center justify-center rounded  border border-border border-dashed border-border">
      <Plus weight="bold" className="size-3.5" />
     </span>
     Create workspace
@@ -68,7 +68,7 @@ export function WorkspaceSwitcher({
   <div className="relative w-full">
    <button
     onClick={() => setOpen((v) => !v)}
-    className="flex w-full items-center gap-2 rounded-xl px-0 pr-2 cursor-pointer py-1.5 text-left transition-colors group"
+    className="flex w-full items-center gap-2 rounded-md px-0 pr-2 cursor-pointer py-1.5 text-left transition-colors group"
    >
     <span className="flex size-6 shrink-0 items-center justify-center overflow-hidden rounded bg-primary text-[10px] font-bold text-primary-foreground">
      {active?.logo_url ? (
@@ -100,7 +100,7 @@ export function WorkspaceSwitcher({
       className="fixed inset-0 z-10"
       onClick={() => setOpen(false)}
      />
-     <div className="absolute left-0 right-0 top-full z-20 mt-1 overflow-hidden rounded-xl  border-2 border-border bg-popover p-1 shadow-xl shadow-black/40">
+     <div className="absolute left-0 right-0 top-full z-20 mt-1 overflow-hidden rounded-md  border border-border bg-popover p-1 shadow-xl shadow-black/40">
       {workspaces.map((w) => (
        <button
         key={w.id}

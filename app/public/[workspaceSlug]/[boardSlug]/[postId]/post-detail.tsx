@@ -296,7 +296,7 @@ export function PostDetail({
         onClick={handleUpvote}
         disabled={voting}
         className={cn(
-         "flex h-fit w-14 shrink-0 flex-col items-center gap-0.5 rounded-xl border-2 border-border py-2.5 transition-all duration-200",
+         "flex h-fit w-14 shrink-0 flex-col items-center gap-0.5 rounded-md border border-border py-2.5 transition-all duration-200",
          voting && "pointer-events-none opacity-70",
          voted
           ? "border-foreground/40 bg-secondary text-foreground"
@@ -310,7 +310,7 @@ export function PostDetail({
        </button>
        {/* Sign-in prompt tooltip */}
        {signInPrompt && (
-        <div className="absolute left-0 top-full mt-2 z-50 w-48 rounded-lg border-2 border-border bg-card p-3 shadow-xl animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="absolute left-0 top-full mt-2 z-50 w-48 rounded-lg border border-border bg-card p-3 shadow-xl animate-in fade-in slide-in-from-top-2 duration-200">
          <p className="text-xs text-muted-foreground mb-2">Sign in to upvote</p>
          <a
           href={getSignInUrl()}
@@ -396,7 +396,7 @@ export function PostDetail({
            href={a.url}
            target="_blank"
            rel="noopener noreferrer"
-           className="block overflow-hidden rounded-xl  border-2 border-border border-border"
+           className="block overflow-hidden rounded-md  border border-border border-border"
           >
            {/* eslint-disable-next-line @next/next/no-img-element */}
            <img
@@ -416,7 +416,7 @@ export function PostDetail({
             href={a.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-xl  border-2 border-border bg-card px-3 py-2 transition-colors hover:border-foreground/30 hover:bg-secondary/40"
+            className="inline-flex items-center gap-2 rounded-md  border border-border bg-card px-3 py-2 transition-colors hover:border-foreground/30 hover:bg-secondary/40"
            >
             <FilePdf className="size-5 shrink-0 text-red-400" />
             <span className="flex flex-col">
@@ -435,7 +435,7 @@ export function PostDetail({
 
       {/* Owner-only inline controls */}
       {canManage ? (
-       <div className="mt-4 flex items-center gap-2 rounded-xl  border-2 border-border border-indigo-500/30 bg-indigo-500/5 px-3 py-2">
+       <div className="mt-4 flex items-center gap-2 rounded-md  border border-border border-indigo-500/30 bg-indigo-500/5 px-3 py-2">
         <span className="font-mono text-[10px] uppercase tracking-wider text-indigo-300">
          team
         </span>
@@ -543,7 +543,7 @@ export function PostDetail({
 
    {/* Sidebar — status timeline */}
    <aside className="lg:sticky lg:top-8 lg:self-start">
-    <div className="rounded-xl  border-2 border-border bg-card p-5">
+    <div className="rounded-md  border border-border bg-card p-5">
      <h2 className="mb-4 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
       Activity
      </h2>
@@ -615,14 +615,14 @@ function StatusDropdown({
     type="button"
     disabled={disabled}
     onClick={() => setOpen((o) => !o)}
-    className="inline-flex items-center gap-1.5 rounded-xl  border-2 border-border bg-secondary/40 px-2.5 py-1 text-xs transition-colors hover:bg-secondary disabled:opacity-60"
+    className="inline-flex items-center gap-1.5 rounded-md  border border-border bg-secondary/40 px-2.5 py-1 text-xs transition-colors hover:bg-secondary disabled:opacity-60"
    >
     <span className={cn("size-1.5 rounded-full", current.dot)} />
     {current.label}
     <ChevronDown className="size-3 text-muted-foreground" />
    </button>
    {open ? (
-    <div className="absolute left-0 top-full z-50 mt-1 w-44 overflow-hidden rounded-xl  border-2 border-border bg-popover p-1 shadow-xl">
+    <div className="absolute left-0 top-full z-50 mt-1 w-44 overflow-hidden rounded-md  border border-border bg-popover p-1 shadow-xl">
      {STATUSES.map((s) => (
       <button
        key={s.key}
@@ -661,7 +661,7 @@ function CommentRow({
  return (
   <div
    className={cn(
-    "group rounded-xl  border-2 border-border px-3.5 py-2.5",
+    "group rounded-md  border border-border px-3.5 py-2.5",
     comment.is_pinned
      ? "border-emerald-500/50 bg-emerald-500/10"
      : comment.is_official
@@ -842,7 +842,7 @@ function ReplyToggle({
 function SignInPrompt() {
  const pathname = usePathname();
  return (
-  <div className="rounded-xl border-2 border-border bg-card px-4 py-5 text-center">
+  <div className="rounded-md border border-border bg-card px-4 py-5 text-center">
    <p className="text-sm text-muted-foreground">
     Sign in to join the discussion.
    </p>
@@ -970,7 +970,7 @@ function CommentForm({
       : "Add your thoughts…"
     }
     rows={compact ? 2 : 3}
-    className="w-full resize-none rounded-xl  border-2 border-border bg-card px-3 py-2 text-xs outline-none placeholder:text-muted-foreground focus:border-ring"
+    className="w-full resize-none rounded-md  border border-border bg-card px-3 py-2 text-xs outline-none placeholder:text-muted-foreground focus:border-ring"
    />
 
    {/* Uploaded file previews */}
@@ -1039,7 +1039,7 @@ function CommentForm({
     <button
      type="submit"
      disabled={submitting || (!content.trim() && uploads.length === 0)}
-     className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity disabled:opacity-50"
+     className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity disabled:opacity-50"
     >
      {submitting ? (
       <Loader2 className="size-3.5 animate-spin" />

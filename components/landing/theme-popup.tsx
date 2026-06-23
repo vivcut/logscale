@@ -51,7 +51,7 @@ export function ThemePopup() {
  if (!isVisible) return null;
 
  return (
-  <div className="fixed bottom-6 right-6 z-50 flex items-center gap-4 rounded-full  border-2 border-border border-white/10 bg-black/80 p-2 pl-4 shadow-xl backdrop-blur-md transition-all duration-300 animate-in slide-in-from-bottom-5 dark:border-white/10 dark:bg-black/80 light:border-black/10 light:bg-white/80">
+  <div className="fixed bottom-6 right-6 z-50 flex items-center gap-4 rounded-full  border border-border border-white/10 bg-black/80 p-2 pl-4 shadow-xl backdrop-blur-md transition-all duration-300 animate-in slide-in-from-bottom-5 dark:border-white/10 dark:bg-black/80 light:border-black/10 light:bg-white/80">
    <span className="text-xs font-medium text-white/80 light:text-black/80">
     Theme
    </span>

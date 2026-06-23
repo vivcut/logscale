@@ -65,7 +65,7 @@ export function ShowcaseSections() {
      everything you need
     </span>
     <h2 className="mt-3 text-balance text-3xl tracking-tight md:text-6xl">
-     <span className={serif.className}>One workspace. The whole feedback loop.</span>
+     <span>One workspace. The whole feedback loop.</span>
     </h2>
     <p className="mt-6 text-balance text-muted-foreground">
      Stop stitching together five tools. Pittstop covers the full journey —
@@ -87,13 +87,13 @@ export function ShowcaseSections() {
        {/* Copy side */}
        <Reveal className={flipped ? "md:order-2" : ""}>
         <div className="flex items-center gap-3">
-         <Icon weight="fill" className="size-8 text-primary" />
-         <span className="font-mono text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+         <Icon weight="duotone" className="size-10 text-primary" />
+         <span className="font-mono textlg font-semibold uppercase tracking-wider text-muted-foreground">
           {showcase.tag}
          </span>
         </div>
-        <h3 className="mt-5 text-balance text-2xl tracking-tight md:text-4xl">
-         <span className={serif.className}>{showcase.title}</span>
+        <h3 className="mt-5 text-balance text-2xl tracking-tight md:text-5xl">
+         <span>{showcase.title}</span>
         </h3>
         <p className="mt-4 text-balance text-muted-foreground">
          {showcase.description}
@@ -118,7 +118,7 @@ export function ShowcaseSections() {
 
        {/* iframe side */}
        <Reveal delay={0.1} className={flipped ? "md:order-1" : ""}>
-        <div className="overflow-hidden rounded-xl border-2 border-border shadow-lg">
+        <div className="overflow-hidden rounded-md border border-border shadow-lg">
          <iframe
           src={showcase.iframeSrc}
           title={`${showcase.tag} preview`}

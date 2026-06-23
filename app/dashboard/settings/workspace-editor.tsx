@@ -56,7 +56,7 @@ export function WorkspaceEditor({
 
   return (
     <>
-      <div className="grid gap-px overflow-hidden rounded-xl border-2 border-border bg-border sm:grid-cols-2">
+      <div className="grid gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-2">
         <div className="bg-card p-4">
           <Label htmlFor="ws-name" className="font-mono text-xs text-muted-foreground">
             name
@@ -170,9 +170,9 @@ function ConfirmDialog({
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onCancel}
       />
-      <div className="relative w-full max-w-md overflow-hidden rounded-xl  border-2 border-border  bg-popover shadow-2xl">
+      <div className="relative w-full max-w-md overflow-hidden rounded-md  border border-border  bg-popover shadow-2xl">
         <div className="flex items-start gap-3 p-5">
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-xl  border-2 border-border  bg-secondary">
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-md  border border-border  bg-secondary">
             <Warning className="size-4 text-chart-5" />
           </div>
           <div className="min-w-0">
@@ -182,7 +182,7 @@ function ConfirmDialog({
             </p>
           </div>
         </div>
-        <div className="flex justify-end gap-2  border-t-2 border-border  bg-card/50 px-5 py-3">
+        <div className="flex justify-end gap-2  border-t border-border  bg-card/50 px-5 py-3">
           <Button variant="ghost" size="sm" onClick={onCancel} disabled={pending}>
             Cancel
           </Button>
