@@ -109,14 +109,14 @@ const jsonLd = {
      price: "0",
      priceCurrency: "USD",
      name: "Hobby",
-     description: "Free forever plan with 1 feedback board, roadmap, changelog, 1 survey, and 2 status sites.",
+     description: "Free forever plan with 1 feedback board, roadmap, changelog, 25 users.",
     },
     {
      "@type": "Offer",
      price: "14",
      priceCurrency: "USD",
      name: "Startup",
-     description: "Unlimited boards, surveys, status sites, team members, image uploads, and no watermark.",
+     description: "Unlimited boards, status sites, team members, infinite users and no watermark.",
     },
    ],
    aggregateRating: {
