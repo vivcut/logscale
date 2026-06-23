@@ -56,7 +56,7 @@ export function WorkspaceEditor({
 
   return (
     <>
-      <div className="grid gap-px overflow-hidden rounded-xl  border-2 border-border  bg- border-2 border-border sm:grid-cols-2">
+      <div className="grid gap-px overflow-hidden rounded-xl border-2 border-border bg-border sm:grid-cols-2">
         <div className="bg-card p-4">
           <Label htmlFor="ws-name" className="font-mono text-xs text-muted-foreground">
             name

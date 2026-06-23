@@ -3,10 +3,6 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getActiveWorkspace } from "@/lib/workspace";
-import {
- getWorkspaceSubscription,
- hasStartupPlan,
-} from "@/lib/subscription";
 
 
 /**
@@ -37,17 +33,6 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({ error: "No workspace." }, { status: 403 });
  }
 
- // Image uploads in changelog entries are a Startup plan feature.
- const subscription = await getWorkspaceSubscription(workspace.id);
- if (!hasStartupPlan(subscription)) {
-  return NextResponse.json(
-   {
-    error:
-     "Image uploads are a Startup plan feature. Upgrade to embed images in changelog entries.",
-   },
-   { status: 403 }
-  );
- }
 
 
  let form: FormData;

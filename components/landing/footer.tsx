@@ -1,6 +1,6 @@
 "use client"
 
-import { Avocado } from "@phosphor-icons/react";
+import { FlagBanner } from "@phosphor-icons/react";
 import Link from "next/link";
 
 const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
@@ -11,14 +11,15 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
     { label: "Feedback Boards", href: "#boards" },
     { label: "Roadmaps", href: "#roadmap" },
     { label: "Changelog", href: "#changelog" },
-    { label: "Surveys", href: "#features" },
-    { label: "Status Pages", href: "#features" },
+    { label: "Live Demo", href: "#demo" },
+    { label: "Pricing", href: "#pricing" },
    ],
   },
   {
-   heading: "Company",
+   heading: "Resources",
    links: [
-    { label: "Pricing", href: "#pricing" },
+    { label: "Blog", href: "/blogs" },
+    { label: "FAQ", href: "#faq" },
     { label: "Get started", href: "/login" },
     { label: "Sign in", href: "/login" },
    ],
@@ -45,7 +46,7 @@ export function Footer() {
      <div className="flex flex-col gap-4">
       <Link href="/" className="flex items-center gap-2">
        <div className={"flex items-center gap-1 w-full px-3 justify-center"}>
-     <Avocado weight="fill" className="size-6 text-primary" />
+     <FlagBanner weight="fill" className="size-6 text-primary" />
      <h1 className={`text-2xl font-bold `}>Pittstop</h1>
     </div>
       </Link>

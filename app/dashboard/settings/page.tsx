@@ -217,7 +217,7 @@ export default async function SettingsPage() {
      on its public page and removes it from the widget — your data is
      preserved and reappears the moment you switch it back on.
     </p>
-    <div className="divide-y divide- border-2 border-border overflow-hidden rounded-xl  border-2 border-border border-border">
+    <div className="divide-y divide-border overflow-hidden rounded-xl border-2 border-border bg-card">
      <SurfaceToggle
       surface="boards"
       label="Boards"

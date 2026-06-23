@@ -98,7 +98,7 @@ export default async function SurveysPage() {
      </p>
     </div>
    ) : (
-    <ul className="divide-y divide- border-2 border-border overflow-hidden rounded-xl  border-2 border-border border-border">
+    <ul className="divide-y divide-border overflow-hidden rounded-xl border-2 border-border bg-card">
      {list.map((s) => {
       const n = counts.get(s.id) ?? 0;
       return (

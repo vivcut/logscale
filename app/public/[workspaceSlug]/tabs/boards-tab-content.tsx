@@ -57,24 +57,34 @@ export function BoardsTabContent({
  }
 
  return (
-  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-   {boards.map((board) => (
+  <div className="space-y-4">
+   <div className="flex justify-end">
     <Link
-     key={board.id}
-     href={`/public/${workspaceSlug}/${board.slug}`}
+     href={`/public/${workspaceSlug}/boards`}
+     className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90"
     >
-     <Card className="h-full hover:bg-popover cursor-pointer transition-all">
-      <CardHeader>
-       <CardTitle className="text-base">{board.name}</CardTitle>
-       {board.description && (
-        <CardDescription className="line-clamp-2">
-         {board.description}
-        </CardDescription>
-       )}
-      </CardHeader>
-     </Card>
+     Filter & Explore All Posts
     </Link>
-   ))}
+   </div>
+   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    {boards.map((board) => (
+     <Link
+      key={board.id}
+      href={`/public/${workspaceSlug}/${board.slug}`}
+     >
+      <Card className="h-full hover:bg-popover cursor-pointer transition-all">
+       <CardHeader>
+        <CardTitle className="text-base">{board.name}</CardTitle>
+        {board.description && (
+         <CardDescription className="line-clamp-2">
+          {board.description}
+         </CardDescription>
+        )}
+       </CardHeader>
+      </Card>
+     </Link>
+    ))}
+   </div>
   </div>
  );
 }

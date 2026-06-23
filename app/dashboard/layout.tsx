@@ -3,9 +3,10 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { claimPendingInvites } from "@/lib/invites";
 import { getActiveWorkspace } from "@/lib/workspace";
-import { getWorkspaceSubscription, hasStartupPlan } from "@/lib/subscription";
+import { getWorkspaceSubscription, hasStartupPlan, countExternalUsers, PLAN_LIMITS } from "@/lib/subscription";
 import { DashboardSidebar } from "./sidebar";
 import { PageTransition } from "./page-transition";
+import { OverLimitDialog } from "@/components/over-limit-dialog";
 
 export default async function DashboardLayout({
  children,
@@ -62,6 +63,13 @@ export default async function DashboardLayout({
   : null;
  const isStartup = hasStartupPlan(subscription);
 
+ // Check if over user limit (Hobby plan only)
+ let overLimitCount = 0;
+ if (activeWorkspace && !isStartup) {
+  overLimitCount = await countExternalUsers(activeWorkspace.id);
+ }
+ const isOverLimit = !isStartup && overLimitCount > PLAN_LIMITS.maxUsers;
+
  return (
   <div className="flex h-screen overflow-hidden">
    {/* Sidebar handles both desktop layout and mobile modal tracking natively */}
@@ -81,6 +89,11 @@ export default async function DashboardLayout({
      <PageTransition>{children}</PageTransition>
     </main>
    </div>
+
+   {/* Over-limit upgrade reminder dialog */}
+   {isOverLimit && (
+    <OverLimitDialog userCount={overLimitCount} limit={PLAN_LIMITS.maxUsers} />
+   )}
   </div>
  );
 }

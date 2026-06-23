@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
   const { data, error } = await admin
     .from("comments")
     .select(
-      "id, post_id, parent_id, content, author_name, is_official, is_pinned, created_at"
+      "id, post_id, parent_id, content, author_name, author_avatar_url, author_email, is_official, is_pinned, created_at"
     )
     .eq("post_id", postId)
     // Pinned answers float to the very top, then chronological.
@@ -50,21 +50,17 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST /api/comments
- * Body: { postId, content, parentId?, authorName, authorEmail, fingerprint }
+ * Body: { postId, content, parentId?, fingerprint }
  *
- * Two paths:
- *   1. Authenticated workspace owner/admin → comment is flagged `is_official`
- *      (verified badge) and attributed to their profile.
- *   2. Anonymous public visitor → MUST supply a name + email so the owner can
- *      follow up. Stored against the device fingerprint.
+ * Requires the user to be signed in. The comment is attributed to their
+ * profile name automatically. Workspace owners/admins get the `is_official`
+ * verified badge.
  */
 export async function POST(request: NextRequest) {
   let body: {
     postId?: string;
     content?: string;
     parentId?: string | null;
-    authorName?: string;
-    authorEmail?: string;
     fingerprint?: string;
   };
 
@@ -77,11 +73,25 @@ export async function POST(request: NextRequest) {
   const postId = body.postId;
   const content = body.content?.trim();
   const parentId = body.parentId || null;
+  const fingerprint = body.fingerprint?.trim() || null;
 
   if (!postId || !content) {
     return NextResponse.json(
       { error: "postId and content are required" },
       { status: 400 }
+    );
+  }
+
+  // Require authentication.
+  const sessionClient = await createClient();
+  const {
+    data: { user },
+  } = await sessionClient.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json(
+      { error: "Please sign in to comment." },
+      { status: 401 }
     );
   }
 
@@ -102,16 +112,11 @@ export async function POST(request: NextRequest) {
     Array.isArray(post.boards) ? post.boards[0] : post.boards
   ) as { id: string; workspace_id: string; is_private: boolean } | null;
 
-  // Is this an authenticated owner/admin of the workspace? → official reply.
-  const sessionClient = await createClient();
-  const {
-    data: { user },
-  } = await sessionClient.auth.getUser();
-
+  // Is this user a workspace owner/admin? → official reply with verified badge.
   let isOfficial = false;
   let profileName: string | null = null;
 
-  if (user && board) {
+  if (board) {
     const { data: membership } = await admin
       .from("workspace_members")
       .select("role")
@@ -124,49 +129,33 @@ export async function POST(request: NextRequest) {
       (membership.role === "owner" || membership.role === "admin")
     ) {
       isOfficial = true;
-      const { data: profile } = await admin
-        .from("profiles")
-        .select("name")
-        .eq("id", user.id)
-        .single();
-      profileName = profile?.name ?? null;
     }
   }
 
-  // Anonymous commenters must provide a name + email.
-  const authorName = body.authorName?.trim() || null;
-  const authorEmail = body.authorEmail?.trim() || null;
-  const fingerprint = body.fingerprint?.trim() || null;
-
-  if (!isOfficial) {
-    if (!authorName || !authorEmail) {
-      return NextResponse.json(
-        { error: "Name and email are required to comment." },
-        { status: 400 }
-      );
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(authorEmail)) {
-      return NextResponse.json(
-        { error: "Please enter a valid email." },
-        { status: 400 }
-      );
-    }
-  }
+  // Get the user's profile name and avatar for attribution.
+  const { data: profile } = await admin
+    .from("profiles")
+    .select("name, avatar_url")
+    .eq("id", user.id)
+    .single();
+  profileName = profile?.name ?? user.email ?? null;
+  const authorAvatarUrl = profile?.avatar_url ?? user.user_metadata?.avatar_url ?? null;
 
   const { data: inserted, error } = await admin
     .from("comments")
     .insert({
       post_id: postId,
       parent_id: parentId,
-      user_id: isOfficial ? user!.id : null,
+      user_id: user.id,
       content,
-      author_name: isOfficial ? profileName ?? "Team" : authorName,
-      author_email: isOfficial ? null : authorEmail,
-      fingerprint_hash: isOfficial ? null : fingerprint,
+      author_name: profileName ?? "User",
+      author_avatar_url: authorAvatarUrl,
+      author_email: user.email ?? null,
+      fingerprint_hash: fingerprint,
       is_official: isOfficial,
     })
     .select(
-      "id, post_id, parent_id, content, author_name, is_official, is_pinned, created_at"
+      "id, post_id, parent_id, content, author_name, author_avatar_url, author_email, is_official, is_pinned, created_at"
     )
     .single();
 

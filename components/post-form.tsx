@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { MessageSquare, MessageSquareQuote } from "lucide-react";
+import { MessageSquareQuote } from "lucide-react";
 
 /** Minimal shape returned by POST /api/posts. */
 export type CreatedPost = {
@@ -32,9 +32,6 @@ export type CreatedPost = {
  flair: string | null;
  created_at: string;
 };
-
-const NAME_KEY = "ttm_name";
-const EMAIL_KEY = "ttm_email";
 
 // Strict client-side mirror of the server limits (see /api/posts/attachments).
 const MAX_FILES = 4;
@@ -51,38 +48,28 @@ const ALLOWED_TYPES = [
 /**
  * PostForm — the canonical "Add post" submission form.
  *
- * Shared between the public feedback board and the dashboard "Manually add
- * post" modal so the two stay pixel-identical. Handles inline duplicate
- * detection, flair selection, attachments, and optional contact identity.
+ * Requires the user to be signed in. Name/email are no longer collected —
+ * the server identifies the user via their session and attributes posts
+ * to their profile automatically.
  */
 export function PostForm({
  boardId,
  flairs,
  onCreated,
  onClose,
- lockedName,
- lockedEmail,
+ workspaceSlug,
+ boardSlug,
 }: {
  boardId: string;
  flairs: string[];
  onCreated: (post: CreatedPost) => void;
- /** When provided, renders a close (X) button in the header (modal usage). */
  onClose?: () => void;
- /**
-  * When set (dashboard "manually add post"), the name/email fields are
-  * prefilled with the signed-in team member's identity and locked, so internal
-  * posts are always attributed to a real person.
-  */
- lockedName?: string | null;
- lockedEmail?: string | null;
+ workspaceSlug?: string;
+ boardSlug?: string;
 }) {
- const isLocked = lockedEmail != null || lockedName != null;
-
  const [title, setTitle] = React.useState("");
  const [description, setDescription] = React.useState("");
  const [flair, setFlair] = React.useState<string | null>(null);
- const [name, setName] = React.useState("");
- const [email, setEmail] = React.useState("");
  const [submitting, setSubmitting] = React.useState(false);
  const [formError, setFormError] = React.useState<string | null>(null);
 
@@ -93,28 +80,11 @@ export function PostForm({
  // Inline duplicate detection.
  const [matches, setMatches] = React.useState<CreatedPost[]>([]);
  const [searching, setSearching] = React.useState(false);
- const [votedMatches, setVotedMatches] = React.useState<
-  Record<string, boolean>
- >({});
 
  const fingerprintRef = React.useRef<string>("");
  React.useEffect(() => {
   fingerprintRef.current = getFingerprint();
-  // When locked (dashboard usage), force the signed-in member's identity and
-  // skip the localStorage prefill so it can never be overwritten.
-  if (isLocked) {
-   setName(lockedName ?? "");
-   setEmail(lockedEmail ?? "");
-   return;
-  }
-  try {
-   setName(window.localStorage.getItem(NAME_KEY) ?? "");
-   setEmail(window.localStorage.getItem(EMAIL_KEY) ?? "");
-  } catch {
-   /* ignore */
-  }
- }, [isLocked, lockedName, lockedEmail]);
-
+ }, []);
 
  // Debounced duplicate search as the user types a title.
  React.useEffect(() => {
@@ -181,24 +151,6 @@ export function PostForm({
   setFiles((prev) => prev.filter((_, i) => i !== idx));
  }
 
- async function upvoteMatch(postId: string) {
-  if (votedMatches[postId]) return;
-  setVotedMatches((v) => ({ ...v, [postId]: true }));
-  setMatches((prev) =>
-   prev.map((p) =>
-    p.id === postId ? { ...p, upvotes_count: p.upvotes_count + 1 } : p
-   )
-  );
-  try {
-   await fetch("/api/upvotes", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ postId, fingerprint: fingerprintRef.current }),
-   });
-  } catch {
-   /* best effort */
-  }
- }
 
  async function handleSubmit(e: React.FormEvent) {
   e.preventDefault();
@@ -207,21 +159,8 @@ export function PostForm({
    setFormError("Please choose a flair for your post.");
    return;
   }
-  // Public submitters must tell us who they are so posts are attributed.
-  if (!isLocked && !name.trim()) {
-   setFormError("Please enter your name.");
-   return;
-  }
   setSubmitting(true);
-
   setFormError(null);
-
-  try {
-   if (name.trim()) window.localStorage.setItem(NAME_KEY, name.trim());
-   if (email.trim()) window.localStorage.setItem(EMAIL_KEY, email.trim());
-  } catch {
-   /* ignore */
-  }
 
   try {
    const res = await fetch("/api/posts", {
@@ -232,8 +171,6 @@ export function PostForm({
      title: title.trim(),
      description: description.trim(),
      flair,
-     authorName: name.trim() || undefined,
-     authorEmail: email.trim() || undefined,
      fingerprint: fingerprintRef.current,
     }),
    });
@@ -274,8 +211,7 @@ export function PostForm({
  }
 
  return (
-  <div className="rounded-xl  border-2 border-border bg-card p-5">
-   
+  <div className="rounded-xl border-2 border-border bg-card p-5">
    <div className="mb-4 flex items-center justify-between gap-2">
     <div className="flex items-center gap-2">
      <MessageSquareQuote className="size-6 text-muted-foreground" />
@@ -307,7 +243,7 @@ export function PostForm({
      />
 
      {title.trim().length >= 3 ? (
-      <div className="rounded-xl  border-2 border-border bg-background/60">
+      <div className="rounded-xl border-2 border-border bg-background/60">
        <div className="flex items-center gap-2 border-b-2 px-3 py-2">
         {searching ? (
          <Loader2 className="size-3 animate-spin text-muted-foreground" />
@@ -316,29 +252,33 @@ export function PostForm({
         )}
         <span className="font-mono text-[11px] text-muted-foreground">
          {matches.length > 0
-          ? "similar ideas — upvote instead?"
+          ? "similar ideas — click to view"
           : "no similar ideas found"}
         </span>
        </div>
        {matches.length > 0 ? (
         <ul className="max-h-40 overflow-y-auto p-1">
-         {matches.map((m) => (
-          <li key={m.id}>
-           <button
-            type="button"
-            onClick={() => upvoteMatch(m.id)}
-            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left transition-colors hover:bg-secondary"
-           >
-            <span className="flex items-center gap-1 font-mono text-xs tabular-nums text-muted-foreground">
-             <ArrowUp className="size-3" />
-             {m.upvotes_count}
-            </span>
-            <span className="min-w-0 flex-1 truncate text-xs">
-             {m.title}
-            </span>
-           </button>
-          </li>
-         ))}
+         {matches.map((m) => {
+          const postUrl = workspaceSlug && boardSlug
+           ? `/public/${workspaceSlug}/${boardSlug}/${m.id}`
+           : "#";
+          return (
+           <li key={m.id}>
+            <a
+             href={postUrl}
+             className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left transition-colors hover:bg-secondary"
+            >
+             <span className="flex items-center gap-1 font-mono text-xs tabular-nums text-muted-foreground">
+              <ArrowUp className="size-3" />
+              {m.upvotes_count}
+             </span>
+             <span className="min-w-0 flex-1 truncate text-xs">
+              {m.title}
+             </span>
+            </a>
+           </li>
+          );
+         })}
         </ul>
        ) : null}
       </div>
@@ -383,7 +323,6 @@ export function PostForm({
     <div className="flex flex-col gap-2">
      <Label className="text-muted-foreground">
       Attachments{" "}
-      {}
       <span className="text-muted-foreground/60">(optional)</span>
      </Label>
 
@@ -394,7 +333,7 @@ export function PostForm({
         return (
          <li
           key={`${file.name}-${idx}`}
-          className="flex items-center gap-2 rounded-xl  border-2 border-border bg-background/60 px-2.5 py-1.5"
+          className="flex items-center gap-2 rounded-xl border-2 border-border bg-background/60 px-2.5 py-1.5"
          >
           {isImage ? (
            <ImageIcon className="size-3.5 shrink-0 text-muted-foreground" />
@@ -433,7 +372,7 @@ export function PostForm({
       <button
        type="button"
        onClick={() => fileInputRef.current?.click()}
-       className="inline-flex items-center justify-center gap-1.5 rounded-xl  border-2 border-border bg-popover border-dashed px-3 py-2 font-mono text-[11px] text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
+       className="inline-flex items-center justify-center gap-1.5 rounded-xl border-2 border-border bg-popover border-dashed px-3 py-2 font-mono text-[11px] text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
       >
        <Paperclip className="size-3.5" />
        attach image or PDF
@@ -444,53 +383,12 @@ export function PostForm({
      </p>
     </div>
 
-    <div className="grid grid-cols-2 gap-2">
-     <div className="flex flex-col gap-2">
-      <Label htmlFor="name" className="text-muted-foreground">
-       Name
-      </Label>
-      <Input
-       id="name"
-       value={name}
-       onChange={(e) => setName(e.target.value)}
-       placeholder="Ada"
-       disabled={isLocked}
-       readOnly={isLocked}
-       required={!isLocked}
-      />
-
-     </div>
-     <div className="flex flex-col gap-2">
-      <Label htmlFor="email" className="text-muted-foreground">
-       Email{" "}
-       {isLocked ? null : (
-        <span className="text-muted-foreground/60">(optional)</span>
-       )}
-      </Label>
-      <Input
-       id="email"
-       type="email"
-       value={email}
-       onChange={(e) => setEmail(e.target.value)}
-       placeholder="you@co.com"
-       disabled={isLocked}
-       readOnly={isLocked}
-      />
-     </div>
-    </div>
-    <p className="-mt-1 font-mono text-[10px] text-muted-foreground">
-     {isLocked
-      ? "posting as your account — internal posts are attributed to you"
-      : "email is private — only the team sees it to follow up"}
-    </p>
-
-
     {formError ? (
      <p className="font-mono text-xs text-destructive">{formError}</p>
     ) : null}
 
     <Button type="submit" disabled={submitting || !title.trim()}>
-     {submitting ? <Loader2 className="animate-spin" /> : <Send weight="bold" />}
+     {submitting ? <Loader2 className="animate-spin" /> : <Send />}
      Submit
     </Button>
    </form>

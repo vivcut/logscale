@@ -15,8 +15,11 @@ export function LoginForm() {
  const [status, setStatus] = React.useState<Status>("idle");
  const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
 
- const getRedirectTo = () =>
-  `${window.location.origin}/auth/callback?next=/dashboard`;
+ const getRedirectTo = () => {
+  const params = new URLSearchParams(window.location.search);
+  const next = params.get("next") || "/dashboard";
+  return `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
+ };
 
  async function handleGoogle() {
   setErrorMsg(null);

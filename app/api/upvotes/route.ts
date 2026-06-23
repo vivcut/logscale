@@ -5,17 +5,16 @@ import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
  * POST /api/upvotes
- * Body: { postId, fingerprint }
- * Toggles an upvote for the current visitor.
- *  - Logged-in users are tracked by user_id.
- *  - Anonymous visitors are tracked by their device fingerprint hash.
+ * Body: { postId }
+ * Toggles an upvote for the current logged-in user.
+ * Anonymous upvoting is no longer allowed — users must sign in.
  *
  * The actual upvotes_count on public.posts is maintained atomically by the
  * `on_upvote_change` Postgres trigger (see supabase/upvote_counters.sql),
  * which uses `upvotes_count = upvotes_count +/- 1` to avoid race conditions.
  */
 export async function POST(request: NextRequest) {
-  let body: { postId?: string; fingerprint?: string };
+  let body: { postId?: string };
 
   try {
     body = await request.json();
@@ -24,7 +23,6 @@ export async function POST(request: NextRequest) {
   }
 
   const postId = body.postId;
-  const fingerprint = body.fingerprint?.trim() || null;
 
   if (!postId) {
     return NextResponse.json({ error: "postId is required" }, { status: 400 });
@@ -35,10 +33,10 @@ export async function POST(request: NextRequest) {
     data: { user },
   } = await sessionClient.auth.getUser();
 
-  if (!user && !fingerprint) {
+  if (!user) {
     return NextResponse.json(
-      { error: "Missing visitor identity." },
-      { status: 400 }
+      { error: "You must be signed in to upvote. Please sign in or create an account." },
+      { status: 401 }
     );
   }
 
@@ -55,13 +53,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Post not found" }, { status: 404 });
   }
 
-  // Find an existing vote for this identity.
-  let existingQuery = admin.from("upvotes").select("id").eq("post_id", postId);
-  existingQuery = user
-    ? existingQuery.eq("user_id", user.id)
-    : existingQuery.is("user_id", null).eq("fingerprint_hash", fingerprint!);
-
-  const { data: existing } = await existingQuery.maybeSingle();
+  // Find an existing vote for this user.
+  const { data: existing } = await admin
+    .from("upvotes")
+    .select("id")
+    .eq("post_id", postId)
+    .eq("user_id", user.id)
+    .maybeSingle();
 
   if (existing) {
     // Toggle OFF — remove the vote. Trigger decrements the count.
@@ -77,8 +75,8 @@ export async function POST(request: NextRequest) {
     // Toggle ON — insert a vote. Trigger increments the count.
     const { error } = await admin.from("upvotes").insert({
       post_id: postId,
-      user_id: user?.id ?? null,
-      fingerprint_hash: user ? null : fingerprint,
+      user_id: user.id,
+      fingerprint_hash: null,
     });
 
     if (error) {

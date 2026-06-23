@@ -24,7 +24,6 @@ import {
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ShareLink } from "@/components/share-link";
 
 import { PostForm, type CreatedPost } from "@/components/post-form";
 
@@ -346,32 +345,13 @@ export function AdminBoard({
      )}
     </div>
 
-    <div className="mt-4  border-t-2 border-border pt-4">
-     {boardPrivate ? (
-      <p className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
-       <Lock className="size-3.5 shrink-0" />
-       This board is private, so it has no public URL. Switch it to public
-       to share a link.
-      </p>
-     ) : (
-      <>
-       <p className="mb-1.5 font-mono text-xs text-muted-foreground">
-        public board link
-       </p>
-       <ShareLink
-        url={`/public/${workspaceSlug}?type=boards`}
-        label={`${boardName} board`}
-       />
-      </>
-     )}
-    </div>
    </div>
 
 
 
 
    {/* ---- Metrics Bar ---- */}
-   <div className="mb-6 grid grid-cols-1 gap-px overflow-hidden rounded-xl  border-2 border-border bg- border-2 border-border sm:grid-cols-2">
+   <div className="mb-6 grid grid-cols-1 gap-px overflow-hidden rounded-xl border-2 border-border bg-border sm:grid-cols-2">
     {/* Posts metric with a timeframe selector. */}
     <div className="bg-card p-4">
      <div className="flex items-center justify-between gap-2">
@@ -507,7 +487,7 @@ export function AdminBoard({
      </p>
     </div>
    ) : (
-    <ul className="divide-y divide- border-2 border-border overflow-hidden rounded-xl  border-2 border-border border-border">
+    <ul className="divide-y divide-border overflow-hidden rounded-xl border-2 border-border bg-card">
      {posts.map((post) => {
       const isMergeTarget = mergingId && mergingId !== post.id;
       return (
@@ -947,12 +927,10 @@ function InternalPostModal({
     onClick={onClose}
    />
    <div className="relative w-full max-w-md">
-    <PostForm
-     boardId={boardId}
-     flairs={flairs}
-     lockedName={lockedName}
-     lockedEmail={lockedEmail}
-     onClose={onClose}
+     <PostForm
+      boardId={boardId}
+      flairs={flairs}
+      onClose={onClose}
 
      onCreated={(post: CreatedPost) => {
       // Reconcile with the admin list shape; server revalidation will

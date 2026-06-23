@@ -10,12 +10,15 @@ import {
  ChevronDown,
  FilePdf,
  Loader2,
+ Paperclip,
  Pin,
  Send,
  Trash2,
+ X,
 } from "@/components/icons";
 
 
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { getFingerprint } from "@/lib/fingerprint";
 import { flairBadgeClass } from "@/lib/flairs";
@@ -57,6 +60,8 @@ type Comment = {
  parent_id: string | null;
  content: string;
  author_name: string | null;
+ author_avatar_url: string | null;
+ author_email: string | null;
  is_official: boolean;
  is_pinned: boolean;
  created_at: string;
@@ -77,8 +82,6 @@ const STATUS_DOT: Record<string, string> = Object.fromEntries(
  STATUSES.map((s) => [s.key, s.dot])
 );
 
-const NAME_KEY = "ttm_name";
-const EMAIL_KEY = "ttm_email";
 
 // Friendly relative time (e.g. "2 months ago", "a few seconds ago").
 function fromNow(iso: string) {
@@ -103,12 +106,18 @@ export function PostDetail({
  attachments = [],
  boardSlug,
  canManage,
+ isSignedIn = false,
+ workspaceName = "",
+ authorEmail = null,
 }: {
  post: DetailPost;
  statusEvents: StatusEvent[];
  attachments?: PostAttachment[];
  boardSlug: string;
  canManage: boolean;
+ isSignedIn?: boolean;
+ workspaceName?: string;
+ authorEmail?: string | null;
 }) {
  const [post, setPost] = React.useState(initialPost);
  const [events, setEvents] = React.useState(initialEvents);
@@ -118,6 +127,7 @@ export function PostDetail({
 
  const [comments, setComments] = React.useState<Comment[]>([]);
  const [loading, setLoading] = React.useState(true);
+ const [signInPrompt, setSignInPrompt] = React.useState(false);
 
  const fingerprintRef = React.useRef<string>("");
  React.useEffect(() => {
@@ -142,22 +152,27 @@ export function PostDetail({
  }, [post.id]);
 
  async function handleUpvote() {
+  // Gate: must be signed in
+  if (!isSignedIn) {
+   setSignInPrompt(true);
+   setTimeout(() => setSignInPrompt(false), 4000);
+   return;
+  }
+
   if (voting) return;
   const hadVoted = voted;
+  const optimisticDelta = hadVoted ? -1 : 1;
   setVoting(true);
   setVoted(!hadVoted);
   setPost((p) => ({
    ...p,
-   upvotes_count: p.upvotes_count + (hadVoted ? -1 : 1),
+   upvotes_count: p.upvotes_count + optimisticDelta,
   }));
   try {
    const res = await fetch("/api/upvotes", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-     postId: post.id,
-     fingerprint: fingerprintRef.current,
-    }),
+    body: JSON.stringify({ postId: post.id }),
    });
    const json = await res.json();
    if (res.ok) {
@@ -167,14 +182,23 @@ export function PostDetail({
     setVoted(hadVoted);
     setPost((p) => ({
      ...p,
-     upvotes_count: p.upvotes_count + (hadVoted ? 1 : -1),
+     upvotes_count: p.upvotes_count - optimisticDelta,
     }));
    }
   } catch {
    setVoted(hadVoted);
+   setPost((p) => ({
+    ...p,
+    upvotes_count: p.upvotes_count - (hadVoted ? -1 : 1),
+   }));
   } finally {
    setVoting(false);
   }
+ }
+
+ function getSignInUrl() {
+  const path = typeof window !== "undefined" ? window.location.pathname : "";
+  return `/login?next=${encodeURIComponent(path)}&brand=${encodeURIComponent(workspaceName)}`;
  }
 
  async function handleStatusChange(status: string) {
@@ -266,22 +290,37 @@ export function PostDetail({
   <div className="grid gap-8 lg:grid-cols-[1fr_300px]">
    {/* Main column */}
    <div>
-    <div className="flex gap-4">
-     <button
-      onClick={handleUpvote}
-      disabled={voting}
-      className={cn(
-       "flex h-fit w-14 shrink-0 flex-col items-center gap-0.5 rounded-xl  border-2 border-border py-2.5 transition-colors",
-       voted
-        ? "border-foreground/40 bg-secondary text-foreground"
-        : " text-muted-foreground hover:border-foreground/30 hover:text-foreground"
-      )}
-     >
-      <ArrowUp className="size-4" />
-      <span className="font-mono text-sm font-medium tabular-nums">
-       {post.upvotes_count}
-      </span>
-     </button>
+     <div className="flex gap-4">
+      <div className="relative">
+       <button
+        onClick={handleUpvote}
+        disabled={voting}
+        className={cn(
+         "flex h-fit w-14 shrink-0 flex-col items-center gap-0.5 rounded-xl border-2 border-border py-2.5 transition-all duration-200",
+         voting && "pointer-events-none opacity-70",
+         voted
+          ? "border-foreground/40 bg-secondary text-foreground"
+          : "text-muted-foreground hover:border-foreground/30 hover:text-foreground"
+        )}
+       >
+        <ArrowUp className="size-4" />
+        <span className="font-mono text-sm font-medium tabular-nums">
+         {post.upvotes_count}
+        </span>
+       </button>
+       {/* Sign-in prompt tooltip */}
+       {signInPrompt && (
+        <div className="absolute left-0 top-full mt-2 z-50 w-48 rounded-lg border-2 border-border bg-card p-3 shadow-xl animate-in fade-in slide-in-from-top-2 duration-200">
+         <p className="text-xs text-muted-foreground mb-2">Sign in to upvote</p>
+         <a
+          href={getSignInUrl()}
+          className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90"
+         >
+          Sign in / Sign up
+         </a>
+        </div>
+       )}
+      </div>
 
      <div className="min-w-0 flex-1">
       <div className="flex flex-wrap items-center gap-2">
@@ -313,6 +352,11 @@ export function PostDetail({
          {post.is_official ? (
           <BadgeCheck className="size-3 text-indigo-300" />
          ) : null}
+        </span>
+       ) : null}
+       {authorEmail && canManage ? (
+        <span className="font-mono text-[10px] text-muted-foreground/60 italic" title="Only visible to admins">
+         ({authorEmail})
         </span>
        ) : null}
        <span
@@ -481,13 +525,17 @@ export function PostDetail({
         </ul>
        )}
 
-       <CommentForm
-        postId={post.id}
-        parentId={null}
-        canManage={canManage}
-        fingerprintRef={fingerprintRef}
-        onAdded={addComment}
-       />
+       {isSignedIn ? (
+        <CommentForm
+         postId={post.id}
+         parentId={null}
+         canManage={canManage}
+         fingerprintRef={fingerprintRef}
+         onAdded={addComment}
+        />
+       ) : (
+        <SignInPrompt />
+       )}
       </>
      )}
     </div>
@@ -622,9 +670,17 @@ function CommentRow({
    )}
   >
    <div className="mb-1 flex items-center gap-1.5">
-    <span className="text-xs font-medium">
-     {comment.author_name ?? "Anonymous"}
-    </span>
+     <div className="size-5 shrink-0 rounded-full bg-secondary flex items-center justify-center text-[9px] font-bold uppercase text-muted-foreground overflow-hidden">
+      {comment.author_avatar_url ? (
+       // eslint-disable-next-line @next/next/no-img-element
+       <img src={comment.author_avatar_url} alt={comment.author_name ?? "User"} className="size-full object-cover" />
+      ) : (
+       (comment.author_name ?? "A").charAt(0)
+      )}
+     </div>
+     <span className="text-xs font-medium">
+      {comment.author_name ?? "Anonymous"}
+     </span>
     {comment.is_official ? (
      <span className="inline-flex items-center gap-0.5 rounded-full bg-indigo-500/15 px-1.5 py-0.5 font-mono text-[9px] font-medium text-indigo-300">
       <BadgeCheck className="size-2.5" />
@@ -640,6 +696,11 @@ function CommentRow({
 
     {canManage ? (
      <div className="ml-auto flex items-center gap-1">
+      {comment.author_email && (
+       <span className="font-mono text-[9px] text-muted-foreground/60 italic" title="Only visible to admins">
+        {comment.author_email} <span className="text-[8px]">(only visible to admins)</span>
+       </span>
+      )}
       <button
        onClick={() => onTogglePin(comment)}
        title={comment.is_pinned ? "Unpin" : "Pin to top"}
@@ -664,9 +725,77 @@ function CommentRow({
     ) : null}
    </div>
 
-   <p className="whitespace-pre-wrap text-xs text-muted-foreground">
-    {comment.content}
-   </p>
+   <CommentContent content={comment.content} />
+  </div>
+ );
+}
+
+/** Renders comment text, detecting embedded image/PDF URLs and showing them inline. */
+function CommentContent({ content }: { content: string }) {
+ const IMAGE_EXTS = /\.(png|jpe?g|webp|gif)(\?.*)?$/i;
+ const PDF_EXT = /\.pdf(\?.*)?$/i;
+ const URL_RE = /https?:\/\/[^\s]+/g;
+
+ // Split content into lines
+ const lines = content.split("\n");
+ const textLines: string[] = [];
+ const imageUrls: string[] = [];
+ const pdfUrls: string[] = [];
+
+ for (const line of lines) {
+  const trimmed = line.trim();
+  if (trimmed.match(URL_RE) && trimmed.match(/^https?:\/\/[^\s]+$/)) {
+   if (IMAGE_EXTS.test(trimmed)) {
+    imageUrls.push(trimmed);
+   } else if (PDF_EXT.test(trimmed)) {
+    pdfUrls.push(trimmed);
+   } else {
+    textLines.push(line);
+   }
+  } else {
+   textLines.push(line);
+  }
+ }
+
+ const textContent = textLines.join("\n").trim();
+
+ return (
+  <div className="space-y-2">
+   {textContent && (
+    <p className="whitespace-pre-wrap text-xs text-muted-foreground">
+     {textContent}
+    </p>
+   )}
+   {imageUrls.length > 0 && (
+    <div className="flex flex-wrap gap-2 mt-1">
+     {imageUrls.map((url, i) => (
+      <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="block">
+       {/* eslint-disable-next-line @next/next/no-img-element */}
+       <img
+        src={url}
+        alt="attachment"
+        className="max-h-40 max-w-[200px] rounded-lg border border-border object-cover"
+       />
+      </a>
+     ))}
+    </div>
+   )}
+   {pdfUrls.length > 0 && (
+    <div className="flex flex-wrap gap-2 mt-1">
+     {pdfUrls.map((url, i) => (
+      <a
+       key={i}
+       href={url}
+       target="_blank"
+       rel="noopener noreferrer"
+       className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-secondary/40 px-2 py-1 text-[10px] text-muted-foreground transition-colors hover:text-foreground"
+      >
+       <FilePdf className="size-3.5 text-red-400" />
+       PDF attachment
+      </a>
+     ))}
+    </div>
+   )}
   </div>
  );
 }
@@ -710,6 +839,30 @@ function ReplyToggle({
  );
 }
 
+function SignInPrompt() {
+ const pathname = usePathname();
+ return (
+  <div className="rounded-xl border-2 border-border bg-card px-4 py-5 text-center">
+   <p className="text-sm text-muted-foreground">
+    Sign in to join the discussion.
+   </p>
+   <a
+    href={`/login?next=${encodeURIComponent(pathname)}`}
+    className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90"
+   >
+    Sign in / Sign up
+   </a>
+  </div>
+ );
+}
+
+type UploadedFile = {
+ url: string;
+ file_name: string;
+ content_type: string;
+ size: number;
+};
+
 function CommentForm({
  postId,
  parentId,
@@ -726,46 +879,66 @@ function CommentForm({
  compact?: boolean;
 }) {
  const [content, setContent] = React.useState("");
- const [name, setName] = React.useState("");
- const [email, setEmail] = React.useState("");
  const [submitting, setSubmitting] = React.useState(false);
  const [error, setError] = React.useState<string | null>(null);
+ const [uploads, setUploads] = React.useState<UploadedFile[]>([]);
+ const [uploading, setUploading] = React.useState(false);
+ const fileInputRef = React.useRef<HTMLInputElement>(null);
 
- React.useEffect(() => {
-  if (canManage) return; // signed-in team members reply as the team
+ async function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  // Reset so the same file can be re-selected
+  e.target.value = "";
+
+  setUploading(true);
+  setError(null);
   try {
-   setName(window.localStorage.getItem(NAME_KEY) ?? "");
-   setEmail(window.localStorage.getItem(EMAIL_KEY) ?? "");
+   const form = new FormData();
+   form.append("file", file);
+   form.append("postId", postId);
+
+   const res = await fetch("/api/comments/attachments", {
+    method: "POST",
+    body: form,
+   });
+   const json = await res.json();
+   if (!res.ok) {
+    setError(json.error ?? "Upload failed.");
+    return;
+   }
+   setUploads((prev) => [...prev, json.attachment as UploadedFile]);
   } catch {
-   /* ignore */
+   setError("Upload failed. Please try again.");
+  } finally {
+   setUploading(false);
   }
- }, [canManage]);
+ }
+
+ function removeUpload(idx: number) {
+  setUploads((prev) => prev.filter((_, i) => i !== idx));
+ }
 
  async function submit(e: React.FormEvent) {
   e.preventDefault();
-  if (!content.trim()) return;
+  if (!content.trim() && uploads.length === 0) return;
   setSubmitting(true);
   setError(null);
-  if (!canManage) {
-   try {
-    if (name.trim()) window.localStorage.setItem(NAME_KEY, name.trim());
-    if (email.trim()) window.localStorage.setItem(EMAIL_KEY, email.trim());
-   } catch {
-    /* ignore */
-   }
-  }
   try {
+   // Build final content: text + any attachment URLs on new lines
+   let finalContent = content.trim();
+   if (uploads.length > 0) {
+    const urls = uploads.map((u) => u.url).join("\n");
+    finalContent = finalContent ? `${finalContent}\n\n${urls}` : urls;
+   }
+
    const res = await fetch("/api/comments", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
      postId,
      parentId,
-     content: content.trim(),
-     // Signed-in team members are detected server-side via their session,
-     // so we don't send (or require) a name/email for them.
-     authorName: canManage ? undefined : name.trim() || undefined,
-     authorEmail: canManage ? undefined : email.trim() || undefined,
+     content: finalContent,
      fingerprint: fingerprintRef.current,
     }),
    });
@@ -776,6 +949,7 @@ function CommentForm({
    }
    onAdded(json.comment as Comment);
    setContent("");
+   setUploads([]);
   } catch {
    setError("Network error. Please try again.");
   } finally {
@@ -798,32 +972,73 @@ function CommentForm({
     rows={compact ? 2 : 3}
     className="w-full resize-none rounded-xl  border-2 border-border bg-card px-3 py-2 text-xs outline-none placeholder:text-muted-foreground focus:border-ring"
    />
-   {/* Anonymous visitors must leave contact info; the team is identified
-     by their session and skips this entirely. */}
-   {canManage ? null : (
-    <div className="grid grid-cols-2 gap-2">
-     <input
-      value={name}
-      onChange={(e) => setName(e.target.value)}
-      placeholder="Name"
-      className="h-8 rounded-xl  border-2 border-border bg-card px-2.5 text-xs outline-none placeholder:text-muted-foreground focus:border-ring"
-     />
-     <input
-      value={email}
-      onChange={(e) => setEmail(e.target.value)}
-      type="email"
-      placeholder="Email (private)"
-      className="h-8 rounded-xl  border-2 border-border bg-card px-2.5 text-xs outline-none placeholder:text-muted-foreground focus:border-ring"
-     />
+
+   {/* Uploaded file previews */}
+   {uploads.length > 0 && (
+    <div className="flex flex-wrap gap-2">
+     {uploads.map((u, idx) => (
+      <div
+       key={idx}
+       className="relative inline-flex items-center gap-1.5 rounded-lg border border-border bg-secondary/40 px-2 py-1"
+      >
+       {u.content_type.startsWith("image/") ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+         src={u.url}
+         alt={u.file_name}
+         className="size-8 rounded object-cover"
+        />
+       ) : (
+        <FilePdf className="size-4 text-red-400" />
+       )}
+       <span className="max-w-[100px] truncate text-[10px]">
+        {u.file_name}
+       </span>
+       <button
+        type="button"
+        onClick={() => removeUpload(idx)}
+        className="ml-0.5 rounded-full p-0.5 text-muted-foreground hover:bg-destructive/20 hover:text-destructive"
+       >
+        <X className="size-3" />
+       </button>
+      </div>
+     ))}
     </div>
    )}
+
    {error ? (
     <p className="font-mono text-[10px] text-destructive">{error}</p>
    ) : null}
-   <div className="flex justify-end">
+
+   <div className="flex items-center justify-between">
+    {/* File attach button */}
+    <div className="flex items-center gap-1">
+     <input
+      ref={fileInputRef}
+      type="file"
+      accept="image/png,image/jpeg,image/webp,image/gif,application/pdf"
+      className="hidden"
+      onChange={handleFileSelect}
+     />
+     <button
+      type="button"
+      disabled={uploading}
+      onClick={() => fileInputRef.current?.click()}
+      title="Attach a file (image or PDF, max 5MB)"
+      className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground disabled:opacity-50"
+     >
+      {uploading ? (
+       <Loader2 className="size-3.5 animate-spin" />
+      ) : (
+       <Paperclip className="size-3.5" />
+      )}
+      <span className="text-[10px]">{uploading ? "Uploading…" : "Attach"}</span>
+     </button>
+    </div>
+
     <button
      type="submit"
-     disabled={submitting || !content.trim()}
+     disabled={submitting || (!content.trim() && uploads.length === 0)}
      className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity disabled:opacity-50"
     >
      {submitting ? (

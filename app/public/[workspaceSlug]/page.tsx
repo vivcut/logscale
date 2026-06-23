@@ -1,7 +1,6 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-import { CommandPalette } from "@/components/command-palette";
 import { Watermark } from "@/components/watermark";
 import { PublicDashboard } from "./public-dashboard";
 
@@ -39,7 +38,6 @@ export default async function PublicWorkspacePage({
 
  if (!workspace) notFound();
 
- // Check if at least one feature is enabled
  const hasAnyFeature =
   workspace.boards_enabled ||
   workspace.changelog_enabled ||
@@ -48,6 +46,21 @@ export default async function PublicWorkspacePage({
   workspace.contact_enabled;
 
  if (!hasAnyFeature) notFound();
+
+ // If boards are enabled and no specific tab is requested, redirect to first public board
+ if (workspace.boards_enabled && !tab) {
+  const { data: firstBoard } = await supabase
+   .from("boards")
+   .select("slug")
+   .eq("workspace_id", workspace.id)
+   .eq("is_private", false)
+   .limit(1)
+   .single();
+
+  if (firstBoard) {
+   redirect(`/public/${workspaceSlug}/${firstBoard.slug}`);
+  }
+ }
 
  // Get team info for logged-in users
  let teamName: string | null = null;
@@ -75,55 +88,26 @@ export default async function PublicWorkspacePage({
  }
 
  return (
-  <div className="min-h-screen">
-   {/* Header */}
-   <header className="border-b-2 border-popover/50">
-    <div className="mx-auto flex max-w-7xl items-center gap-3 px-6 py-5">
-     <div className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-popover text-lg font-bold text-foreground">
-      {workspace.logo_url ? (
-       // eslint-disable-next-line @next/next/no-img-element
-       <img
-        src={workspace.logo_url}
-        alt={workspace.name}
-        className="size-full object-cover"
-       />
-      ) : (
-       workspace.name.charAt(0).toUpperCase()
-      )}
-     </div>
-     <div className="min-w-0 flex-1">
-      <p className="font-mono text-xs text-muted-foreground">
-       {workspace.name}
-      </p>
-      <h1 className="truncate text-lg font-semibold tracking-tight">
-       Public Dashboard
-      </h1>
-     </div>
-     <CommandPalette workspaceSlug={workspace.slug} />
-    </div>
-   </header>
-
-   <main className="mx-auto max-w-7xl px-6 py-8">
-    <PublicDashboard
-     workspaceId={workspace.id}
-     workspaceSlug={workspace.slug}
-     workspaceName={workspace.name}
-     changelog_enabled={workspace.changelog_enabled}
-     boards_enabled={workspace.boards_enabled}
-     roadmap_enabled={workspace.roadmap_enabled}
-     features={{
-      boards: workspace.boards_enabled,
-      changelog: workspace.changelog_enabled,
-      roadmap: workspace.roadmap_enabled,
-      status: workspace.status_enabled,
-      contact: workspace.contact_enabled,
-     }}
-     teamName={teamName}
-     teamEmail={teamEmail}
-     initialTab={tab}
-    />
-    <Watermark workspaceId={workspace.id} />
-   </main>
-  </div>
+  <main className="mx-auto max-w-7xl px-6 py-8">
+   <PublicDashboard
+    workspaceId={workspace.id}
+    workspaceSlug={workspace.slug}
+    workspaceName={workspace.name}
+    changelog_enabled={workspace.changelog_enabled}
+    boards_enabled={workspace.boards_enabled}
+    roadmap_enabled={workspace.roadmap_enabled}
+    features={{
+     boards: workspace.boards_enabled,
+     changelog: workspace.changelog_enabled,
+     roadmap: workspace.roadmap_enabled,
+     status: workspace.status_enabled,
+     contact: workspace.contact_enabled,
+    }}
+    teamName={teamName}
+    teamEmail={teamEmail}
+    initialTab={tab}
+   />
+   <Watermark workspaceId={workspace.id} />
+  </main>
  );
 }

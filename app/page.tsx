@@ -2,30 +2,61 @@ import type { Metadata } from "next";
 
 import { Navbar } from "@/components/landing/navbar";
 import { Hero } from "@/components/landing/hero";
-import { Features } from "@/components/landing/features";
+import { DemoSection } from "@/components/landing/demo-section";
+import { ShowcaseSections } from "@/components/landing/showcase-sections";
+import { Testimonials } from "@/components/landing/testimonials";
+import { FAQ } from "@/components/landing/faq";
 import { Pricing } from "@/components/landing/pricing";
 import { CTA } from "@/components/landing/cta";
 import { Footer } from "@/components/landing/footer";
-import { ThemePopup } from "@/components/landing/theme-popup"; // 👈 Import the popup
-import { Cardo } from "next/font/google";
-
 
 export const metadata: Metadata = {
- title: "Pittstop — Ship what your users actually want",
+ title: "Pittstop — The #1 Feedback Platform for Startups | Boards, Roadmaps & Changelogs",
  description:
-  "The high-performance feedback platform for startups and indie developers. Feedback boards, kanban roadmaps, public changelogs, surveys, and status pages in one sleek workspace.",
+  "Collect user feedback, prioritize with kanban roadmaps, and announce updates with public changelogs. The all-in-one platform trusted by 600+ startups. Start free today.",
+ keywords: [
+  "feedback board",
+  "feature request tool",
+  "public roadmap",
+  "kanban roadmap",
+  "public changelog",
+  "product feedback tool",
+  "user feedback platform",
+  "startup tools",
+  "indie developer tools",
+  "feature voting board",
+  "product management",
+  "customer feedback software",
+  "canny alternative",
+  "uservoice alternative",
+ ],
  openGraph: {
-  title: "Pittstop — Ship what your users actually want",
+  title: "Pittstop — The #1 Feedback Platform for Startups",
   description:
-   "Feedback boards, kanban roadmaps, changelogs, surveys, and status pages in one sleek workspace built for startups and indie developers.",
+   "Collect user feedback, prioritize with kanban roadmaps, and announce updates with public changelogs. Trusted by 600+ startups.",
   type: "website",
+  url: "https://pittstop.com",
+  siteName: "Pittstop",
+  images: [
+   {
+    url: "/og-image.png",
+    width: 1200,
+    height: 630,
+    alt: "Pittstop — Feedback Boards, Roadmaps & Changelogs",
+   },
+  ],
+ },
+ twitter: {
+  card: "summary_large_image",
+  title: "Pittstop — The #1 Feedback Platform for Startups",
+  description:
+   "Collect user feedback, prioritize with kanban roadmaps, and announce updates with public changelogs.",
+  images: ["/og-image.png"],
+ },
+ alternates: {
+  canonical: "https://pittstop.com",
  },
 };
-
-const COMPANIES = [
- "NexusForge", "Kinetik", "VaporIO", "Stratum", "PrismIQ", "OmniCore", "Logix",
- "DevFlow", "Aether", "SentryX", "Plinth", "Volt.io", "ByteMesh", "GridScale"
-];
 
 export default function Home() {
  return (
@@ -33,44 +64,14 @@ export default function Home() {
    <Navbar />
    <main className="flex flex-1 flex-col">
     <Hero />
-    
-    {/* --- INFINITE SCROLLING COMPANY MARQUEE STRIP --- */}
-    <section className="relative w-full overflow-hiddenr pt-6 pb-6 backdrop-blur-sm">
-     <style dangerouslySetInnerHTML={{__html: `
-      @keyframes marquee {
-       0% { transform: translateX(0%); }
-       100% { transform: translateX(-50%); }
-      }
-      .animate-marquee-slow {
-       display: flex;
-       width: max-content;
-       animation: marquee 30s linear infinite;
-      }
-     `}} />
-     
-     <div className="animate-marquee-slow gap-16 px-4">
-      {[...COMPANIES, ...COMPANIES].map((company, index) => (
-       <span 
-        key={index} 
-        className="text-lg font-medium text-white not-dark:text-black opacity-70"
-       >
-        {company}
-       </span>
-      ))}
-     </div>
-     
-     <div className="pointer-events-none absolute inset-y-0 left-0 w-1/6 bg-gradient-to-r from-background not-dark:!from-white to-transparent" />
-     <div className="pointer-events-none absolute inset-y-0 right-0 w-1/6 bg-gradient-to-l from-background not-dark:!from-white to-transparent" />
-    </section>
-
-    <Features />
+    <DemoSection />
+    <ShowcaseSections />
+    <Testimonials />
     <Pricing />
+    <FAQ />
     <CTA />
    </main>
    <Footer />
-   
-   {/* --- FLOATING THEME INTERFACES --- */}
-   <ThemePopup /> 
   </>
  );
 }

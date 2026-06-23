@@ -172,7 +172,7 @@ export function OverviewBoards({
      no feedback in this range
     </div>
    ) : (
-    <ul className="divide-y divide- border-2 border-border overflow-hidden rounded-xl  border-2 border-border border-border">
+    <ul className="divide-y divide-border overflow-hidden rounded-xl border-2 border-border bg-card">
      {visible.map((p) => {
       const board = boardById[p.board_id];
       const href = board

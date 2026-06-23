@@ -116,10 +116,10 @@ export function Features() {
        href={`#${f.id}`}
        // whileHover={{ y: -4 }}
        // transition={{ type: "spring", stiffness: 300, damping: 22 }}
-       className="group flex h-full flex-col gap-3 !rounded-xl bg- border-2 border-border not-dark:bg-transparent p-6 not-dark: border-2 border-border transition-colors hover:bg-white/15"
+       className="group flex h-full flex-col gap-3 !rounded-xl border-2 border-border bg-transparent p-6 transition-colors hover:bg-secondary"
       >
        {/* <div className="flex size-10 items-center bg-black/10 justify-center rounded-xl text-foreground transition-colors group-hover:border-foreground/30"> */}
-        <f.icon weight="fill" className="size-8 text-black dark:text-white" />
+        <f.icon weight="fill" className="size-8 text-black" />
        {/* </div> */}
        <span className="font-mono text-xs text-muted-foreground">
         /{f.tag}

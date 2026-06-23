@@ -23,12 +23,9 @@ export async function GET(request: NextRequest) {
   let query = supabase
     .from("posts")
     .select(
-      "id, title, description, status, upvotes_count, flair, is_official, author_name, created_at"
+      "id, title, description, status, upvotes_count, flair, is_official, author_name, author_avatar_url, created_at"
     )
     .eq("board_id", boardId);
-
-
-
 
   if (q) {
     query = query.ilike("title", `%${q}%`);
@@ -52,9 +49,9 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST /api/posts
- * Body: { boardId, title, description, fingerprint }
- * Creates a new feedback post. Associates the logged-in user when present,
- * otherwise stores the device fingerprint for anonymous attribution.
+ * Body: { boardId, title, description, flair, fingerprint }
+ * Creates a new feedback post. Requires the user to be signed in.
+ * The post is attributed to the user's profile name automatically.
  */
 export async function POST(request: NextRequest) {
   let body: {
@@ -62,8 +59,6 @@ export async function POST(request: NextRequest) {
     title?: string;
     description?: string;
     fingerprint?: string;
-    authorName?: string;
-    authorEmail?: string;
     flair?: string;
   };
 
@@ -77,19 +72,7 @@ export async function POST(request: NextRequest) {
   const title = body.title?.trim();
   const description = body.description?.trim() || null;
   const fingerprint = body.fingerprint?.trim() || null;
-  const authorName = body.authorName?.trim() || null;
-  const authorEmail = body.authorEmail?.trim() || null;
   const flair = body.flair?.trim().toLowerCase() || null;
-
-
-  // Light email validation when provided.
-  if (authorEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(authorEmail)) {
-    return NextResponse.json(
-      { error: "Please enter a valid email." },
-      { status: 400 }
-    );
-  }
-
 
   if (!boardId || !title) {
     return NextResponse.json(
@@ -98,7 +81,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // A flair is mandatory on every public submission.
+  // A flair is mandatory on every submission.
   if (!flair) {
     return NextResponse.json(
       { error: "Please choose a flair for your post." },
@@ -106,20 +89,25 @@ export async function POST(request: NextRequest) {
     );
   }
 
-
-
-  // Identify the visitor (if logged in).
+  // Require authentication — users must be signed in to post.
   const sessionClient = await createClient();
   const {
     data: { user },
   } = await sessionClient.auth.getUser();
 
+  if (!user) {
+    return NextResponse.json(
+      { error: "Please sign in to submit feedback." },
+      { status: 401 }
+    );
+  }
+
   const admin = createAdminClient();
 
-  // Validate the board exists and isn't private (anonymous can't post to private).
+  // Validate the board exists.
   const { data: board, error: boardError } = await admin
     .from("boards")
-    .select("id, is_private")
+    .select("id, is_private, workspace_id")
     .eq("id", boardId)
     .single();
 
@@ -127,90 +115,62 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Board not found" }, { status: 404 });
   }
 
-  if (board.is_private && !user) {
+  if (board.is_private) {
     return NextResponse.json(
       { error: "This board is private." },
       { status: 403 }
     );
   }
 
-  if (!user && !fingerprint) {
-    return NextResponse.json(
-      { error: "Missing visitor identity." },
-      { status: 400 }
-    );
-  }
-
-  // Anonymous (public) submitters must provide a name so posts are attributed.
-  if (!user && !authorName) {
-    return NextResponse.json(
-      { error: "Please enter your name." },
-      { status: 400 }
-    );
-  }
-
-
-  // A signed-in user who is an owner/admin/member of the board's workspace is
-  // posting as "the team" — flag it so the public board shows a verified badge,
-  // mirroring official comments. We attribute internal posts to their profile.
+  // Determine if the user is a workspace member (team post → verified badge).
   let isOfficial = false;
-  let teamName: string | null = null;
-  if (user) {
-    const { data: boardWorkspace } = await admin
-      .from("boards")
-      .select("workspace_id")
-      .eq("id", boardId)
-      .single();
+  let authorName: string | null = null;
 
-    if (boardWorkspace) {
-      const { data: membership } = await admin
-        .from("workspace_members")
-        .select("role")
-        .eq("workspace_id", boardWorkspace.workspace_id)
-        .eq("profile_id", user.id)
-        .maybeSingle();
-      if (membership) {
-        isOfficial = true;
-        const { data: profile } = await admin
-          .from("profiles")
-          .select("name")
-          .eq("id", user.id)
-          .single();
-        teamName = profile?.name ?? null;
-      }
-    }
+  const { data: membership } = await admin
+    .from("workspace_members")
+    .select("role")
+    .eq("workspace_id", board.workspace_id)
+    .eq("profile_id", user.id)
+    .maybeSingle();
+
+  if (membership) {
+    isOfficial = true;
   }
+
+  // Get the user's profile name and avatar for attribution.
+  const { data: profile } = await admin
+    .from("profiles")
+    .select("name, avatar_url")
+    .eq("id", user.id)
+    .single();
+
+  authorName = profile?.name ?? user.email ?? null;
+  const authorAvatarUrl = profile?.avatar_url ?? user.user_metadata?.avatar_url ?? null;
 
   const { data: inserted, error } = await admin
     .from("posts")
     .insert({
       board_id: boardId,
-      user_id: user?.id ?? null,
-      fingerprint_hash: user ? null : fingerprint,
+      user_id: user.id,
+      fingerprint_hash: fingerprint,
       title,
       description,
       flair,
       is_official: isOfficial,
-      // Attribute the author: team members post under their profile name,
-      // anonymous visitors under their supplied name/email.
-      author_name: isOfficial ? teamName ?? authorName : user ? null : authorName,
-      author_email: user ? null : authorEmail,
+      author_name: authorName,
+      author_avatar_url: authorAvatarUrl,
+      author_email: user.email ?? null,
     })
     .select(
-      "id, title, description, status, upvotes_count, flair, is_official, author_name, created_at"
+      "id, title, description, status, upvotes_count, flair, is_official, author_name, author_avatar_url, created_at"
     )
     .single();
-
-
-
-
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  // Seed the activity timeline with the initial "under-review" entry so the
-  // public post page shows a "Created" event the moment a post is submitted.
+  // Seed the activity timeline with the initial "under-review" entry.
   if (inserted?.id) {
     await admin.from("post_status_events").insert({
       post_id: inserted.id,
@@ -221,3 +181,79 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({ post: inserted }, { status: 201 });
 }
 
+/**
+ * DELETE /api/posts?postId=...
+ *
+ * Lets a workspace owner/admin delete any post on one of their boards.
+ */
+export async function DELETE(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const postId = searchParams.get("postId");
+
+  if (!postId) {
+    return NextResponse.json(
+      { error: "postId is required" },
+      { status: 400 }
+    );
+  }
+
+  const admin = createAdminClient();
+
+  // Resolve post → board → workspace for authorization.
+  const { data: post } = await admin
+    .from("posts")
+    .select("id, board_id, boards ( workspace_id )")
+    .eq("id", postId)
+    .single();
+
+  if (!post) {
+    return NextResponse.json({ error: "Post not found" }, { status: 404 });
+  }
+
+  const boardRel = (
+    Array.isArray(post.boards) ? post.boards[0] : post.boards
+  ) as { workspace_id: string } | null;
+
+  if (!boardRel) {
+    return NextResponse.json({ error: "Post not found" }, { status: 404 });
+  }
+
+  // Must be an authenticated owner/admin of the workspace.
+  const sessionClient = await createClient();
+  const {
+    data: { user },
+  } = await sessionClient.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { data: membership } = await admin
+    .from("workspace_members")
+    .select("role")
+    .eq("workspace_id", boardRel.workspace_id)
+    .eq("profile_id", user.id)
+    .maybeSingle();
+
+  if (
+    !membership ||
+    (membership.role !== "owner" && membership.role !== "admin")
+  ) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  // Delete associated comments first, then the post.
+  await admin.from("comments").delete().eq("post_id", postId);
+  await admin.from("post_status_events").delete().eq("post_id", postId);
+
+  const { error } = await admin
+    .from("posts")
+    .delete()
+    .eq("id", postId);
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ ok: true });
+}

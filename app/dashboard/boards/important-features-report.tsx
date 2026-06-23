@@ -41,22 +41,22 @@ export function ImportantFeaturesReport() {
     };
   }, []);
 
-  if (loading) {
-    return (
-      <div className="mb-8 overflow-hidden rounded-xl  border-2 border-border  bg-card">
-        <div className="flex items-center gap-2 border-b-2  px-4 py-2.5">
-          <Sparkles className="size-3.5 text-chart-1 animate-pulse" />
-          <h2 className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
-            loading top features...
-          </h2>
-        </div>
-        <div className="p-4 space-y-3">
-          <div className="h-4 w-3/4 rounded bg-secondary animate-pulse" />
-          <div className="h-3 w-full rounded bg-secondary animate-pulse" />
-        </div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="mb-8 overflow-hidden rounded-xl  border-2 border-border  bg-card">
+  //       <div className="flex items-center gap-2 border-b-2  px-4 py-2.5">
+  //         <Sparkles className="size-3.5 text-chart-1 animate-pulse" />
+  //         <h2 className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
+  //           loading top features...
+  //         </h2>
+  //       </div>
+  //       <div className="p-4 space-y-3">
+  //         <div className="h-4 w-3/4 rounded bg-secondary animate-pulse" />
+  //         <div className="h-3 w-full rounded bg-secondary animate-pulse" />
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   if (posts.length === 0) return null;
 

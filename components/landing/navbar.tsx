@@ -7,14 +7,14 @@ import { AnimatePresence, motion } from "motion/react";
 import { ArrowRight, X } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Moon, Circle, AvocadoIcon } from "@phosphor-icons/react";
+import { FlagBannerIcon } from "@phosphor-icons/react";
 
 const NAV_LINKS = [
  { label: "Features", href: "#features" },
- { label: "Boards", href: "#boards" },
- { label: "Roadmap", href: "#roadmap" },
- { label: "Changelog", href: "#changelog" },
+ { label: "Demo", href: "#demo" },
  { label: "Pricing", href: "#pricing" },
+ { label: "FAQ", href: "#faq" },
+ { label: "Blog", href: "/blogs" },
 ];
 
 /**
@@ -54,7 +54,7 @@ export function Navbar() {
     <Link href="/" className="flex items-center gap-2">
      {/* <Circle className="size-8" weight="fill" /> */}
      <div className={"flex items-center gap-1 w-full px-3 justify-center"}>
-     <AvocadoIcon weight="fill" className="size-6 text-primary" />
+     <FlagBannerIcon weight="fill" className="size-6 text-primary" />
      <h1 className={`text-2xl font-bold`}>Pittstop</h1>
     </div>
     </Link>

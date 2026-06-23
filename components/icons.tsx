@@ -69,6 +69,6 @@ export {
  Warning,
  X,
  List as Menu,
- Avocado
+ FlagBanner
 } from "@phosphor-icons/react/dist/ssr";
 

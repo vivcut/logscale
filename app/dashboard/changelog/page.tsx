@@ -6,7 +6,6 @@ import { getActiveWorkspace } from "@/lib/workspace";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PlanBanner } from "@/components/plan-banner";
-import { ShareLink } from "@/components/share-link";
 
 
 
@@ -56,16 +55,6 @@ export default async function ChangelogPage() {
     </Link>
    </div>
 
-   <div className="mb-6">
-    <p className="mb-1.5 font-mono text-xs text-muted-foreground">
-     public changelog link
-    </p>
-    <ShareLink
-     url={`/public/${workspace.slug}?type=changelog`}
-     label={`${workspace.name} changelog`}
-    />
-   </div>
-
    <PlanBanner page="changelog" />
 
 
@@ -86,7 +75,7 @@ export default async function ChangelogPage() {
      </Link>
     </div>
    ) : (
-    <ul className="divide-y divide- border-2 border-border overflow-hidden rounded-xl  border-2 border-border border-border">
+    <ul className="divide-y divide-border overflow-hidden rounded-xl border-2 border-border bg-card">
      {list.map((entry) => {
       const published = !!entry.published_at;
       return (

@@ -115,7 +115,7 @@ export function EmbedSnippet({
     </div>
     
     {/* Code Content Window */}
-    <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed text-muted-foreground bg-black/5 dark:bg-black/20">
+    <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed text-muted-foreground bg-black/5">
      <code>{activeSnippet}</code>
     </pre>
    </div>

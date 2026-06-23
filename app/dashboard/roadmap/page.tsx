@@ -2,7 +2,6 @@ import { getActiveWorkspace } from "@/lib/workspace";
 import { getRoadmapPosts } from "@/lib/roadmap";
 import { RoadmapKanban } from "./kanban";
 import { PlanBanner } from "@/components/plan-banner";
-import { ShareLink } from "@/components/share-link";
 
 
 
@@ -34,16 +33,6 @@ export default async function RoadmapPage() {
      Drag feedback through the pipeline. Status changes are saved instantly
      and reflected on your public roadmap.
     </p>
-   </div>
-
-   <div className="mb-6">
-    <p className="mb-1.5 font-mono text-xs text-muted-foreground">
-     public roadmap link
-    </p>
-    <ShareLink
-     url={`/public/${workspace.slug}?type=roadmap`}
-     label={`${workspace.name} roadmap`}
-    />
    </div>
 
    <PlanBanner page="roadmap" />

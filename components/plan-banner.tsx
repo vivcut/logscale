@@ -25,14 +25,12 @@ const COPY: Record<PlanPage, { limited: string[]; unlocked: string[] }> = {
   limited: [
    "Only 1 board",
    "No custom board flairs",
-   "No image uploads on changelog",
    "No extra team members",
    "“Built with Pittstop” watermark on public pages",
   ],
   unlocked: [
-   "Unlimited boards, surveys & questions",
+   "Unlimited boards",
    "Create custom board flairs",
-   "Image uploads everywhere",
    "Unlimited team members",
    "No watermark",
   ],

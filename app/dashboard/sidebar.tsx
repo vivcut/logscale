@@ -12,25 +12,24 @@ import {
  MessageSquare,
  BadgeCheck,
  Monitor,
- Moon,
  Rocket,
  Settings,
  SidebarIcon,
  Sparkles,
- Sun,
- Menu, // Added for hamburger
- X,  // Added for closing drawer
+ Menu,
+ X,
 } from "@/components/icons";
 
 import { cn } from "@/lib/utils";
 import { WorkspaceSwitcher } from "./workspace-switcher";
-import { AvocadoIcon } from "@phosphor-icons/react";
+import { FlagBannerIcon } from "@phosphor-icons/react";
 
 type NavItem = { href: string; label: string; icon: React.ComponentType<{ className?: string }> };
 
 const nav: NavItem[] = [
  { href: "/dashboard", label: "Overview", icon: LayoutGrid },
  { href: "/dashboard/boards", label: "Boards", icon: MessageSquare },
+ { href: "/dashboard/boards/filter", label: "Filter Posts", icon: Activity },
  { href: "/dashboard/roadmap", label: "Roadmap", icon: GitBranch },
  { href: "/dashboard/changelog", label: "Changelog", icon: Sparkles },
  { href: "/dashboard/settings", label: "Settings", icon: Settings },
@@ -144,7 +143,7 @@ export function DashboardSidebar({
     </div>
 
     <div className={"flex items-center gap-1 w-full px-3 justify-center"}>
-     <AvocadoIcon weight="fill" className="size-6 text-primary" />
+     <FlagBannerIcon weight="fill" className="size-6.5 text-primary" />
      <h1 className={`text-2xl font-bold ${isCollapsedLayout ? "hidden" : "block"}`}>Pittstop</h1>
     </div>
 
@@ -207,10 +206,6 @@ export function DashboardSidebar({
      ))}
     </nav>
 
-    {/* Theme toggle */}
-    <div className={cn("px-3 pb-1", isCollapsedLayout && "px-2")}>
-     <ThemeToggle collapsed={isCollapsedLayout} />
-    </div>
 
     {/* Account */}
     <div className={cn(" border-t-2 border-border p-3", isCollapsedLayout && "px-2")}>
@@ -253,7 +248,7 @@ export function DashboardSidebar({
    {/* Mobile Top Header Display View */}
    <header className="fixed top-0 left-0 right-0 z-40 flex h-14 items-center justify-between bg-card px-6 md:hidden">
     <div className={"flex items-center gap-1 justify-center"}>
-     <AvocadoIcon weight="fill" className="size-6 text-primary" />
+     <FlagBannerIcon weight="fill" className="size-6 text-primary" />
      <h1 className={`text-2xl font-bold`}>Pittstop</h1>
     </div>
     <button
@@ -286,7 +281,7 @@ export function DashboardSidebar({
    {/* Desktop Main Side panel Component Frame */}
    <aside
     className={cn(
-     "sticky hidden h-[calc(100vh-1rem)] translate-y-[0.5rem] shrink-0 flex-col overflow-hidden bg-card rounded-r-2xl transition-[width] duration-200 md:flex not-dark:shadow-md",
+     "sticky hidden h-[calc(100vh-1rem)] translate-y-[0.5rem] shrink-0 flex-col overflow-hidden bg-card rounded-r-2xl shadow-sm transition-[width] duration-200 md:flex",
      collapsed ? "w-16" : "w-64"
     )}
    >
@@ -296,88 +291,3 @@ export function DashboardSidebar({
  );
 }
 
-type Theme = "system" | "light" | "dark";
-
-const THEMES: { value: Theme; label: string; icon: React.ComponentType<{ className?: string }> }[] =
- [
-  { value: "system", label: "System", icon: Monitor },
-  { value: "light", label: "Light", icon: Sun },
-  { value: "dark", label: "Dark", icon: Moon },
- ];
-
-function applyTheme(theme: Theme) {
- const dark =
-  theme === "dark" ||
-  (theme !== "light" &&
-   window.matchMedia("(prefers-color-scheme: dark)").matches);
- document.documentElement.classList.toggle("dark", dark);
-}
-
-export function ThemeToggle({ collapsed }: { collapsed: boolean }) {
- const [theme, setTheme] = React.useState<Theme>("system");
-
- React.useEffect(() => {
-  let stored: Theme = "system";
-  try {
-   stored = (localStorage.getItem("theme") as Theme) || "system";
-  } catch {}
-  setTheme(stored);
-
-  const mq = window.matchMedia("(prefers-color-scheme: dark)");
-  const onChange = () => {
-   try {
-    if ((localStorage.getItem("theme") || "system") === "system") {
-     applyTheme("system");
-    }
-   } catch {}
-  };
-  mq.addEventListener("change", onChange);
-  return () => mq.removeEventListener("change", onChange);
- }, []);
-
- const pick = (next: Theme) => {
-  setTheme(next);
-  try {
-   localStorage.setItem("theme", next);
-  } catch {}
-  applyTheme(next);
- };
-
- const order: Theme[] = ["system", "light", "dark"];
- const current = THEMES.find((t) => t.value === theme) ?? THEMES[0];
- const Icon = current.icon;
-
- const handleCycleTheme = () => {
-  const nextTheme = order[(order.indexOf(theme) + 1) % order.length];
-  pick(nextTheme);
- };
-
- if (collapsed) {
-  return (
-   <button
-    onClick={handleCycleTheme}
-    title={`Theme: ${current.label}`}
-    aria-label={`Theme: ${current.label} (click to change)`}
-    className="flex size-8 mx-auto items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-   >
-    <Icon className="size-4" />
-   </button>
-  );
- }
-
- return (
-  <button
-   onClick={handleCycleTheme}
-   title={`Theme: ${current.label}`}
-   aria-label={`Theme: ${current.label} (click to change)`}
-   className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-muted-foreground  border-2 border-border dark:border-popover transition-colors hover:bg-popover hover:text-foreground"
-  >
-   <div className="flex items-center gap-3">
-    <Icon className="size-5 shrink-0" />
-   </div>
-   <span className="text-xs text-muted-foreground/70">
-    {current.label}
-   </span>
-  </button>
- );
-}

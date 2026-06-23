@@ -1,10 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { createAdminClient } from "@/lib/supabase/admin";
-import {
-  getWorkspaceSubscription,
-  hasStartupPlan,
-} from "@/lib/subscription";
 
 
 /**
@@ -76,22 +72,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Post not found." }, { status: 404 });
   }
 
-  // Image/file uploads on posts are a Startup plan feature.
-  const workspaceId = (
-    post.boards as unknown as { workspace_id: string } | null
-  )?.workspace_id;
-  if (workspaceId) {
-    const subscription = await getWorkspaceSubscription(workspaceId);
-    if (!hasStartupPlan(subscription)) {
-      return NextResponse.json(
-        {
-          error:
-            "Image uploads are a Startup plan feature. Ask the workspace owner to upgrade.",
-        },
-        { status: 403 }
-      );
-    }
-  }
 
 
   // Enforce the per-post attachment cap.

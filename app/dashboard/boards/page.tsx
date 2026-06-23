@@ -17,6 +17,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getActiveWorkspace } from "@/lib/workspace";
 import { Badge } from "@/components/ui/badge";
 import { CreateBoardForm } from "./create-board-form";
+import { DeleteBoardButton } from "./delete-board-button";
 import {
   OverviewBoards,
   type OverviewBoard,
@@ -277,6 +278,7 @@ export default async function BoardsPage() {
           <ExternalLink weight="bold" className="size-4" />
           Public
         </Link>
+        <DeleteBoardButton boardSlug={board.slug} />
       </div>
     </div>
   ))}

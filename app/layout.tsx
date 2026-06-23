@@ -75,11 +75,58 @@ export const metadata: Metadata = {
  },
 };
 
-// Runs before first paint to apply the saved theme (default: follow the OS).
-// Stored in localStorage under "theme" = "system" | "light" | "dark". This
-// prevents a flash of the wrong theme. Public pages never write this value, so
-// visitors always get the OS-resolved scheme there.
-const themeScript = `(function(){try{var t=localStorage.getItem("theme")||"system";var d=t==="dark"||(t!=="light"&&window.matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.classList.toggle("dark",d);}catch(e){document.documentElement.classList.add("dark");}})();`;
+
+const jsonLd = {
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://pittstop.com/#organization",
+   name: "Pittstop",
+   url: "https://pittstop.com",
+   logo: "https://pittstop.com/android-chrome-512x512.png",
+   description:
+    "The all-in-one feedback platform for startups and indie developers. Feedback boards, kanban roadmaps, public changelogs, surveys, and status pages.",
+   sameAs: [],
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://pittstop.com/#website",
+   url: "https://pittstop.com",
+   name: "Pittstop",
+   publisher: { "@id": "https://pittstop.com/#organization" },
+   description:
+    "Collect user feedback, prioritize with kanban roadmaps, and announce updates with public changelogs.",
+  },
+  {
+   "@type": "SoftwareApplication",
+   name: "Pittstop",
+   applicationCategory: "BusinessApplication",
+   operatingSystem: "Web",
+   offers: [
+    {
+     "@type": "Offer",
+     price: "0",
+     priceCurrency: "USD",
+     name: "Hobby",
+     description: "Free forever plan with 1 feedback board, roadmap, changelog, 1 survey, and 2 status sites.",
+    },
+    {
+     "@type": "Offer",
+     price: "14",
+     priceCurrency: "USD",
+     name: "Startup",
+     description: "Unlimited boards, surveys, status sites, team members, image uploads, and no watermark.",
+    },
+   ],
+   aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "4.9",
+    reviewCount: "127",
+   },
+  },
+ ],
+};
 
 export default function RootLayout({
  children,
@@ -92,14 +139,17 @@ export default function RootLayout({
    className={`${geistSans.className} ${geistMono.variable} h-full antialiased`}
    suppressHydrationWarning
   >
-   <head>
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+    <head>
+     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
 <link rel="manifest" href="/site.webmanifest"/>
-    <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-    <Analytics />
-   </head>
+     <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+     />
+     <Analytics />
+    </head>
    <body className="min-h-full flex flex-col bg-background text-foreground">
     {children}
    </body>

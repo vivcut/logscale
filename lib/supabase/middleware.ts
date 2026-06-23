@@ -9,6 +9,13 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function updateSession(request: NextRequest) {
  let supabaseResponse = NextResponse.next({ request });
 
+ const { pathname } = request.nextUrl;
+
+ // Never interfere with auth callback/signout routes to prevent loops.
+ if (pathname.startsWith("/auth/")) {
+  return supabaseResponse;
+ }
+
  const supabase = createServerClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -31,11 +38,14 @@ export async function updateSession(request: NextRequest) {
  );
 
  // IMPORTANT: Do not run code between createServerClient and getUser().
- const {
-  data: { user },
- } = await supabase.auth.getUser();
-
- const { pathname } = request.nextUrl;
+ let user = null;
+ try {
+  const { data } = await supabase.auth.getUser();
+  user = data.user;
+ } catch {
+  // If token refresh fails, treat as unauthenticated — don't loop.
+  return supabaseResponse;
+ }
 
  // Protect the multi-tenant dashboard area.
  if (!user && pathname.startsWith("/dashboard")) {
@@ -45,8 +55,9 @@ export async function updateSession(request: NextRequest) {
   return NextResponse.redirect(url);
  }
 
- // Logged-in users shouldn't see the login page.
- if (user && pathname === "/login") {
+ // Logged-in users shouldn't see the login page (unless they have a `next`
+ // param indicating they were sent here deliberately, e.g. from sign-out).
+ if (user && pathname === "/login" && !request.nextUrl.searchParams.has("next")) {
   const url = request.nextUrl.clone();
   url.pathname = "/dashboard";
   url.search = "";

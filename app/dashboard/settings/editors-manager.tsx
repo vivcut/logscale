@@ -89,7 +89,7 @@ export function EditorsManager({
       ) : null}
 
       {/* Members + pending invites */}
-      <ul className="divide-y divide- border-2 border-border overflow-hidden rounded-xl  border-2 border-border border-border">
+      <ul className="divide-y divide-border overflow-hidden rounded-xl border-2 border-border bg-card">
         {members.map((m) => (
           <li key={m.profile_id} className="flex items-center gap-3 p-3">
             <div className="flex size-8 shrink-0 items-center justify-center rounded-full  border-2 border-border  bg-secondary text-xs font-medium">
