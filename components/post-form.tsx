@@ -387,7 +387,7 @@ export function PostForm({
      <p className="font-mono text-xs text-destructive">{formError}</p>
     ) : null}
 
-    <Button type="submit" disabled={submitting || !title.trim()}>
+    <Button variant={"secondary"} type="submit" disabled={submitting || !title.trim()}>
      {submitting ? <Loader2 className="animate-spin" /> : <Send />}
      Submit
     </Button>

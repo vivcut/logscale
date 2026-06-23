@@ -83,10 +83,16 @@ export function DashboardSidebar({
   });
  };
 
- const isActive = (href: string) =>
-  href === "/dashboard"
-   ? pathname === "/dashboard"
-   : pathname.startsWith(href);
+ const isActive = (href: string) => {
+  if (href === "/dashboard") {
+   return pathname === "/dashboard";
+  }
+  if (href === "/dashboard/boards") {
+   // Only match /dashboard/boards and its direct sub-paths, BUT exclude the filter page explicitly
+   return pathname.startsWith("/dashboard/boards") && !pathname.startsWith("/dashboard/boards/filter");
+  }
+  return pathname.startsWith(href);
+ };
 
  // Common inner render structure shared identically across desktop sidebar container and mobile slider drawer panel view
  const renderSidebarContent = (isMobileView = false) => {
@@ -107,7 +113,7 @@ export function DashboardSidebar({
        aria-label="Expand sidebar"
        className="flex size-8 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
       >
-       <SidebarIcon weight="bold" className="size-5" />
+       <SidebarIcon className="size-5" />
       </button>
      ) : (
       <>
@@ -123,9 +129,9 @@ export function DashboardSidebar({
          onClick={toggleCollapsed}
          title="Collapse sidebar"
          aria-label="Collapse sidebar"
-         className="flex size-7 shrink-0 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-primary hover:text-white"
+         className="flex size-7 shrink-0 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:bg-primary hover:text-black"
         >
-         <SidebarIcon weight="bold" className="size-5" />
+         <SidebarIcon  className="size-6" />
         </button>
        )}
 
@@ -142,9 +148,9 @@ export function DashboardSidebar({
      )}
     </div>
 
-    <div className={"flex items-center gap-1 w-full px-3 justify-center"}>
+    <div className={"flex items-center gap-0.5 w-full px-3 justify-center"}>
      <FlagBannerIcon weight="fill" className="size-6.5 text-primary" />
-     <h1 className={`text-2xl font-bold ${isCollapsedLayout ? "hidden" : "block"}`}>Pittstop</h1>
+     <h1 className={`text-2xl ${isCollapsedLayout ? "hidden" : "block"}`}>Pittstop</h1>
     </div>
 
     {/* Plan badge */}
@@ -153,25 +159,25 @@ export function DashboardSidebar({
       href="/subscriptions/plan"
       title={isStartup ? "Startup plan" : "Hobby plan — upgrade"}
       className={cn(
-       "flex items-center rounded-xl !py-3  border border-border text-sm font-semibold transition-colors",
+       "flex items-center rounded-md !py-3 transition-colors",
        isCollapsedLayout ? "justify-center px-2 py-2" : "gap-2 px-3 py-2",
        isStartup
         ? "bg-popover"
-        : " bg-secondary/40 text-muted-foreground hover:text-foreground"
+        : " bg-zinc-800 text-white"
       )}
      >
       {isStartup ? (
-       <BadgeCheck weight="fill" className="size-4 shrink-0" />
+       <BadgeCheck weight="fill" className="size-5 shrink-0 text-black" />
       ) : (
-       <Rocket className="size-4 shrink-0" />
+       <Rocket weight="fill" className="size-5 shrink-0 text-white" />
       )}
       {!isCollapsedLayout ? (
        <span className="flex min-w-0 flex-1 items-center justify-between gap-2">
-        <span className="truncate">
+        <span className="truncate !text-black">
          {isStartup ? "Startup plan" : "Hobby plan"}
         </span>
         {!isStartup ? (
-         <span className="shrink-0 font-mono text-[10px] uppercase tracking-wider text-primary">
+         <span className="shrink-0 font-[700] text-[11px] uppercase tracking-wider text-primary">
           upgrade
          </span>
         ) : null}
@@ -181,11 +187,7 @@ export function DashboardSidebar({
     </div>
 
     <nav className="flex flex-1 flex-col gap-0.5 p-3 overflow-y-auto">
-     {!isCollapsedLayout ? (
-      <span className="px-3 pb-2 pt-1 text-[12px] uppercase tracking-wider font-bold text-center text-muted-foreground">
-       Workspace
-      </span>
-     ) : null}
+     
 
      {nav.map((item) => (
       <Link
@@ -193,14 +195,14 @@ export function DashboardSidebar({
        href={item.href}
        title={isCollapsedLayout ? item.label : undefined}
        className={cn(
-        "flex items-center rounded-xl text-md font-semibold transition-colors",
+        "flex items-center rounded-xl text-md transition-colors",
         isCollapsedLayout ? "justify-center px-2 py-2" : "gap-3 px-3 py-2",
         isActive(item.href)
          ? "bg-popover text-foreground"
-         : "text-muted-foreground hover:bg-popover hover:text-foreground"
+         : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
        )}
       >
-       <item.icon className="size-5 shrink-0" />
+       <item.icon className="size-6 shrink-0" />
        {!isCollapsedLayout ? item.label : null}
       </Link>
      ))}
@@ -208,17 +210,17 @@ export function DashboardSidebar({
 
 
     {/* Account */}
-    <div className={cn(" border-t border-border p-3", isCollapsedLayout && "px-2")}>
+    <div className={cn("p-3", isCollapsedLayout && "px-2")}>
      <Link
       href="/dashboard/profile"
       title={isCollapsedLayout ? displayName : "Edit your profile"}
       className={cn(
-       "flex items-center rounded-xl transition-colors hover:bg-popover",
+       "flex items-center rounded-xl transition-colors hover:bg-zinc-800",
        isCollapsedLayout ? "justify-center py-2" : "gap-3 px-2 py-2",
-       isActive("/dashboard/profile") && "bg-popover"
+       isActive("/dashboard/profile") && "bg-popover text-black"
       )}
      >
-      <div className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-secondary text-xs font-medium">
+      <div className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-md bg-secondary text-xs font-medium">
        {avatarUrl ? (
         <img
          src={avatarUrl}
@@ -231,10 +233,8 @@ export function DashboardSidebar({
       </div>
       {!isCollapsedLayout ? (
        <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium">{displayName}</p>
-        <p className="truncate font-semibold text-xs text-muted-foreground">
-         {displayEmail}
-        </p>
+        <p className="truncate text-md">{displayName}e</p>
+        
        </div>
       ) : null}
      </Link>
@@ -256,7 +256,7 @@ export function DashboardSidebar({
      aria-label="Open menu"
      className="flex size-11 items-center justify-center rounded-xl  border border-border text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
     >
-     <Menu weight="bold" className="size-7" />
+     <Menu weight="default" className="size-7" />
     </button>
    </header>
 
@@ -281,7 +281,7 @@ export function DashboardSidebar({
    {/* Desktop Main Side panel Component Frame */}
    <aside
     className={cn(
-     "sticky hidden h-[calc(100vh-1rem)] translate-y-[0.5rem] shrink-0 flex-col overflow-hidden bg-card rounded-r-2xl shadow-sm transition-[width] duration-200 md:flex",
+     "sticky hidden shrink-0 flex-col overflow-hidden bg-zinc-950 text-white shadow-sm transition-[width] duration-200 md:flex",
      collapsed ? "w-16" : "w-64"
     )}
    >
@@ -290,4 +290,3 @@ export function DashboardSidebar({
   </>
  );
 }
-

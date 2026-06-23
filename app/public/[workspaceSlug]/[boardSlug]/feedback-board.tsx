@@ -242,7 +242,7 @@ export function FeedbackBoard({
        {sortedPosts.map((post) => (
         <div
          key={post.id}
-         className="bg-card p-5 transition-colors hover:bg-secondary/20"
+         className="p-5 transition-colors hover:bg-secondary/20"
         >
          <Link
           href={`/public/${workspaceSlug}/${boardSlug}/${post.id}`}
@@ -389,7 +389,7 @@ export function FeedbackBoard({
       />
      </div>
 
-     <Button className="w-full" size="lg" onClick={handleNewFeedbackClick}>
+     <Button className="w-full text-lg bg-black text-white cursor-pointer hover:bg-zinc-800" size="lg" onClick={handleNewFeedbackClick}>
       New Feedback
      </Button>
 

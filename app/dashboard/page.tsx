@@ -139,7 +139,7 @@ export default async function DashboardPage() {
       <div className="mt-6 rounded-md border border-border bg-card p-5">
        <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-         <Users weight="bold" className="size-5 text-muted-foreground" />
+         <Users className="size-5 text-muted-foreground" />
          <span className="text-sm font-semibold">External Users</span>
         </div>
         <span className="font-mono text-sm font-medium text-muted-foreground">
@@ -161,8 +161,8 @@ export default async function DashboardPage() {
      <div className={`mt-6 rounded-md border ${overLimit ? "border-red-500/50 bg-red-500/5" : "border-border bg-card"} p-5`}>
       <div className="flex items-center justify-between mb-3">
        <div className="flex items-center gap-2">
-        <Users weight="bold" className="size-5 text-muted-foreground" />
-        <span className="text-sm font-semibold">External Users</span>
+        <Users className="size-5 text-muted-foreground" />
+        <span className="text-lg">External Users</span>
        </div>
        <span className={`font-mono text-sm font-medium ${overLimit ? "text-red-400" : "text-muted-foreground"}`}>
         {userCount}/{limit}
@@ -203,9 +203,9 @@ export default async function DashboardPage() {
       className="group flex items-center justify-between px-6 py-6 transition-colors hover:bg-secondary/40"
      >
       <div className="flex items-center gap-3 text-xl">
-       <app.icon weight="bold" className="size-6 text-muted-foreground group-hover:text-foreground transition-colors" />
+       <app.icon className="size-6 text-muted-foreground group-hover:text-foreground transition-colors" />
        <div>
-        <span className="font-semibold text-foreground">{app.label}:</span>{" "}
+        <span className="text-foreground">{app.label}:</span>{" "}
         <span className="text-muted-foreground tabular-nums">{app.contents}</span>
        </div>
       </div>

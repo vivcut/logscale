@@ -287,6 +287,7 @@ export function ChangelogEditor({
     <Button
      type="submit"
      disabled={pending}
+      variant={"secondary"}
      onClick={() => {
       const f = document.getElementById(
        "publish-flag"

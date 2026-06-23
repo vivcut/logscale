@@ -139,7 +139,7 @@ export function FormRunner({
       ) : null}
 
       <div className="flex justify-end">
-        <Button type="submit" disabled={pending}>
+        <Button  variant={"secondary"} type="submit" disabled={pending}>
           {pending ? <Loader2 className="animate-spin" /> : <Send />}
           Submit response
         </Button>

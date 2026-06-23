@@ -11,7 +11,7 @@
 
  --background: #ffffff;
  --foreground: #1a1a1a;
- --card: #ffffff;
+ --card: #f4f4f5;
  --card-foreground: #1a1a1a;
  --popover: #ffffff;
  --popover-foreground: #1a1a1a;
@@ -36,7 +36,7 @@
  --input: #e4e4e7;
 
  /* Focus ring — uses primary pink */
- --ring: #f278f2;
+ --ring: #000000;
 
  --chart-1: #f278f2;
  --chart-2: #a78bfa;

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { SignOutButton } from "../dashboard/sign-out-button";
 import { OnboardingForm } from "./onboarding-form";
+import Link from "next/link";
 
 export const metadata = {
  title: "Create your workspace — Pittstop",
@@ -43,26 +44,20 @@ export default async function OnboardingPage({
 
  return (
   <main className="relative flex min-h-screen flex-col items-center justify-center px-6 py-12">
-   <div
-    aria-hidden
-    className="pointer-events-none absolute inset-0 [background:radial-gradient(60%_50%_at_50%_0%,oklch(0.2_0_0)_0%,transparent_70%)]"
-   />
+
 
    <div className="relative z-10 w-full max-w-md">
-    <div className="mb-8 flex items-center justify-center gap-2">
-     <div className="flex size-7 items-center justify-center rounded bg-primary text-primary-foreground">
-      <span className="font-mono text-xs font-bold">↑</span>
-     </div>
-     <span className="font-mono text-sm font-semibold tracking-tight">
-      Pittstop
-     </span>
+    <Link href="/" className="flex items-center gap-2">
+       <div className={"flex items-center gap-1.5 w-full px-3 justify-center"}>
+     {/* <Logo weight="fill" className="size-9 text-primary" /> */}
+     <h1 className={`text-4xl text-white `}>Pittstop</h1>
     </div>
+      </Link>
+     
 
-    <div className="rounded-md  border border-border bg-card p-6 shadow-2xl shadow-black/40">
+    <div className="rounded-md  border border-border bg-card p-6">
      <div className="mb-6 space-y-1.5">
-      <p className="font-mono text-xs text-muted-foreground">
-       /onboarding
-      </p>
+      
       <h1 className="text-xl font-semibold tracking-tight">
        Create your workspace
       </h1>

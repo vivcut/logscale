@@ -61,9 +61,9 @@ export function ImportantFeaturesReport() {
   if (posts.length === 0) return null;
 
   return (
-    <div className="mb-8 overflow-hidden rounded-md  border border-border  bg-card">
+    <div className="mb-8 overflow-hidden rounded-md bg-card">
       {/* Header Panel */}
-      <div className="flex items-center gap-2 border-t  p-4">
+      <div className="flex items-center gap-2 p-4">
         <Trophy weight="fill" className="size-6 text-primary" />
         <h2 className="text-md tracking-wider text-muted-foreground">
           Most important features
@@ -80,7 +80,7 @@ export function ImportantFeaturesReport() {
             <Link
               key={post.id}
               href={`/public/${workspaceSlug}/${post.boardSlug}/${post.id}`}
-              className="flex items-start gap-4 p-3 rounded-lg bg-secondary/30  border border-border  hover:bg-secondary/60 hover:border-border-hover transition-all group"
+              className="flex items-start gap-4 p-3 rounded-lg bg-white  border border-border hover:border-border-hover transition-all group"
             >
               {/* Rank Counter Ring */}
               <div className="shrink-0 flex items-center justify-center size-6 rounded-full bg-primary/10 text-primary  border border-border border-primary/20 font-mono text-xs font-bold">
@@ -93,7 +93,7 @@ export function ImportantFeaturesReport() {
                   <h4 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors truncate">
                     {post.title}
                   </h4>
-                  <span className="shrink-0 inline-flex items-center rounded-md text-black bg-primary px-2 py-0.5 text-lg font-mono font-medium">
+                  <span className="shrink-0 inline-flex items-center rounded-sm text-black bg-primary px-2 py-0.5 text-lg">
                      <ArrowFatUp weight="fill" className="size-4 mr-2" />
                      {post.upvotes}
                   </span>

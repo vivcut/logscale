@@ -4,6 +4,7 @@ import { Rocket, ArrowRight, Check, X } from "@/components/icons";
 import { getActiveWorkspace } from "@/lib/workspace";
 import { getWorkspaceSubscription, hasStartupPlan } from "@/lib/subscription";
 import { XIcon } from "@phosphor-icons/react";
+import { Button } from "./ui/button";
 
 export type PlanPage =
  | "overview"
@@ -23,12 +24,14 @@ export type PlanPage =
 const COPY: Record<PlanPage, { limited: string[]; unlocked: string[] }> = {
  overview: {
   limited: [
+"25 users only",
    "Only 1 board",
    "No custom board flairs",
    "No extra team members",
    "“Built with Pittstop” watermark on public pages",
   ],
   unlocked: [
+"Unlimited users",
    "Unlimited boards",
    "Create custom board flairs",
    "Unlimited team members",
@@ -109,14 +112,14 @@ export async function PlanBanner({ page }: { page: PlanPage }) {
  const { limited, unlocked } = COPY[page];
 
  return (
-  <div className="mb-6 overflow-hidden rounded-3xl border-primary/30 bg-primary/10">
+  <div className="mb-6 overflow-hidden rounded-lg border-primary/30 bg-primary/10">
    <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between">
     <div className="flex items-start gap-3">
-     <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary">
-      <Rocket weight="bold" className="size-6" />
+     <div className="flex size-10 shrink-0 items-center justify-center rounded-md bg-primary/20 text-primary">
+      <Rocket className="size-7" />
      </div>
      <div className="min-w-0">
-      <p className="text-md font-semibold">
+      <p className="text-lg">
        You’re on the Hobby plan — upgrade to Startup for better perks
       </p>
       <div className="mt-2 grid gap-3 sm:grid-cols-2">
@@ -130,7 +133,7 @@ export async function PlanBanner({ page }: { page: PlanPage }) {
            key={item}
            className="flex items-start gap-1.5 text-xs text-muted-foreground"
           >
-           <X weight="bold" className="mt-0.5 size-3 shrink-0 text-red-400" />
+           <X className="mt-0.5 size-3 shrink-0 text-red-400" />
 
            <span>{item}</span>
           </li>
@@ -147,7 +150,7 @@ export async function PlanBanner({ page }: { page: PlanPage }) {
            key={item}
            className="flex items-start gap-1.5 text-xs text-foreground"
           >
-           <Check weight="bold" className="mt-0.5 size-3 shrink-0 text-primary" />
+           <Check className="mt-0.5 size-3 shrink-0 text-primary" />
            <span>{item}</span>
           </li>
          ))}
@@ -158,9 +161,11 @@ export async function PlanBanner({ page }: { page: PlanPage }) {
     </div>
     <Link
      href="/subscriptions/plan"
-     className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+    //  className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
     >
-     Upgrade plan
+     <Button>
+        Upgrade plan
+     </Button>
      {/* <ArrowRight className="size-3.5" /> */}
     </Link>
    </div>

@@ -35,7 +35,9 @@ export default async function ProfilePage() {
         </p>
       </div>
 
-      <SignOutButton />
+      <div className="mb-4">
+        <SignOutButton />
+      </div>
 
       <ProfileForm
         initialName={displayName}

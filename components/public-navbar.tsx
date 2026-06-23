@@ -119,8 +119,8 @@ export function PublicNavbar({
 
    {/* Admin banner */}
    {user?.isAdmin && (
-    <div className="border-t border-primary/20 bg-primary/10 px-6 py-2 text-center text-sm font-medium text-primary">
-     ✓ Posting and commenting as a verified admin
+    <div className="border-t border-primary/20 bg-primary px-6 py-2 text-center text-sm font-medium text-white">
+     Posting and commenting as a verified admin
     </div>
    )}
   </header>

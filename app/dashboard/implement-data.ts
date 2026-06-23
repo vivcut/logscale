@@ -8,7 +8,7 @@ const WORKER_ENDPOINT = "https://summer-cherry-c965.vivaancut.workers.dev/";
 const SECTION_DEFS = [
   { key: "under-review", label: "Under review", dot: "bg-zinc-400" },
   { key: "planned", label: "Planned", dot: "bg-blue-500" },
-  { key: "in-progress", label: "In progress", dot: "bg-indigo-500" },
+  { key: "in-progress", label: "In progress", dot: "bg-indigo-00" },
 ] as const;
 
 // Per-section cap so the page stays fast (and AI calls stay bounded).

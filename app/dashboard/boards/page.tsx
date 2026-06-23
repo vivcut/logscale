@@ -190,9 +190,9 @@ export default async function BoardsPage() {
                   <span className="text-md  text-muted-foreground">
                     {s.label}
                   </span>
-                  <s.icon weight="bold" className="size-5 text-muted-foreground" />
+                  <s.icon className="size-5 text-muted-foreground" />
                 </div>
-                <p className="mt-3 text-5xl font-semibold tabular-nums tracking-tight">
+                <p className="mt-3 text-5xl tabular-nums tracking-tight">
                   {s.value}
                 </p>
               </div>
@@ -220,11 +220,11 @@ export default async function BoardsPage() {
   {list.map((board) => (
     <div
       key={board.id}
-      className="group flex flex-col gap-3 rounded-md bg-card p-5 transition-colors hover:bg-popover"
+      className="group flex flex-col gap-3 rounded-md bg-card p-5 transition-colors hover:ring ring-zinc-200 animation duration-200 cursor-pointer"
     >
       <div className="flex items-start justify-between gap-2">
         {/* <div className="flex size-9 items-center justify-center rounded-md  border border-border  bg-popover text-foreground"> */}
-          <MessageSquare weight="fill" className="size-8" />
+          <MessageSquare className="size-8 text-muted-foreground" />
         {/* </div> */}
         {board.is_private ? (
           <Badge
@@ -249,7 +249,7 @@ export default async function BoardsPage() {
         href={`/dashboard/boards/${board.slug}`}
         className="flex-1"
       >
-        <h3 className="text-2xl font-semibold transition-colors group-hover:text-foreground">
+        <h3 className="text-2xl transition-colors group-hover:text-foreground">
           {board.name}
         </h3>
         <p className="mt-0.5 font-mono text-xs text-muted-foreground">
@@ -267,7 +267,7 @@ export default async function BoardsPage() {
           href={`/dashboard/boards/${board.slug}`}
           className="inline-flex items-center gap-2 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
         >
-          <Settings2 weight="bold" className="size-4" />
+          <Settings2 className="size-4" />
           Edit
         </Link>
         <Link
@@ -275,7 +275,7 @@ export default async function BoardsPage() {
           target="_blank"
           className="inline-flex items-center gap-2 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
         >
-          <ExternalLink weight="bold" className="size-4" />
+          <ExternalLink className="size-4" />
           Public
         </Link>
         <DeleteBoardButton boardSlug={board.slug} />

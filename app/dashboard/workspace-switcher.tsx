@@ -56,7 +56,7 @@ export function WorkspaceSwitcher({
     className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
    >
     <span className="flex size-6 items-center justify-center rounded  border border-border border-dashed border-border">
-     <Plus weight="bold" className="size-3.5" />
+     <Plus weight="default" className="size-3.5" />
     </span>
     Create workspace
    </Link>
@@ -106,16 +106,16 @@ export function WorkspaceSwitcher({
         key={w.id}
         onClick={() => handleSwitch(w.id)}
         disabled={pending}
-        className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm transition-colors hover:bg-white/10 disabled:opacity-60"
+        className="flex w-full items-center text-black gap-2 rounded-sm px-2 py-1.5 text-left text-sm transition-colors hover:bg-white/10 disabled:opacity-60"
        >
 
-        <span className="flex size-5 shrink-0 items-center justify-center rounded bg-secondary text-[9px] font-bold">
+        <span className="flex size-5 shrink-0 items-center justify-center rounded bg-secondary text-[9px] text-black font-bold">
          {w.name.charAt(0).toUpperCase()}
         </span>
         <span className="min-w-0 flex-1 truncate">
          {w.name}
          {w.shared ? (
-          <span className="ml-1 font-mono text-[10px] text-muted-foreground">
+          <span className="ml-1 font-mono text-[10px] text-black">
            (shared)
           </span>
          ) : null}

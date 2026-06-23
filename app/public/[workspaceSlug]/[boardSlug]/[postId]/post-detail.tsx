@@ -24,6 +24,7 @@ import { getFingerprint } from "@/lib/fingerprint";
 import { flairBadgeClass } from "@/lib/flairs";
 import { Badge } from "@/components/ui/badge";
 import { updatePostStatus } from "@/app/dashboard/boards/[boardSlug]/actions";
+import { Button } from "@/components/ui/button";
 
 export type DetailPost = {
  id: string;
@@ -1036,10 +1037,12 @@ function CommentForm({
      </button>
     </div>
 
-    <button
+    <Button
      type="submit"
+      variant={"secondary"}
+      className="h-8"
      disabled={submitting || (!content.trim() && uploads.length === 0)}
-     className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity disabled:opacity-50"
+     
     >
      {submitting ? (
       <Loader2 className="size-3.5 animate-spin" />
@@ -1047,7 +1050,7 @@ function CommentForm({
       <Send className="size-3.5" />
      )}
      {parentId ? "Reply" : "Comment"}
-    </button>
+    </Button>
    </div>
   </form>
  );

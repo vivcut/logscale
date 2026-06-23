@@ -17,15 +17,15 @@ export const STATUS_LABELS: Record<string, string> = {
  */
 export const STATUS_BADGE: Record<string, string> = {
  "under-review":
-  "bg-zinc-500/10 text-zinc-400 ring-1 ring-inset ring-zinc-500/20",
+  "bg-zinc-400/50 text-black font-bold",
  planned:
-  "bg-blue-500/10 text-blue-400 ring-1 ring-inset ring-blue-500/20",
+  "bg-blue-400/50 text-black font-bold",
  "in-progress":
-  "bg-amber-500/10 text-amber-400 ring-1 ring-inset ring-amber-500/20",
+  "bg-amber-400/50 text-black font-bold",
  completed:
-  "bg-emerald-500/10 text-emerald-400 ring-1 ring-inset ring-emerald-500/20",
+  "bg-emerald-400/50 text-black font-bold",
  closed:
-  "bg-rose-500/10 text-rose-400 ring-1 ring-inset ring-rose-500/20",
+  "bg-rose-400/50 text-black font-bold",
 };
 
 /** Solid dot colour for status, used in compact lists. */

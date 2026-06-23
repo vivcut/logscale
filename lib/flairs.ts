@@ -16,19 +16,19 @@ export const DEFAULT_FLAIR = "general";
  * stable across renders.
  */
 const FIXED: Record<string, string> = {
- general: "bg-indigo-500/10 text-indigo-300 ring-1 ring-inset ring-indigo-500/25",
- feedback: "bg-indigo-500/10 text-indigo-300 ring-1 ring-inset ring-indigo-500/25",
- bug: "bg-rose-500/10 text-rose-300 ring-1 ring-inset ring-rose-500/25",
+ general: "bg-indigo-400/50 text-black font-bold",
+ feedback: "bg-indigo-400/50 text-black font-bold",
+ bug: "bg-rose-400/50 text-black font-bold",
 };
 
 
 const PALETTE = [
- "bg-emerald-500/10 text-emerald-300 ring-1 ring-inset ring-emerald-500/25",
- "bg-amber-500/10 text-amber-300 ring-1 ring-inset ring-amber-500/25",
- "bg-sky-500/10 text-sky-300 ring-1 ring-inset ring-sky-500/25",
- "bg-fuchsia-500/10 text-fuchsia-300 ring-1 ring-inset ring-fuchsia-500/25",
- "bg-teal-500/10 text-teal-300 ring-1 ring-inset ring-teal-500/25",
- "bg-orange-500/10 text-orange-300 ring-1 ring-inset ring-orange-500/25",
+ "bg-emerald-400/50 text-black font-bold",
+ "bg-amber-400/50 text-black font-bold",
+ "bg-sky-400/50 text-black font-bold",
+ "bg-fuchsia-400/50 text-black font-bold",
+ "bg-teal-400/50 text-black font-bold",
+ "bg-orange-400/50 text-black font-bold",
 ];
 
 export function flairBadgeClass(flair: string): string {
