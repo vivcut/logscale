@@ -55,7 +55,7 @@ export function RoadmapBoard({
      key={col.key}
      className="flex flex-col rounded-md  border border-border bg-card/40"
     >
-     <div className="flex items-center justify-between border-t px-4 py-3">
+     <div className="flex items-center justify-between  px-4 py-3">
       <div className="flex items-center gap-2">
        <span className={cn("size-2 rounded-full", col.accent)} />
        <span className="text-sm font-medium">{col.label}</span>
