@@ -156,8 +156,9 @@ export function DashboardSidebar({
     {/* Plan badge */}
     <div className={cn("px-3 pt-3", isCollapsedLayout && "px-2")}>
      <Link
-      href="/subscriptions/plan"
-      title={isStartup ? "Startup plan" : "Hobby plan — upgrade"}
+       href="/subscriptions/plan"
+       prefetch={true}
+       title={isStartup ? "Startup plan" : "Hobby plan — upgrade"}
       className={cn(
        "flex items-center rounded-md !py-3 transition-colors",
        isCollapsedLayout ? "justify-center px-2 py-2" : "gap-2 px-3 py-2",
@@ -193,6 +194,7 @@ export function DashboardSidebar({
       <Link
        key={item.href}
        href={item.href}
+       prefetch={true}
        title={isCollapsedLayout ? item.label : undefined}
        className={cn(
         "flex items-center rounded-xl text-md transition-colors",
@@ -213,6 +215,7 @@ export function DashboardSidebar({
     <div className={cn("p-3", isCollapsedLayout && "px-2")}>
      <Link
       href="/dashboard/profile"
+      prefetch={true}
       title={isCollapsedLayout ? displayName : "Edit your profile"}
       className={cn(
        "flex items-center rounded-xl transition-colors hover:bg-zinc-800",
@@ -233,7 +236,7 @@ export function DashboardSidebar({
       </div>
       {!isCollapsedLayout ? (
        <div className="min-w-0 flex-1">
-        <p className="truncate text-md">{displayName}e</p>
+        <p className="truncate text-md">{displayName}</p>
         
        </div>
       ) : null}

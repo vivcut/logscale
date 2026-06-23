@@ -246,6 +246,7 @@ export function FeedbackBoard({
         >
          <Link
           href={`/public/${workspaceSlug}/${boardSlug}/${post.id}`}
+          prefetch={true}
           className="block"
          >
           <h3 className="text-base font-semibold text-foreground">
@@ -411,6 +412,7 @@ export function FeedbackBoard({
           <li key={b.id}>
            <Link
             href={`/public/${workspaceSlug}/${b.slug}`}
+            prefetch={true}
             className={cn(
              "flex items-center justify-between rounded-lg px-2 py-1.5 text-sm transition-colors",
              isActive ? "bg-secondary font-medium" : "hover:bg-secondary/50"

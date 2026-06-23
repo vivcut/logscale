@@ -45,6 +45,7 @@ export function PublicNavbar({
     {/* Left: Logo + Name */}
     <Link
      href={`/public/${workspace.slug}`}
+     prefetch={true}
      className="flex items-center gap-2.5"
     >
      <div className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-primary text-xs font-bold text-primary-foreground">
@@ -75,20 +76,21 @@ export function PublicNavbar({
           !pathname.includes("/contact"))
         : pathname.startsWith(link.href);
 
-      return (
-       <Link
-        key={link.href}
-        href={link.href}
-        className={cn(
-         "rounded-lg px-4 py-2 text-sm font-medium transition-colors",
-         isActive
-          ? "bg-secondary text-foreground"
-          : "text-muted-foreground hover:text-foreground"
-        )}
-       >
-        {link.label}
-       </Link>
-      );
+       return (
+        <Link
+         key={link.href}
+         href={link.href}
+         prefetch={true}
+         className={cn(
+          "rounded-lg px-4 py-2 text-sm font-medium transition-colors",
+          isActive
+           ? "bg-secondary text-foreground"
+           : "text-muted-foreground hover:text-foreground"
+         )}
+        >
+         {link.label}
+        </Link>
+       );
      })}
     </nav>
 
@@ -139,20 +141,21 @@ export function PublicNavbar({
          !pathname.includes("/contact"))
        : pathname.startsWith(link.href);
 
-     return (
-      <Link
-       key={link.href}
-       href={link.href}
-       className={cn(
-        "flex-1 rounded-lg py-2 text-center text-sm font-semibold transition-colors",
-        isActive
-         ? "bg-secondary text-foreground"
-         : "text-muted-foreground hover:text-foreground"
-       )}
-      >
-       {link.label}
-      </Link>
-     );
+      return (
+       <Link
+        key={link.href}
+        href={link.href}
+        prefetch={true}
+        className={cn(
+         "flex-1 rounded-lg py-2 text-center text-sm font-semibold transition-colors",
+         isActive
+          ? "bg-secondary text-foreground"
+          : "text-muted-foreground hover:text-foreground"
+        )}
+       >
+        {link.label}
+       </Link>
+      );
     })}
    </nav>
   )}

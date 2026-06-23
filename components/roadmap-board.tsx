@@ -74,12 +74,13 @@ export function RoadmapBoard({
        grouped[col.key].map((post) => {
         const boardSlug = post.board_slug || fallbackBoardSlug;
         
-        return (
-         <Link
-          key={post.id}
-          href={`/public/${workspaceSlug}/${boardSlug}/${post.id}`}
-          className="block rounded-md  border border-border bg-card p-3 transition-all hover:bg-popover cursor-pointer text-card-foreground no-underline"
-         >
+         return (
+          <Link
+           key={post.id}
+           href={`/public/${workspaceSlug}/${boardSlug}/${post.id}`}
+           prefetch={true}
+           className="block rounded-md  border border-border bg-card p-3 transition-all hover:bg-popover cursor-pointer text-card-foreground no-underline"
+          >
           <div className="flex items-start justify-between gap-2">
            <h3 className="text-sm font-medium leading-snug">
             {post.title}

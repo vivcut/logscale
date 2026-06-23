@@ -127,6 +127,7 @@ export default async function PublicPostPage({
   <main className="mx-auto max-w-7xl px-6 py-8">
    <Link
     href={`/public/${workspace.slug}/${board.slug}`}
+    prefetch={true}
     className="mb-6 inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
    >
     <ChevronLeft className="size-3.5" />
