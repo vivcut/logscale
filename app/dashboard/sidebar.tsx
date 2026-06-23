@@ -256,7 +256,7 @@ export function DashboardSidebar({
      aria-label="Open menu"
      className="flex size-11 items-center justify-center rounded-xl  border border-border text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
     >
-     <Menu weight="default" className="size-7" />
+     <Menu className="size-7" />
     </button>
    </header>
 
