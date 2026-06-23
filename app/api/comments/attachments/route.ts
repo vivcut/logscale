@@ -102,11 +102,8 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // Ensure bucket exists (idempotent — ignores "already exists" error)
-  const { error: bucketErr } = await admin.storage.createBucket(BUCKET, { public: true });
-  if (bucketErr && !bucketErr.message?.includes("already exists")) {
-    console.error("[comment-attachments] bucket creation error:", bucketErr.message);
-  }
+  // Make sure the bucket exists
+  await admin.storage.createBucket(BUCKET, { public: true }).catch(() => {});
 
   const folder = commentId ?? `post-${postId}`;
   const ext = file.name.split(".").pop()?.toLowerCase() || "bin";
@@ -114,13 +111,12 @@ export async function POST(request: NextRequest) {
     .toString(36)
     .slice(2, 8)}.${ext}`;
 
-  const arrayBuf = await file.arrayBuffer();
+  const buffer = Buffer.from(await file.arrayBuffer());
   const { error: uploadError } = await admin.storage
     .from(BUCKET)
-    .upload(path, arrayBuf, { contentType: file.type, upsert: false });
+    .upload(path, buffer, { contentType: file.type, upsert: false });
 
   if (uploadError) {
-    console.error("[comment-attachments] upload error:", uploadError.message);
     return NextResponse.json({ error: uploadError.message }, { status: 500 });
   }
 

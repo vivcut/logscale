@@ -64,33 +64,23 @@ export function Hero() {
     className="pointer-events-none absolute inset-0 -z-20 [background:radial-gradient(60%_50%_at_50%_0%,oklch(1_0_0/0.03)_0%,transparent_70%)]"
    />
 
-   <div className="mx-auto flex max-w-6xl flex-col items-center px-6 text-center w-full z-10">
+   <div className="mx-auto mt-16 flex max-w-6xl flex-col items-center px-6 text-center w-full z-10">
     {/* Social proof badge */}
-    <motion.div
-     {...fade(0.04)}
-     className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm text-muted-foreground"
-    >
-     <span className="relative flex size-2">
-      <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-      <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
-     </span>
-     Trusted by 600+ startups shipping faster
-    </motion.div>
+   
 
     <motion.h1
      {...fade(0.08)}
-     className={`${serif.className} max-w-4xl text-balance font-bold leading-[1.05] text-black tracking-tight text-5xl md:text-[76px]`}
+     className={`max-w-4xl text-balance leading-[1.05] text-black tracking-tight text-5xl md:text-[86px]`}
     >
-     Your users are requesting features.{" "}
-     <span className="italic text-primary">Are you listening?</span>
+     Your users are requesting features
+     {/* <span className="text-black font-[500]">Are you listening?</span> */}
     </motion.h1>
 
     <motion.p
      {...fade(0.14)}
-     className="mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl"
+     className="mt-8 max-w-2xl text-lg text-black md:text-5xl"
     >
-     Collect feedback, prioritize with a public roadmap, and announce
-     every ship — all in one beautiful workspace. Free to start.
+     Are you listening?
     </motion.p>
 
     {/* Feature pills */}

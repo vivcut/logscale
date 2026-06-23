@@ -32,13 +32,13 @@ export function DemoSection() {
    </Reveal>
 
    <Reveal delay={0.1}>
-    <Link href="https://placeholder-demo-url.com" target="_blank" className="group mt-10 block">
+    <Link href="https://www.pittstop.space/public/acme/general" target="_blank" className="group mt-10 block">
      <div className="relative overflow-hidden rounded-2xl border-2 border-border shadow-2xl shadow-black/10 transition-all duration-300 group-hover:border-primary/40 group-hover:shadow-primary/10">
       {/* Gradient overlay on hover */}
       <div className="pointer-events-none absolute inset-0 z-10 rounded-2xl bg-gradient-to-t from-black/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
       
       <iframe
-       src="https://placeholder-demo-url.com"
+       src="https://www.pittstop.space/public/acme/general"
        title="Pittstop Live Demo"
        className="h-[600px] w-full pointer-events-none select-none bg-background"
        loading="lazy"
@@ -57,7 +57,7 @@ export function DemoSection() {
 
    <div className="mt-6 flex justify-center">
     <Button variant="outline" size="lg" asChild>
-     <Link href="https://placeholder-demo-url.com" target="_blank">
+     <Link href="https://www.pittstop.space/public/acme/general" target="_blank">
       Try the interactive demo
       <ArrowRight className="ml-2 size-4" />
      </Link>

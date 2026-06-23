@@ -24,7 +24,7 @@ export const PLAN_LIMITS = {
  maxSurveys: 1,
  maxQuestionsPerSurvey: 3,
  maxStatusSites: 2,
- maxUsers: 2, // unique external users who posted or commented
+ maxUsers: 25, // unique external users who posted or commented
  allowPostImages: false,
  allowChangelogImages: false,
  allowStatusPaths: false, // base origin URLs only on Hobby

@@ -13,10 +13,10 @@ export const metadata: Metadata = {
   description:
    "Expert articles on feedback collection, public roadmaps, changelogs, and product management for startups.",
   type: "website",
-  url: "https://pittstop.com/blogs",
+  url: "https://pittstop.space/blogs",
  },
  alternates: {
-  canonical: "https://pittstop.com/blogs",
+  canonical: "https://pittstop.space/blogs",
  },
 };
 

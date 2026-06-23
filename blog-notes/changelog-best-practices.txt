@@ -101,7 +101,7 @@ The best changelog tools in 2025 share these traits:
 - Integration with your feedback and roadmap tools
 - Clean, branded design
 
-[Pittstop](https://pittstop.com) combines all of these into one workspace — your changelog is automatically connected to your feedback board and roadmap, so you can link shipped features back to the requests that drove them.
+[Pittstop](https://pittstop.space) combines all of these into one workspace — your changelog is automatically connected to your feedback board and roadmap, so you can link shipped features back to the requests that drove them.
 
 ## Start Shipping Updates People Care About
 
@@ -111,4 +111,4 @@ The bar is low: most of your competitors either don't have a changelog or write 
 
 ---
 
-*Ready to launch a changelog your users will love? [Get started with Pittstop](https://pittstop.com) — free forever on the Hobby plan.*
+*Ready to launch a changelog your users will love? [Get started with Pittstop](https://pittstop.space) — free forever on the Hobby plan.*

@@ -53,7 +53,7 @@ Most competitors hide behind closed doors. A public roadmap positions you as the
 
 ## How to Get Started
 
-Tools like [Pittstop](https://pittstop.com) make it dead simple to create a public kanban roadmap that auto-sorts by user votes. Set it up in under 2 minutes, connect it to your feedback board, and start building in public.
+Tools like [Pittstop](https://pittstop.space) make it dead simple to create a public kanban roadmap that auto-sorts by user votes. Set it up in under 2 minutes, connect it to your feedback board, and start building in public.
 
 ## The Bottom Line
 
@@ -61,4 +61,4 @@ A public roadmap isn't just a nice-to-have — it's a competitive advantage. It 
 
 ---
 
-*Ready to create your public roadmap? [Get started with Pittstop for free](https://pittstop.com) — no credit card required.*
+*Ready to create your public roadmap? [Get started with Pittstop for free](https://pittstop.space) — no credit card required.*

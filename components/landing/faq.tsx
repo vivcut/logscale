@@ -39,7 +39,7 @@ const FAQS = [
  {
   question: "Do you support custom domains?",
   answer:
-   "Custom domain support is on our roadmap and coming soon. Currently, your public workspace lives at a clean pittstop.com/your-workspace URL that you can share anywhere.",
+   "Custom domain support is on our roadmap and coming soon. Currently, your public workspace lives at a clean pittstop.space/your-workspace URL that you can share anywhere.",
  },
  {
   question: "Can I invite team members?",

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllBlogSlugs } from "@/lib/blog";
 
-const BASE_URL = "https://pittstop.com";
+const BASE_URL = "https://pittstop.space";
 
 export default function sitemap(): MetadataRoute.Sitemap {
  const blogSlugs = getAllBlogSlugs();

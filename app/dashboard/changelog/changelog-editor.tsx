@@ -208,7 +208,7 @@ export function ChangelogEditor({
       </Button>
 
       {/* AI Draft */}
-      <Button
+      {/* <Button
        type="button"
        variant="outline"
        size="sm"
@@ -221,7 +221,7 @@ export function ChangelogEditor({
         <Sparkles className="text-indigo-400" />
        )}
        {aiLoading ? "Generating…" : "AI Draft"}
-      </Button>
+      </Button> */}
      </div>
     </div>
 

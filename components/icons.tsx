@@ -69,6 +69,7 @@ export {
  Warning,
  X,
  List as Menu,
- FlagBanner
+ FlagBanner,
+ Info
 } from "@phosphor-icons/react/dist/ssr";
 

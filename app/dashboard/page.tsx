@@ -181,7 +181,7 @@ export default async function DashboardPage() {
       {overLimit && (
        <div className="mt-3 flex items-center gap-2">
         <Warning weight="fill" className="size-4 text-red-400" />
-        <span className="text-xs text-red-400 font-medium">Over limit — upgrade to avoid workspace restrictions</span>
+        <span className="text-xs text-red-400 font-medium">Over limit — your public page has been frozen. Upgrade to remove restrictions.</span>
         <Link
          href="/subscriptions/plan"
          className="ml-auto rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90"

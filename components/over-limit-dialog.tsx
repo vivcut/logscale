@@ -59,7 +59,7 @@ export function OverLimitDialog({
      <span className="font-semibold text-foreground">{limit}</span>.
     </p>
     <p className="text-sm text-muted-foreground leading-relaxed mb-5">
-     Upgrade to the Startup plan to remove this limit and unlock all features.
+     Your public page is frozen and will not be visible to users anymore. Upgrade to the Startup plan to remove this limit and unlock all features.
     </p>
 
     <div className="flex items-center gap-3">

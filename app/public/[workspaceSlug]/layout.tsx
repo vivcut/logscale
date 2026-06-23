@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-import { getWorkspaceSubscription, hasStartupPlan } from "@/lib/subscription";
+import { getWorkspaceSubscription, hasStartupPlan, countExternalUsers, PLAN_LIMITS } from "@/lib/subscription";
 import { PublicNavbar, type NavUser, type NavWorkspace } from "@/components/public-navbar";
+import { FrozenOverlay } from "@/components/frozen-overlay";
 
 type LayoutParams = {
  workspaceSlug: string;
@@ -60,6 +61,13 @@ export default async function PublicLayout({
  const subscription = await getWorkspaceSubscription(workspace.id);
  const isStartup = hasStartupPlan(subscription);
 
+ // Check if workspace is over limit (Hobby plan only) — freeze public pages
+ let isFrozen = false;
+ if (!isStartup) {
+  const externalUsers = await countExternalUsers(workspace.id);
+  isFrozen = externalUsers > PLAN_LIMITS.maxUsers;
+ }
+
  const navWorkspace: NavWorkspace = {
   name: workspace.name,
   slug: workspace.slug,
@@ -74,6 +82,7 @@ export default async function PublicLayout({
   <div className="min-h-screen">
    <PublicNavbar workspace={navWorkspace} user={navUser} />
    {children}
+   {isFrozen && <FrozenOverlay workspaceName={workspace.name} />}
   </div>
  );
 }

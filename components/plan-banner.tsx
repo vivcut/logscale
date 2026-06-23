@@ -53,7 +53,6 @@ const COPY: Record<PlanPage, { limited: string[]; unlocked: string[] }> = {
  },
  changelog: {
   limited: [
-   "No image uploads in changelog entries",
    "“Built with Pittstop” watermark on your public changelog",
   ],
   unlocked: ["Image uploads in changelog entries", "No watermark"],

@@ -46,16 +46,16 @@ export function Navbar() {
    className={cn(
     "fixed inset-x-0 top-0 z-50 transition-all duration-300",
     scrolled
-     ? " bg-background/70 backdrop-blur-xl"
-     : " border-transparent bg-transparent"
+     ? "bg-black backdrop-blur-2xl"
+     : " border-transparent bg-black"
    )}
   >
-   <div className="mx-auto flex h-20 max-w-8xl items-center justify-between px-20">
+   <div className="mx-auto flex h-22 max-w-8xl items-center justify-between px-20">
     <Link href="/" className="flex items-center gap-2">
      {/* <Circle className="size-8" weight="fill" /> */}
      <div className={"flex items-center gap-1 w-full px-3 justify-center"}>
-     <FlagBannerIcon weight="fill" className="size-6 text-primary" />
-     <h1 className={`text-2xl font-bold`}>Pittstop</h1>
+     <FlagBannerIcon weight="fill" className="size-8 text-primary" />
+     <h1 className={`text-3xl text-white`}>Pittstop</h1>
     </div>
     </Link>
 
@@ -64,7 +64,7 @@ export function Navbar() {
       <a
        key={l.href}
        href={l.href}
-       className="relative transition-colors hover:text-foreground font-semibold"
+       className="relative transition-colors hover:text-foreground text-white text-lg"
       >
        {l.label}
       </a>
@@ -72,12 +72,12 @@ export function Navbar() {
     </nav>
 
     <div className="hidden items-center gap-2 md:flex">
-     <Button variant="ghost" size="sm" asChild>
+     {/* <Button variant="ghost" size="sm" asChild>
       <Link href="/login">Sign in</Link>
-     </Button>
-     <Button size="sm" asChild>
+     </Button> */}
+     <Button className="h-12 w-40 text-lg" size="sm" asChild>
       <Link href="/login">
-       Get started
+       Start
        {/* <ArrowRight /> */}
       </Link>
      </Button>

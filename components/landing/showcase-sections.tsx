@@ -17,7 +17,7 @@ const SHOWCASES = [
   title: "Collect & prioritize feature requests",
   description:
    "Your users vote on what matters most. Anonymous, frictionless, and always organized. No more scattered feedback across emails, Slack, and spreadsheets.",
-  iframeSrc: "https://placeholder-boards-url.com",
+  iframeSrc: "https://www.pittstop.space/public/acme/general/41d78a80-43b0-472a-9775-acb0f646ec22",
   points: [
    "Anonymous fingerprinted voting — no login wall",
    "Status flairs & tags to keep signal clean",
@@ -32,7 +32,7 @@ const SHOWCASES = [
   title: "Show users what's coming next",
   description:
    "Turn your loudest signals into a public roadmap. Drag-and-drop columns keep your team aligned and users excited about what's shipping.",
-  iframeSrc: "https://placeholder-roadmap-url.com",
+  iframeSrc: "https://www.pittstop.space/public/acme/roadmap",
   points: [
    "Drag-and-drop: Planned → In Progress → Shipped",
    "Auto-sorted by upvotes for clear priorities",
@@ -47,7 +47,7 @@ const SHOWCASES = [
   title: "Announce every ship with style",
   description:
    "Write updates in markdown, attach images, and publish a clean changelog your users actually want to read. Close the feedback loop automatically.",
-  iframeSrc: "https://placeholder-changelog-url.com",
+  iframeSrc: "https://www.pittstop.space/public/acme/changelog",
   points: [
    "Rich markdown editor with image uploads",
    "Auto-link shipped items to original requests",

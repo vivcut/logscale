@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Cal_Sans, Geist, Geist_Mono, Google_Sans, Noto_Sans, Poppins } from "next/font/google";
+import { Cal_Sans, Geist, Geist_Mono, Google_Sans, Noto_Sans, Poppins, Nunito_Sans, Manrope, DM_Sans, Ubuntu, Outfit } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Google_Sans({
+const geistSans = Outfit ({
  variable: "--font-geist-sans",
- weight: ["400", "600"],
+ weight: ["400", "500"],
  subsets: ["latin"],
 });
 
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   "The high-performance platform for startups and indie developers. Feedback boards, kanban roadmaps, public changelogs, and more.",
  
  // 1. The base URL for all your relative metadata paths
- metadataBase: new URL("https://Pittstop.com"), // <-- Change to your actual domain
+ metadataBase: new URL("https://pittstop.space"), // <-- Change to your actual domain
  
  // 2. Standard SEO Keywords
  keywords: ["feedback board", "kanban roadmap", "public changelog", "product management tool", "startup tools"],
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
  openGraph: {
   title: "Pittstop — Let your users know what's going on",
   description: "The high-performance platform for startups and indie developers. Feedback boards, kanban roadmaps, public changelogs, and more.",
-  url: "https://Pittstop.com", // <-- Change to your actual domain
+  url: "https://pittstop.space", // <-- Change to your actual domain
   siteName: "Pittstop",
   locale: "en_US",
   type: "website",
@@ -81,20 +81,20 @@ const jsonLd = {
  "@graph": [
   {
    "@type": "Organization",
-   "@id": "https://pittstop.com/#organization",
+   "@id": "https://pittstop.space/#organization",
    name: "Pittstop",
-   url: "https://pittstop.com",
-   logo: "https://pittstop.com/android-chrome-512x512.png",
+   url: "https://pittstop.space",
+   logo: "https://pittstop.space/android-chrome-512x512.png",
    description:
     "The all-in-one feedback platform for startups and indie developers. Feedback boards, kanban roadmaps, public changelogs, surveys, and status pages.",
    sameAs: [],
   },
   {
    "@type": "WebSite",
-   "@id": "https://pittstop.com/#website",
-   url: "https://pittstop.com",
+   "@id": "https://pittstop.space/#website",
+   url: "https://pittstop.space",
    name: "Pittstop",
-   publisher: { "@id": "https://pittstop.com/#organization" },
+   publisher: { "@id": "https://pittstop.space/#organization" },
    description:
     "Collect user feedback, prioritize with kanban roadmaps, and announce updates with public changelogs.",
   },

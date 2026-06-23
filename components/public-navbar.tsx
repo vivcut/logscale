@@ -39,6 +39,7 @@ export function PublicNavbar({
   navLinks.push({ label: "Changelog", href: `/public/${workspace.slug}/changelog` });
 
  return (
+  <>
   <header className="sticky top-0 z-40 border-b-2 border-border bg-background/80 backdrop-blur-xl">
    <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
     {/* Left: Logo + Name */}
@@ -123,6 +124,39 @@ export function PublicNavbar({
     </div>
    )}
   </header>
+
+  {/* Mobile bottom tab bar */}
+  {navLinks.length > 0 && (
+   <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t-2 border-border bg-background/95 backdrop-blur-lg px-2 py-2.5 md:hidden">
+    {navLinks.map((link) => {
+     const isActive =
+      link.label === "Feedback"
+       ? pathname === `/public/${workspace.slug}` ||
+        (pathname.startsWith(`/public/${workspace.slug}/`) &&
+         !pathname.includes("/roadmap") &&
+         !pathname.includes("/changelog") &&
+         !pathname.includes("/status") &&
+         !pathname.includes("/contact"))
+       : pathname.startsWith(link.href);
+
+     return (
+      <Link
+       key={link.href}
+       href={link.href}
+       className={cn(
+        "flex-1 rounded-lg py-2 text-center text-sm font-semibold transition-colors",
+        isActive
+         ? "bg-secondary text-foreground"
+         : "text-muted-foreground hover:text-foreground"
+       )}
+      >
+       {link.label}
+      </Link>
+     );
+    })}
+   </nav>
+  )}
+  </>
  );
 }
 

@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
    type: "article",
    publishedTime: post.date,
    authors: [post.author],
-   url: `https://pittstop.com/blog/${post.slug}`,
+   url: `https://pittstop.space/blog/${post.slug}`,
   },
   twitter: {
    card: "summary_large_image",
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
    description: post.description,
   },
   alternates: {
-   canonical: `https://pittstop.com/blog/${post.slug}`,
+   canonical: `https://pittstop.space/blog/${post.slug}`,
   },
  };
 }

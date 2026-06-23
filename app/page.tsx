@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   description:
    "Collect user feedback, prioritize with kanban roadmaps, and announce updates with public changelogs. Trusted by 600+ startups.",
   type: "website",
-  url: "https://pittstop.com",
+  url: "https://pittstop.space",
   siteName: "Pittstop",
   images: [
    {
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   images: ["/og-image.png"],
  },
  alternates: {
-  canonical: "https://pittstop.com",
+  canonical: "https://pittstop.space",
  },
 };
 
