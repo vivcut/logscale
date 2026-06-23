@@ -78,7 +78,7 @@ export function ThemePopup() {
      }`}
      aria-label="Light Mode"
     >
-     <Sun weight="default" className="h-3.5 w-3.5" />
+     <Sun  className="h-3.5 w-3.5" />
     </button>
    </div>
 

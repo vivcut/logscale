@@ -56,7 +56,7 @@ export function WorkspaceSwitcher({
     className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
    >
     <span className="flex size-6 items-center justify-center rounded  border border-border border-dashed border-border">
-     <Plus weight="default" className="size-3.5" />
+     <Plus className="size-3.5" />
     </span>
     Create workspace
    </Link>

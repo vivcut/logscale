@@ -115,7 +115,7 @@ function PlanCard({
    <ul className="mb-6 space-y-2">
     {FEATURES.map((f) => (
      <li key={f} className="flex items-center gap-2 text-sm">
-      <Check weight="default" className="size-4 shrink-0 text-primary" />
+      <Check className="size-4 shrink-0 text-primary" />
       <span className="text-muted-foreground">{f}</span>
      </li>
     ))}
